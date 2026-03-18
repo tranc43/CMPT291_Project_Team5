@@ -1,0 +1,8 @@
+# Visual Studio Stuff
+.vs/
+bin/
+obj/
+*.user
+
+# Connection string for Project
+App.config
