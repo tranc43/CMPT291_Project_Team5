@@ -4,11 +4,11 @@ using System.Windows.Forms;
 
 namespace MovieRental_Team5
 {
-    public partial class Form1 : Form
+    public partial class LoginForm : Form
     {
         string connectionString = @"Server=ServerName;Database=MovieRental_Team5;Trusted_Connection=yes;";
 
-        public Form1()
+        public LoginForm()
         {
             InitializeComponent();
         }
@@ -27,6 +27,26 @@ namespace MovieRental_Team5
             {
                 MessageBox.Show("Database connection failed: " + ex.Message);
             }
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
