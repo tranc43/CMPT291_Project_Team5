@@ -42,7 +42,7 @@
             // 
             Title.AutoSize = true;
             Title.Font = new Font("Segoe UI", 30F, FontStyle.Bold);
-            Title.Location = new Point(320, 9);
+            Title.Location = new Point(294, 9);
             Title.Name = "Title";
             Title.Size = new Size(415, 54);
             Title.TabIndex = 0;
@@ -58,7 +58,7 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 20.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label1.Location = new Point(206, 90);
+            label1.Location = new Point(320, 78);
             label1.Name = "label1";
             label1.Size = new Size(82, 37);
             label1.TabIndex = 2;
@@ -69,7 +69,7 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 20.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label2.Location = new Point(160, 158);
+            label2.Location = new Point(274, 146);
             label2.Name = "label2";
             label2.Size = new Size(128, 37);
             label2.TabIndex = 3;
@@ -79,7 +79,7 @@
             // EmailField
             // 
             EmailField.Font = new Font("Segoe UI", 10F);
-            EmailField.Location = new Point(294, 102);
+            EmailField.Location = new Point(420, 90);
             EmailField.Name = "EmailField";
             EmailField.Size = new Size(185, 25);
             EmailField.TabIndex = 4;
@@ -87,7 +87,7 @@
             // PasswordField
             // 
             PasswordField.Font = new Font("Segoe UI", 10F);
-            PasswordField.Location = new Point(294, 170);
+            PasswordField.Location = new Point(420, 158);
             PasswordField.Name = "PasswordField";
             PasswordField.Size = new Size(185, 25);
             PasswordField.TabIndex = 5;
@@ -95,7 +95,7 @@
             // button1
             // 
             button1.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
-            button1.Location = new Point(294, 215);
+            button1.Location = new Point(420, 205);
             button1.Name = "button1";
             button1.Size = new Size(185, 66);
             button1.TabIndex = 6;
