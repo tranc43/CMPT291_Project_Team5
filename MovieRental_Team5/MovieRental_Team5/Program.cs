@@ -1,4 +1,4 @@
-namespace Team5_MovieRental_Project
+namespace MovieRental_Team5
 {
     internal static class Program
     {
