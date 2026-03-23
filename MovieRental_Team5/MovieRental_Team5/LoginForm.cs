@@ -6,7 +6,7 @@ namespace MovieRental_Team5
 {
     public partial class LoginForm : Form
     {
-        string connectionString = @"Server=ServerName;Database=MovieRental_Team5;Trusted_Connection=yes;";
+        string connectionString = @"Server=DESKTOP-CHLK2FI;Database=MovieRental_Team5;Trusted_Connection=yes;";
 
         public LoginForm()
         {
@@ -45,6 +45,11 @@ namespace MovieRental_Team5
         }
 
         private void button1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void EmailAddressInput(object sender, EventArgs e)
         {
 
         }
