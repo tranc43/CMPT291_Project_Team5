@@ -6,7 +6,7 @@ namespace MovieRental_Team5
 {
     public partial class LoginForm : Form
     {
-        string connectionString = @"Server=DESKTOP-CHLK2FI\SQLEXPRESS;Database=MovieRental_Team5;Trusted_Connection=yes;";
+        string connectionString = @"Server=;Database=MovieRental_Team5;Trusted_Connection=yes;";
 
         public LoginForm()
         {
@@ -43,7 +43,7 @@ namespace MovieRental_Team5
                 {
                     conn.Open();
                     // Employee Reader
-                    string employee_query = "SELECT Employee_ID, First_Name FROM Employee_Data WHERE SIN = @input";
+                    string employee_query = "SELECT Employee_ID, First_Name, Last_Name FROM Employee_Data WHERE SIN = @input";
                     SqlCommand empCmd = new SqlCommand(employee_query, conn);
 
                     empCmd.Parameters.AddWithValue("@input", email);
@@ -52,27 +52,27 @@ namespace MovieRental_Team5
                     if (empReader.HasRows)
                     {
                         empReader.Read();
-                        string employee_name = empReader["First_Name"].ToString();
+                        string employee_name = empReader["First_Name"].ToString() + empReader["Last_Name"].ToString();
                         empReader.Close();
-                        MessageBox.Show("Login Successful!" + "Welcome Back," + Name + "!");
+                        MessageBox.Show("Login Successful! " + " Welcome Back, " + employee_name + " ! ");
                         return;
 
                     }
                     empReader.Close();
 
                     // Customer check
-                    string customer_query = "SELECT Customer_ID, First_Name FROM Employee_Data WHERE Email_Address = @input";
+                    string customer_query = "SELECT Customer_ID, First_Name, Last_Name FROM Customer_Data WHERE Email_Address = @input";
                     SqlCommand customer_cmd = new SqlCommand(customer_query, conn);
 
                     customer_cmd.Parameters.AddWithValue("@input", email);
-                    SqlDataReader customer_reader = empCmd.ExecuteReader();
+                    SqlDataReader customer_reader = customer_cmd.ExecuteReader();
 
                     if (customer_reader.HasRows)
                     {
                         customer_reader.Read();
-                        string customer_name = customer_reader["First_Name"].ToString();
+                        string customer_name = customer_reader["First_Name"].ToString() + customer_reader["Last_Name"].ToString();
                         customer_reader.Close();
-                        MessageBox.Show("Login Successful!" + "Welcome Back," + Name + "!");
+                        MessageBox.Show("Login Successful!" + "Welcome Back," + customer_name + "!");
                         return;
 
                     }
