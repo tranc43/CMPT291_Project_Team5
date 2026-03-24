@@ -6,7 +6,7 @@ namespace MovieRental_Team5
 {
     public partial class LoginForm : Form
     {
-        string connectionString = @"Server=;Database=MovieRental_Team5;Trusted_Connection=yes;";
+        string connectionString = @"Server=DESKTOP-CHLK2FI\SQLEXPRESS;Database=MovieRental_Team5;Trusted_Connection=yes;";
 
         public LoginForm()
         {
@@ -55,12 +55,16 @@ namespace MovieRental_Team5
                         string employee_name = empReader["First_Name"].ToString() + empReader["Last_Name"].ToString();
                         empReader.Close();
                         MessageBox.Show("Login Successful! " + " Welcome Back, " + employee_name + " ! ");
+                        Dashboard_Form dashboard = new Dashboard_Form(employee_name);
+                        dashboard.Show();
+                        this.Hide();
                         return;
 
                     }
                     empReader.Close();
 
                     // Customer check
+                    /*
                     string customer_query = "SELECT Customer_ID, First_Name, Last_Name FROM Customer_Data WHERE Email_Address = @input";
                     SqlCommand customer_cmd = new SqlCommand(customer_query, conn);
 
@@ -77,6 +81,7 @@ namespace MovieRental_Team5
 
                     }
                     customer_reader.Close();
+                    */
                 }
 
             }
@@ -88,13 +93,13 @@ namespace MovieRental_Team5
 
         private void EmailAddressInput(object sender, EventArgs e)
         {
-
+            // Its being read in the function above
         }
 
 
         private void button1_Click(object sender, EventArgs e)
         {
-
+            // Its being read in the function above
         }
 
         private void Exit_Application_Click(object sender, EventArgs e)
