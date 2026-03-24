@@ -6,7 +6,7 @@ namespace MovieRental_Team5
 {
     public partial class LoginForm : Form
     {
-        string connectionString = @"Server=DESKTOP-CHLK2FI\SQLEXPRESS;Database=MovieRental_Team5;Trusted_Connection=yes;";
+        string connectionString = @"Server=ServerName;Database=MovieRental_Team5;Trusted_Connection=yes;";
 
         public LoginForm()
         {
