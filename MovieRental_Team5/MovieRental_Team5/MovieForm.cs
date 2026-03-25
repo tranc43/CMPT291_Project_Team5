@@ -157,6 +157,20 @@ namespace MovieRental_Team5
                     using (SqlConnection connection_new = new SqlConnection(connection))
                     {
                         connection_new.Open();
+                        // Checks if the movie is associated with any existing rentals. 
+                        string check_query = "SELECT COUNT(*) FROM Order_Data WHERE Movie_ID = @id";
+                        SqlCommand checkCmd = new SqlCommand(check_query, connection_new);
+                        checkCmd.Parameters.AddWithValue("@id", selectedMovieID);
+                        int order_count = (int)checkCmd.ExecuteScalar();
+
+                        if (order_count > 0)
+                        {
+                            MessageBox.Show("Error! This movie cannot be deleted because it is associated with existing rentals.");
+                            return;
+                        }
+
+                        // Deletion confirmation and deleting movie.
+                    
                         string delete_query = "DELETE FROM Movie_Data WHERE Movie_ID = @id";
                         SqlCommand cmd = new SqlCommand(delete_query, connection_new);
                         cmd.Parameters.AddWithValue("@id", selectedMovieID);

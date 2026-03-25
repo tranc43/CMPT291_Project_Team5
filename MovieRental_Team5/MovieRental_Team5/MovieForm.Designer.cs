@@ -80,7 +80,7 @@
             // 
             input_movie_title.AutoSize = true;
             input_movie_title.Font = new Font("Segoe UI", 20F, FontStyle.Bold);
-            input_movie_title.Location = new Point(45, 63);
+            input_movie_title.Location = new Point(102, 63);
             input_movie_title.Name = "input_movie_title";
             input_movie_title.Size = new Size(150, 37);
             input_movie_title.TabIndex = 3;
@@ -197,8 +197,9 @@
             movie_grid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             movie_grid.Location = new Point(33, 112);
             movie_grid.Name = "movie_grid";
-            movie_grid.Size = new Size(162, 245);
+            movie_grid.Size = new Size(286, 245);
             movie_grid.TabIndex = 22;
+            movie_grid.CellClick += movie_grid_CellContentClick;
             movie_grid.CellContentClick += movie_grid_CellContentClick;
             // 
             // MovieForm
