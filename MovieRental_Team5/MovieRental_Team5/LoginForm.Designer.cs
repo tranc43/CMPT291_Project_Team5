@@ -57,18 +57,18 @@
             // 
             Email_SIN_Label.AutoSize = true;
             Email_SIN_Label.Font = new Font("Segoe UI", 20.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            Email_SIN_Label.Location = new Point(274, 146);
+            Email_SIN_Label.Location = new Point(232, 145);
             Email_SIN_Label.Name = "Email_SIN_Label";
-            Email_SIN_Label.Size = new Size(134, 37);
+            Email_SIN_Label.Size = new Size(182, 37);
             Email_SIN_Label.TabIndex = 2;
-            Email_SIN_Label.Text = "Email/SIN";
+            Email_SIN_Label.Text = "Employee SIN";
             // 
             // EmailField
             // 
             EmailField.Font = new Font("Segoe UI", 10F);
             EmailField.Location = new Point(420, 158);
             EmailField.Name = "EmailField";
-            EmailField.PlaceholderText = "Enter Email Address or SIN";
+            EmailField.PlaceholderText = "Enter Employee SIN";
             EmailField.Size = new Size(185, 25);
             EmailField.TabIndex = 4;
             EmailField.Click += EmailAddressInput;
