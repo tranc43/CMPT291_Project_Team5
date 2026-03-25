@@ -130,6 +130,7 @@
             load_movies.TabIndex = 8;
             load_movies.Text = "Load Movies";
             load_movies.UseVisualStyleBackColor = true;
+            load_movies.Click += load_movies_Click;
             // 
             // controls
             // 
@@ -149,6 +150,7 @@
             add_movie.TabIndex = 16;
             add_movie.Text = "Add Movie";
             add_movie.UseVisualStyleBackColor = true;
+            add_movie.Click += add_movie_Click;
             // 
             // update_movie
             // 
@@ -158,6 +160,7 @@
             update_movie.TabIndex = 17;
             update_movie.Text = "Update Movie";
             update_movie.UseVisualStyleBackColor = true;
+            update_movie.Click += update_movie_Click;
             // 
             // delete_movie
             // 
@@ -167,6 +170,7 @@
             delete_movie.TabIndex = 18;
             delete_movie.Text = "Delete Movie";
             delete_movie.UseVisualStyleBackColor = true;
+            delete_movie.Click += delete_movie_Click;
             // 
             // clear_button
             // 
@@ -176,6 +180,7 @@
             clear_button.TabIndex = 19;
             clear_button.Text = "Clear Fields";
             clear_button.UseVisualStyleBackColor = true;
+            clear_button.Click += clear_button_Click;
             // 
             // back_button
             // 
@@ -185,6 +190,7 @@
             back_button.TabIndex = 21;
             back_button.Text = "Back";
             back_button.UseVisualStyleBackColor = true;
+            back_button.Click += back_button_Click;
             // 
             // movie_grid
             // 
@@ -193,6 +199,7 @@
             movie_grid.Name = "movie_grid";
             movie_grid.Size = new Size(162, 245);
             movie_grid.TabIndex = 22;
+            movie_grid.CellContentClick += movie_grid_CellContentClick;
             // 
             // MovieForm
             // 
