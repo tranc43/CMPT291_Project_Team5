@@ -53,6 +53,9 @@ namespace MovieRental_Team5
 
         private void movie_grid_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
+            /* This functions purpose is to display the movie title, genre, distribution fee, num of copies
+             * 
+             */
             if (e.RowIndex >= 0)
             {
                 DataGridViewRow row = movie_grid.Rows[e.RowIndex];
@@ -66,6 +69,9 @@ namespace MovieRental_Team5
 
         private void add_movie_Click(object sender, EventArgs e)
         {
+            /* this functions purpose is to add a movie to the database and ensure all fields are required to be filled out before adding.
+             * 
+             */
             if (string.IsNullOrEmpty(title_search.Text) || string.IsNullOrEmpty(fee_field.Text) || string.IsNullOrEmpty(num_copies.Text))
             {
                 MessageBox.Show("There is an error! All fields must be entered!"); return;
@@ -112,11 +118,15 @@ namespace MovieRental_Team5
 
         private void back_button_Click(object sender, EventArgs e)
         {
+            // back button to return to dashboard
             this.Close();
         }
 
         private void update_movie_Click(object sender, EventArgs e)
         {
+            /* this functions purpose is to update a movie in the database and also ensures fall fields are required to be filled out. 
+             * 
+             */
             if (selectedMovieID == -1)
             {
                 MessageBox.Show("Error! Please select a movie in order to update");
@@ -146,6 +156,10 @@ namespace MovieRental_Team5
 
         private void delete_movie_Click(object sender, EventArgs e)
         {
+            /* this functions purpose is to delete a movie from the database
+             * check whether or not if the movie has orders or not 
+             * Has a confirmation
+             */
             if (selectedMovieID == -1)
             {
                 MessageBox.Show("Error! Please select a movie in order to delete");
