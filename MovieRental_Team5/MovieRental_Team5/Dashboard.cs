@@ -26,5 +26,27 @@ namespace MovieRental_Team5
         {
             welcome_title.Text = "Welcome, " + employee_name + "!";
         }
+
+        private void log_out_button_Click(object sender, EventArgs e)
+        {
+            this.Close();
+            LoginForm loginForm = new LoginForm();
+            loginForm.Show();
+        }
+
+        private void orders_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void manage_movies_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

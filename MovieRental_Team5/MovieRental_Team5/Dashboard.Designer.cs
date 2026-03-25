@@ -32,8 +32,8 @@
             manage_customers = new Button();
             manage_movies = new Button();
             orders = new Button();
-            button1 = new Button();
             welcome_title = new Label();
+            reports_button = new Button();
             SuspendLayout();
             // 
             // log_out_button
@@ -45,6 +45,7 @@
             log_out_button.TabIndex = 0;
             log_out_button.Text = "Log Out";
             log_out_button.UseVisualStyleBackColor = true;
+            log_out_button.Click += log_out_button_Click;
             // 
             // manage_customers
             // 
@@ -66,6 +67,7 @@
             manage_movies.TabIndex = 2;
             manage_movies.Text = "Manage Movies";
             manage_movies.UseVisualStyleBackColor = true;
+            manage_movies.Click += manage_movies_Click;
             // 
             // orders
             // 
@@ -76,16 +78,7 @@
             orders.TabIndex = 3;
             orders.Text = "Record Order";
             orders.UseVisualStyleBackColor = true;
-            // 
-            // button1
-            // 
-            button1.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            button1.Location = new Point(491, 218);
-            button1.Name = "button1";
-            button1.Size = new Size(188, 74);
-            button1.TabIndex = 4;
-            button1.Text = "Record Order";
-            button1.UseVisualStyleBackColor = true;
+            orders.Click += orders_Click;
             // 
             // welcome_title
             // 
@@ -98,13 +91,23 @@
             welcome_title.Text = "Movie Rental Dashboard";
             welcome_title.Click += Title_Click;
             // 
+            // reports_button
+            // 
+            reports_button.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            reports_button.Location = new Point(491, 218);
+            reports_button.Name = "reports_button";
+            reports_button.Size = new Size(188, 74);
+            reports_button.TabIndex = 6;
+            reports_button.Text = "Reports";
+            reports_button.UseVisualStyleBackColor = true;
+            // 
             // Dashboard_Form
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(970, 526);
+            Controls.Add(reports_button);
             Controls.Add(welcome_title);
-            Controls.Add(button1);
             Controls.Add(orders);
             Controls.Add(manage_movies);
             Controls.Add(manage_customers);
@@ -121,7 +124,7 @@
         private Button manage_customers;
         private Button manage_movies;
         private Button orders;
-        private Button button1;
         private Label welcome_title;
+        private Button reports_button;
     }
 }
