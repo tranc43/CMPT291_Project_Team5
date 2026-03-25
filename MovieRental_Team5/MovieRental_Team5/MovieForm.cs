@@ -58,10 +58,9 @@ namespace MovieRental_Team5
                 DataGridViewRow row = movie_grid.Rows[e.RowIndex];
                 selectedMovieID = Convert.ToInt32(row.Cells["Movie_ID"].Value);
                 title_search.Text = row.Cells["Movie_Name"].Value.ToString();
-                genre_dropdown.SelectedItem = row.Cells["Movie_Genre"].Value.ToString().Trim();
-                distribution_fee.Text = row.Cells["Distribution_Fee"].Value.ToString();
+                genre_dropdown.SelectedItem = row.Cells["Movie_Genre"].Value.ToString();
+                fee_field.Text = row.Cells["Distribution_Fee"].Value.ToString();
                 num_copies.Text = row.Cells["Num_Copies"].Value.ToString();
-
             }
         }
 
@@ -83,6 +82,7 @@ namespace MovieRental_Team5
                     cmd.Parameters.AddWithValue("@genre", genre_dropdown.SelectedItem.ToString().Trim());
                     cmd.Parameters.AddWithValue("@fee", decimal.Parse(fee_field.Text));
                     cmd.Parameters.AddWithValue("@copies", int.Parse(num_copies.Text));
+                    cmd.Parameters.AddWithValue("@id", selectedMovieID);
                     cmd.ExecuteNonQuery();
                     MessageBox.Show("Movie added successfully!");
                     load_movie();
