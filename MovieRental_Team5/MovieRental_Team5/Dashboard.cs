@@ -19,7 +19,8 @@ namespace MovieRental_Team5
 
         private void manage_customers_Click(object sender, EventArgs e)
         {
-
+            CustomerForm customerForm = new CustomerForm();
+            customerForm.Show();
         }
 
         private void Title_Click(object sender, EventArgs e)
@@ -36,17 +37,21 @@ namespace MovieRental_Team5
 
         private void orders_Click(object sender, EventArgs e)
         {
-
+            OrderForm orderForm = new OrderForm();
+            orderForm.Show();
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-
-        }
 
         private void manage_movies_Click(object sender, EventArgs e)
         {
+            MovieForm movieForm = new MovieForm();
+            movieForm.Show();
+        }
 
+        private void reports_button_Click(object sender, EventArgs e)
+        {
+            ReportsForm reportsForm = new ReportsForm();
+            reportsForm.Show();
         }
     }
 }

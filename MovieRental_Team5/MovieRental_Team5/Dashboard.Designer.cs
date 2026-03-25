@@ -100,6 +100,7 @@
             reports_button.TabIndex = 6;
             reports_button.Text = "Reports";
             reports_button.UseVisualStyleBackColor = true;
+            reports_button.Click += reports_button_Click;
             // 
             // Dashboard_Form
             // 
