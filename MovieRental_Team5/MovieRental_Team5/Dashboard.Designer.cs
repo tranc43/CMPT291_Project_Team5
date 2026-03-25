@@ -84,11 +84,11 @@
             // 
             welcome_title.AutoSize = true;
             welcome_title.Font = new Font("Segoe UI", 20F, FontStyle.Bold);
-            welcome_title.Location = new Point(272, 50);
+            welcome_title.Location = new Point(255, 63);
             welcome_title.Name = "welcome_title";
-            welcome_title.Size = new Size(334, 37);
+            welcome_title.Size = new Size(467, 37);
             welcome_title.TabIndex = 5;
-            welcome_title.Text = "Movie Rental Dashboard";
+            welcome_title.Text = "Employee Movie Rental Dashboard";
             welcome_title.Click += Title_Click;
             // 
             // reports_button

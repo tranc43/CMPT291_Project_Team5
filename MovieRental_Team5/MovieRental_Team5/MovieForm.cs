@@ -82,7 +82,7 @@ namespace MovieRental_Team5
                     cmd.Parameters.AddWithValue("@genre", genre_dropdown.SelectedItem.ToString().Trim());
                     cmd.Parameters.AddWithValue("@fee", decimal.Parse(fee_field.Text));
                     cmd.Parameters.AddWithValue("@copies", int.Parse(num_copies.Text));
-                    cmd.Parameters.AddWithValue("@id", selectedMovieID);
+              
                     cmd.ExecuteNonQuery();
                     MessageBox.Show("Movie added successfully!");
                     load_movie();
@@ -134,6 +134,7 @@ namespace MovieRental_Team5
                     cmd.Parameters.AddWithValue("@genre", genre_dropdown.SelectedItem.ToString().Trim());
                     cmd.Parameters.AddWithValue("@fee", decimal.Parse(fee_field.Text));
                     cmd.Parameters.AddWithValue("@copies", int.Parse(num_copies.Text));
+                    cmd.Parameters.AddWithValue("@id", selectedMovieID);
                     cmd.ExecuteNonQuery();
                     MessageBox.Show("Success! Movie updated successfully!");
                     load_movie();
