@@ -12,7 +12,7 @@ namespace MovieRental_Team5
 {
     public partial class MovieForm : Form
     {
-        string connection = @"Server=DESKTOP-CHLK2FI\SQLEXPRESS;Database=MovieRental_Team5;Trusted_Connection=yes;";
+        private readonly string connection = DatabaseConnection.ConnectionString;
         private int selectedMovieID = -1; // for tracking movies editing/deleting
         public MovieForm()
         {
