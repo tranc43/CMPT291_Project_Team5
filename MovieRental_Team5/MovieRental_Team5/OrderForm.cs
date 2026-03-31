@@ -175,6 +175,10 @@ namespace MovieRental_Team5
 
         private void clear_order_fields()
         {
+            /*@desc
+             * this functions purpose is to clear the order fields and resetting them 
+             * to default values
+             */
             if (comboBox2.Items.Count > 0)
             {
                 comboBox2.SelectedIndex = 0;
@@ -206,6 +210,12 @@ namespace MovieRental_Team5
 
         private void record_order_button_Click(object sender, EventArgs e)
         {
+            /*@desc
+             * this functions purpose is to record the order into the database
+             * it first check if theres an employee logged in or not and checks if the customer and movie are selected
+             * it checks if the return date is after the checkout date before proceeding
+             * checks if  the movie is available by comparing the number of copies to num of orders
+             */
             if (CurrentSession.EmployeeId == -1)
             {
                 MessageBox.Show("There is an error. No employee is logged in.");
@@ -221,6 +231,7 @@ namespace MovieRental_Team5
             OrderLookupItem customerItem = (OrderLookupItem)comboBox2.SelectedItem;
             OrderLookupItem movieItem = (OrderLookupItem)comboBox3.SelectedItem;
 
+            // Combining date and time for check out
             DateTime checkoutDateTime = checkout_time.Value.Date + checkout_date.Value.TimeOfDay;
             DateTime returnDateTime = return_date.Value.Date + return_time.Value.TimeOfDay;
 
@@ -235,7 +246,7 @@ namespace MovieRental_Team5
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
-
+                    // this query checks if movie is available by comparing # of copies to # of orders.
                     string availabilityQuery = @"
                         SELECT Num_Copies -
                         (
@@ -258,7 +269,7 @@ namespace MovieRental_Team5
                         load_movies();
                         return;
                     }
-
+           
                     string insertQuery = @"
                         INSERT INTO Order_Data
                         (Checkout_Year, Checkout_Month, Checkout_Day, Checkout_Time,
@@ -266,7 +277,7 @@ namespace MovieRental_Team5
                         VALUES
                         (@checkoutYear, @checkoutMonth, @checkoutDay, @checkoutTime,
                          @returnYear, @returnMonth, @returnDay, @returnTime, @movieId, @customerId, @employeeId)";
-
+                    // this block of code inserts the order into the database with the necessary information for th eorder.
                     SqlCommand insertCmd = new SqlCommand(insertQuery, conn);
                     insertCmd.Parameters.AddWithValue("@checkoutYear", checkoutDateTime.Year);
                     insertCmd.Parameters.AddWithValue("@checkoutMonth", checkoutDateTime.Month);
