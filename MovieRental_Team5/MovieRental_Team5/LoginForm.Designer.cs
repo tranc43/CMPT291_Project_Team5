@@ -33,6 +33,8 @@
             contextMenuStrip1 = new ContextMenuStrip(components);
             Email_SIN_Label = new Label();
             EmailField = new TextBox();
+            PasswordLabel = new Label();
+            PasswordField = new TextBox();
             LoginButton = new Button();
             label2 = new Label();
             Exit_Application = new Button();
@@ -74,13 +76,33 @@
             EmailField.Click += EmailAddressInput;
             EmailField.TextChanged += EmailAddressInput;
             // 
+            // PasswordLabel
+            // 
+            PasswordLabel.AutoSize = true;
+            PasswordLabel.Font = new Font("Segoe UI", 20.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            PasswordLabel.Location = new Point(264, 200);
+            PasswordLabel.Name = "PasswordLabel";
+            PasswordLabel.Size = new Size(133, 37);
+            PasswordLabel.TabIndex = 5;
+            PasswordLabel.Text = "Password";
+            // 
+            // PasswordField
+            // 
+            PasswordField.Font = new Font("Segoe UI", 10F);
+            PasswordField.Location = new Point(420, 212);
+            PasswordField.Name = "PasswordField";
+            PasswordField.PasswordChar = '*';
+            PasswordField.PlaceholderText = "Enter Password";
+            PasswordField.Size = new Size(185, 25);
+            PasswordField.TabIndex = 6;
+            // 
             // LoginButton
             // 
             LoginButton.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
-            LoginButton.Location = new Point(420, 205);
+            LoginButton.Location = new Point(420, 260);
             LoginButton.Name = "LoginButton";
             LoginButton.Size = new Size(185, 66);
-            LoginButton.TabIndex = 6;
+            LoginButton.TabIndex = 7;
             LoginButton.Text = "Login";
             LoginButton.UseVisualStyleBackColor = true;
             LoginButton.Click += LoginButton_Click;
@@ -97,10 +119,10 @@
             // Exit_Application
             // 
             Exit_Application.Font = new Font("Segoe UI", 12F, FontStyle.Underline);
-            Exit_Application.Location = new Point(420, 307);
+            Exit_Application.Location = new Point(420, 348);
             Exit_Application.Name = "Exit_Application";
             Exit_Application.Size = new Size(182, 77);
-            Exit_Application.TabIndex = 7;
+            Exit_Application.TabIndex = 8;
             Exit_Application.Text = "Exit Application";
             Exit_Application.UseVisualStyleBackColor = true;
             Exit_Application.Click += Exit_Application_Click;
@@ -112,6 +134,8 @@
             ClientSize = new Size(967, 586);
             Controls.Add(Exit_Application);
             Controls.Add(LoginButton);
+            Controls.Add(PasswordField);
+            Controls.Add(PasswordLabel);
             Controls.Add(EmailField);
             Controls.Add(label2);
             Controls.Add(Email_SIN_Label);
@@ -129,6 +153,8 @@
         private ContextMenuStrip contextMenuStrip1;
         private Label Email_SIN_Label;
         private TextBox EmailField;
+        private Label PasswordLabel;
+        private TextBox PasswordField;
         private Button LoginButton;
         private Label label2;
         private Button Exit_Application;

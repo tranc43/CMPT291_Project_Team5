@@ -33,6 +33,7 @@
             manage_movies = new Button();
             orders = new Button();
             welcome_title = new Label();
+            logged_in_as_label = new Label();
             reports_button = new Button();
             SuspendLayout();
             // 
@@ -84,12 +85,21 @@
             // 
             welcome_title.AutoSize = true;
             welcome_title.Font = new Font("Segoe UI", 20F, FontStyle.Bold);
-            welcome_title.Location = new Point(255, 63);
+            welcome_title.Location = new Point(257, 23);
             welcome_title.Name = "welcome_title";
             welcome_title.Size = new Size(467, 37);
             welcome_title.TabIndex = 5;
             welcome_title.Text = "Employee Movie Rental Dashboard";
-            welcome_title.Click += Title_Click;
+            // 
+            // logged_in_as_label
+            // 
+            logged_in_as_label.AutoSize = true;
+            logged_in_as_label.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            logged_in_as_label.Location = new Point(257, 74);
+            logged_in_as_label.Name = "logged_in_as_label";
+            logged_in_as_label.Size = new Size(158, 20);
+            logged_in_as_label.TabIndex = 6;
+            logged_in_as_label.Text = "Logged in as: nobody";
             // 
             // reports_button
             // 
@@ -107,6 +117,7 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(970, 526);
+            Controls.Add(logged_in_as_label);
             Controls.Add(reports_button);
             Controls.Add(welcome_title);
             Controls.Add(orders);
@@ -126,6 +137,7 @@
         private Button manage_movies;
         private Button orders;
         private Label welcome_title;
+        private Label logged_in_as_label;
         private Button reports_button;
     }
 }

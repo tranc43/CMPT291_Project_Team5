@@ -6,7 +6,7 @@ namespace MovieRental_Team5
 {
     public partial class LoginForm : Form
     {
-        private readonly string connectionString = DatabaseConnection.ConnectionString;
+        string connectionString = DatabaseConnection.ConnectionString;
 
         public LoginForm()
         {
@@ -30,11 +30,12 @@ namespace MovieRental_Team5
         }
         private void LoginButton_Click(object sender, EventArgs e)
         {
-            string email = EmailField.Text.Trim();
+            string sin = EmailField.Text.Trim();
+            string password = PasswordField.Text;
 
-            if (string.IsNullOrEmpty(email))
+            if (string.IsNullOrEmpty(sin) || string.IsNullOrEmpty(password))
             {
-                MessageBox.Show("Error", "Please enter your email :(");
+                MessageBox.Show("Please enter your employee SIN and password.", "Login Error");
                 return;
             }
             try
@@ -42,52 +43,63 @@ namespace MovieRental_Team5
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
-                    // Employee Reader
-                    string employee_query = "SELECT Employee_ID, First_Name, Last_Name FROM Employee_Data WHERE SIN = @input";
+                    string employee_query = "SELECT Employee_ID, First_Name, Last_Name, Employee_Password FROM Employee_Data WHERE SIN = @input";
                     SqlCommand empCmd = new SqlCommand(employee_query, conn);
 
-                    empCmd.Parameters.AddWithValue("@input", email);
+                    empCmd.Parameters.AddWithValue("@input", sin);
                     SqlDataReader empReader = empCmd.ExecuteReader();
 
                     if (empReader.HasRows)
                     {
                         empReader.Read();
-                        string employee_name = empReader["First_Name"].ToString() + empReader["Last_Name"].ToString();
+                        string storedPassword = empReader["Employee_Password"].ToString();
+                        bool passwordMatches = PasswordSecurity.VerifyPassword(password, storedPassword);
+
+                        if (!passwordMatches)
+                        {
+                            empReader.Close();
+                            MessageBox.Show("Invalid employee SIN or password.", "Login Error");
+                            return;
+                        }
+
+                        int employeeId = Convert.ToInt32(empReader["Employee_ID"]);
+                        string employee_name = empReader["First_Name"].ToString() + " " + empReader["Last_Name"].ToString();
+                        bool passwordNeedsUpgrade = !PasswordSecurity.IsHashed(storedPassword);
+
                         empReader.Close();
+
+                        if (passwordNeedsUpgrade)
+                        {
+                            UpgradeEmployeePassword(conn, employeeId, password);
+                        }
+
+                        CurrentSession.SetEmployee(employeeId, sin, employee_name);
+
                         MessageBox.Show("Login Successful! " + " Welcome Back, " + employee_name + " ! ");
                         Dashboard_Form dashboard = new Dashboard_Form(employee_name);
                         dashboard.Show();
                         this.Hide();
                         return;
-
                     }
-                    empReader.Close();
 
-                    // Customer check
-                    /*
-                    string customer_query = "SELECT Customer_ID, First_Name, Last_Name FROM Customer_Data WHERE Email_Address = @input";
-                    SqlCommand customer_cmd = new SqlCommand(customer_query, conn);
-
-                    customer_cmd.Parameters.AddWithValue("@input", email);
-                    SqlDataReader customer_reader = customer_cmd.ExecuteReader();
-
-                    if (customer_reader.HasRows)
-                    {
-                        customer_reader.Read();
-                        string customer_name = customer_reader["First_Name"].ToString() + customer_reader["Last_Name"].ToString();
-                        customer_reader.Close();
-                        MessageBox.Show("Login Successful!" + "Welcome Back," + customer_name + "!");
-                        return;
-
-                    }
-                    customer_reader.Close();
-                    */
+                    MessageBox.Show("Invalid employee SIN or password.", "Login Error");
                 }
 
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error: " + ex.Message + "there is an error!");
+            }
+        }
+
+        private void UpgradeEmployeePassword(SqlConnection conn, int employeeId, string plainTextPassword)
+        {
+            string updateQuery = "UPDATE Employee_Data SET Employee_Password = @password WHERE Employee_ID = @employeeId";
+            using (SqlCommand updateCommand = new SqlCommand(updateQuery, conn))
+            {
+                updateCommand.Parameters.AddWithValue("@password", PasswordSecurity.HashPassword(plainTextPassword));
+                updateCommand.Parameters.AddWithValue("@employeeId", employeeId);
+                updateCommand.ExecuteNonQuery();
             }
         }
 
