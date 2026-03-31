@@ -15,6 +15,7 @@ namespace MovieRental_Team5
         {
             InitializeComponent();
             employee_name = name;
+            Load += Dashboard_Form_Load;
         }
 
         private void manage_customers_Click(object sender, EventArgs e)
@@ -23,20 +24,39 @@ namespace MovieRental_Team5
             customerForm.Show();
         }
 
-        private void Title_Click(object sender, EventArgs e)
+        private void Dashboard_Form_Load(object sender, EventArgs e)
+            /*@desc: this functions purpose is to display welcome and whos currently logged in
+             * 
+             */
         {
-            welcome_title.Text = "Welcome, " + employee_name + "!";
+            string displayName = employee_name;
+
+            if (!string.IsNullOrWhiteSpace(CurrentSession.EmployeeName))
+            {
+                displayName = CurrentSession.EmployeeName;
+            }
+
+            welcome_title.Text = "Employee Movie Rental Dashboard";
+            logged_in_as_label.Text = "Logged in as: " + displayName;
         }
 
         private void log_out_button_Click(object sender, EventArgs e)
         {
+            /*@desc: this functions purpose is to log out the user and go to login 
+             * 
+             */
+            CurrentSession.Clear();
             this.Close();
             LoginForm loginForm = new LoginForm();
             loginForm.Show();
         }
 
         private void orders_Click(object sender, EventArgs e)
+
         {
+            /*@desc: this functions purpose is to go to the order form 
+            * 
+            */
             OrderForm orderForm = new OrderForm();
             orderForm.Show();
         }
@@ -44,12 +64,18 @@ namespace MovieRental_Team5
 
         private void manage_movies_Click(object sender, EventArgs e)
         {
+            /*@desc: functions purpose is to go to manage movies
+            * 
+            */
             MovieForm movieForm = new MovieForm();
             movieForm.Show();
         }
 
         private void reports_button_Click(object sender, EventArgs e)
         {
+            /*@desc: functiosn purpose is to go to reports 
+            * 
+            */
             ReportsForm reportsForm = new ReportsForm();
             reportsForm.Show();
         }
