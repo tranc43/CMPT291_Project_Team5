@@ -5,4 +5,4 @@ obj/
 *.user
 
 # Connection string for Project
-App.config
+MovieRental_Team5/MovieRental_Team5/App.config
