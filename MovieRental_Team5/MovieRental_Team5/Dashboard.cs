@@ -79,5 +79,48 @@ namespace MovieRental_Team5
             ReportsForm reportsForm = new ReportsForm();
             reportsForm.Show();
         }
+
+        private void OpenHelpTopic(string topic)
+        {
+            using (HelpForm helpForm = new HelpForm(topic))
+            {
+                helpForm.ShowDialog(this);
+            }
+        }
+
+        private void helpOverviewToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenHelpTopic(HelpTopics.GettingStarted);
+        }
+
+        private void helpDashboardToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenHelpTopic(HelpTopics.Dashboard);
+        }
+
+        private void helpMoviesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenHelpTopic(HelpTopics.Movies);
+        }
+
+        private void helpOrdersToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenHelpTopic(HelpTopics.Orders);
+        }
+
+        private void helpCustomersToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenHelpTopic(HelpTopics.CustomerManagement);
+        }
+
+        private void helpReportsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenHelpTopic(HelpTopics.Reports);
+        }
+
+        private void helpAboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenHelpTopic(HelpTopics.About);
+        }
     }
 }

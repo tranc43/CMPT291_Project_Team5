@@ -119,6 +119,27 @@ namespace MovieRental_Team5
             Application.Exit();
         }
 
-   
+        private void OpenHelpTopic(string topic)
+        {
+            using (HelpForm helpForm = new HelpForm(topic))
+            {
+                helpForm.ShowDialog(this);
+            }
+        }
+
+        private void helpGettingStartedToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenHelpTopic(HelpTopics.GettingStarted);
+        }
+
+        private void helpLoginToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenHelpTopic(HelpTopics.Login);
+        }
+
+        private void helpAboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenHelpTopic(HelpTopics.About);
+        }
     }
 }

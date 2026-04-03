@@ -28,6 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
+            menuStrip1 = new MenuStrip();
+            helpToolStripMenuItem = new ToolStripMenuItem();
+            helpOverviewToolStripMenuItem = new ToolStripMenuItem();
+            helpMoviesToolStripMenuItem = new ToolStripMenuItem();
+            helpOrdersToolStripMenuItem = new ToolStripMenuItem();
+            helpAboutToolStripMenuItem = new ToolStripMenuItem();
             movie_dashboardd_title = new Label();
             genre_dropdown = new ComboBox();
             title_search = new TextBox();
@@ -44,14 +50,60 @@
             clear_button = new Button();
             back_button = new Button();
             movie_grid = new DataGridView();
+            movie_info = new Label();
+            menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)movie_grid).BeginInit();
             SuspendLayout();
+            // 
+            // menuStrip1
+            // 
+            menuStrip1.Items.AddRange(new ToolStripItem[] { helpToolStripMenuItem });
+            menuStrip1.Location = new Point(0, 0);
+            menuStrip1.Name = "menuStrip1";
+            menuStrip1.Size = new Size(893, 24);
+            menuStrip1.TabIndex = 23;
+            menuStrip1.Text = "menuStrip1";
+            // 
+            // helpToolStripMenuItem
+            // 
+            helpToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { helpOverviewToolStripMenuItem, helpMoviesToolStripMenuItem, helpOrdersToolStripMenuItem, helpAboutToolStripMenuItem });
+            helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            helpToolStripMenuItem.Size = new Size(44, 20);
+            helpToolStripMenuItem.Text = "Help";
+            // 
+            // helpOverviewToolStripMenuItem
+            // 
+            helpOverviewToolStripMenuItem.Name = "helpOverviewToolStripMenuItem";
+            helpOverviewToolStripMenuItem.Size = new Size(181, 22);
+            helpOverviewToolStripMenuItem.Text = "Getting Started";
+            helpOverviewToolStripMenuItem.Click += helpOverviewToolStripMenuItem_Click;
+            // 
+            // helpMoviesToolStripMenuItem
+            // 
+            helpMoviesToolStripMenuItem.Name = "helpMoviesToolStripMenuItem";
+            helpMoviesToolStripMenuItem.Size = new Size(181, 22);
+            helpMoviesToolStripMenuItem.Text = "Movie Management";
+            helpMoviesToolStripMenuItem.Click += helpMoviesToolStripMenuItem_Click;
+            // 
+            // helpOrdersToolStripMenuItem
+            // 
+            helpOrdersToolStripMenuItem.Name = "helpOrdersToolStripMenuItem";
+            helpOrdersToolStripMenuItem.Size = new Size(181, 22);
+            helpOrdersToolStripMenuItem.Text = "Order Entry";
+            helpOrdersToolStripMenuItem.Click += helpOrdersToolStripMenuItem_Click;
+            // 
+            // helpAboutToolStripMenuItem
+            // 
+            helpAboutToolStripMenuItem.Name = "helpAboutToolStripMenuItem";
+            helpAboutToolStripMenuItem.Size = new Size(181, 22);
+            helpAboutToolStripMenuItem.Text = "About";
+            helpAboutToolStripMenuItem.Click += helpAboutToolStripMenuItem_Click;
             // 
             // movie_dashboardd_title
             // 
             movie_dashboardd_title.AutoSize = true;
             movie_dashboardd_title.Font = new Font("Segoe UI", 20F, FontStyle.Bold);
-            movie_dashboardd_title.Location = new Point(268, 9);
+            movie_dashboardd_title.Location = new Point(324, 24);
             movie_dashboardd_title.Name = "movie_dashboardd_title";
             movie_dashboardd_title.Size = new Size(245, 37);
             movie_dashboardd_title.TabIndex = 0;
@@ -62,7 +114,7 @@
             genre_dropdown.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             genre_dropdown.FormattingEnabled = true;
             genre_dropdown.Items.AddRange(new object[] { "Comedy", "Action", "Drama", "Foreign" });
-            genre_dropdown.Location = new Point(351, 112);
+            genre_dropdown.Location = new Point(357, 447);
             genre_dropdown.Name = "genre_dropdown";
             genre_dropdown.Size = new Size(121, 23);
             genre_dropdown.TabIndex = 1;
@@ -70,7 +122,7 @@
             // 
             // title_search
             // 
-            title_search.Location = new Point(492, 112);
+            title_search.Location = new Point(498, 447);
             title_search.Name = "title_search";
             title_search.PlaceholderText = "Enter Movie Name..";
             title_search.Size = new Size(124, 23);
@@ -80,7 +132,7 @@
             // 
             input_movie_title.AutoSize = true;
             input_movie_title.Font = new Font("Segoe UI", 20F, FontStyle.Bold);
-            input_movie_title.Location = new Point(102, 63);
+            input_movie_title.Location = new Point(378, 72);
             input_movie_title.Name = "input_movie_title";
             input_movie_title.Size = new Size(150, 37);
             input_movie_title.TabIndex = 3;
@@ -88,7 +140,7 @@
             // 
             // fee_field
             // 
-            fee_field.Location = new Point(492, 184);
+            fee_field.Location = new Point(187, 459);
             fee_field.Name = "fee_field";
             fee_field.PlaceholderText = "Enter fee cost";
             fee_field.Size = new Size(124, 23);
@@ -98,7 +150,7 @@
             // 
             distribution_fee.AutoSize = true;
             distribution_fee.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            distribution_fee.Location = new Point(338, 182);
+            distribution_fee.Location = new Point(33, 457);
             distribution_fee.Name = "distribution_fee";
             distribution_fee.Size = new Size(134, 21);
             distribution_fee.TabIndex = 5;
@@ -108,7 +160,7 @@
             // 
             copies_label.AutoSize = true;
             copies_label.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            copies_label.Location = new Point(325, 219);
+            copies_label.Location = new Point(20, 494);
             copies_label.Name = "copies_label";
             copies_label.Size = new Size(147, 21);
             copies_label.TabIndex = 6;
@@ -116,7 +168,7 @@
             // 
             // num_copies
             // 
-            num_copies.Location = new Point(492, 221);
+            num_copies.Location = new Point(187, 496);
             num_copies.Name = "num_copies";
             num_copies.PlaceholderText = "Enter num of copies";
             num_copies.Size = new Size(124, 23);
@@ -124,7 +176,7 @@
             // 
             // load_movies
             // 
-            load_movies.Location = new Point(366, 319);
+            load_movies.Location = new Point(45, 598);
             load_movies.Name = "load_movies";
             load_movies.Size = new Size(106, 38);
             load_movies.TabIndex = 8;
@@ -135,16 +187,16 @@
             // controls
             // 
             controls.AutoSize = true;
-            controls.Font = new Font("Segoe UI", 20F, FontStyle.Bold);
-            controls.Location = new Point(544, 63);
+            controls.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
+            controls.Location = new Point(378, 416);
             controls.Name = "controls";
-            controls.Size = new Size(122, 37);
+            controls.Size = new Size(191, 28);
             controls.TabIndex = 15;
-            controls.Text = "controls";
+            controls.Text = "select movie genre";
             // 
             // add_movie
             // 
-            add_movie.Location = new Point(366, 266);
+            add_movie.Location = new Point(45, 545);
             add_movie.Name = "add_movie";
             add_movie.Size = new Size(106, 38);
             add_movie.TabIndex = 16;
@@ -154,7 +206,7 @@
             // 
             // update_movie
             // 
-            update_movie.Location = new Point(492, 266);
+            update_movie.Location = new Point(171, 545);
             update_movie.Name = "update_movie";
             update_movie.Size = new Size(106, 38);
             update_movie.TabIndex = 17;
@@ -164,7 +216,7 @@
             // 
             // delete_movie
             // 
-            delete_movie.Location = new Point(492, 319);
+            delete_movie.Location = new Point(171, 598);
             delete_movie.Name = "delete_movie";
             delete_movie.Size = new Size(106, 38);
             delete_movie.TabIndex = 18;
@@ -174,7 +226,7 @@
             // 
             // clear_button
             // 
-            clear_button.Location = new Point(650, 206);
+            clear_button.Location = new Point(314, 598);
             clear_button.Name = "clear_button";
             clear_button.Size = new Size(106, 38);
             clear_button.TabIndex = 19;
@@ -184,7 +236,7 @@
             // 
             // back_button
             // 
-            back_button.Location = new Point(671, 400);
+            back_button.Location = new Point(758, 606);
             back_button.Name = "back_button";
             back_button.Size = new Size(106, 38);
             back_button.TabIndex = 21;
@@ -197,16 +249,28 @@
             movie_grid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             movie_grid.Location = new Point(33, 112);
             movie_grid.Name = "movie_grid";
-            movie_grid.Size = new Size(286, 245);
+            movie_grid.Size = new Size(804, 244);
             movie_grid.TabIndex = 22;
             movie_grid.CellClick += movie_grid_CellContentClick;
             movie_grid.CellContentClick += movie_grid_CellContentClick;
+            // 
+            // movie_info
+            // 
+            movie_info.AutoSize = true;
+            movie_info.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
+            movie_info.Location = new Point(82, 416);
+            movie_info.Name = "movie_info";
+            movie_info.Size = new Size(195, 28);
+            movie_info.TabIndex = 24;
+            movie_info.Text = "enter movie details";
             // 
             // MovieForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(893, 665);
+            Controls.Add(movie_info);
+            Controls.Add(menuStrip1);
             Controls.Add(movie_grid);
             Controls.Add(back_button);
             Controls.Add(clear_button);
@@ -223,9 +287,12 @@
             Controls.Add(title_search);
             Controls.Add(genre_dropdown);
             Controls.Add(movie_dashboardd_title);
+            MainMenuStrip = menuStrip1;
             Name = "MovieForm";
             Text = "MovieForm";
             Load += MovieForm_Load;
+            menuStrip1.ResumeLayout(false);
+            menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)movie_grid).EndInit();
             ResumeLayout(false);
             PerformLayout();
@@ -233,6 +300,12 @@
 
         #endregion
 
+        private MenuStrip menuStrip1;
+        private ToolStripMenuItem helpToolStripMenuItem;
+        private ToolStripMenuItem helpOverviewToolStripMenuItem;
+        private ToolStripMenuItem helpMoviesToolStripMenuItem;
+        private ToolStripMenuItem helpOrdersToolStripMenuItem;
+        private ToolStripMenuItem helpAboutToolStripMenuItem;
         private Label movie_dashboardd_title;
         private ComboBox genre_dropdown;
         private TextBox title_search;
@@ -249,5 +322,6 @@
         private Button clear_button;
         private Button back_button;
         private DataGridView movie_grid;
+        private Label movie_info;
     }
 }

@@ -28,6 +28,15 @@
         /// </summary>
         private void InitializeComponent()
         {
+            menuStrip1 = new MenuStrip();
+            helpToolStripMenuItem = new ToolStripMenuItem();
+            helpOverviewToolStripMenuItem = new ToolStripMenuItem();
+            helpDashboardToolStripMenuItem = new ToolStripMenuItem();
+            helpCustomersToolStripMenuItem = new ToolStripMenuItem();
+            helpMoviesToolStripMenuItem = new ToolStripMenuItem();
+            helpOrdersToolStripMenuItem = new ToolStripMenuItem();
+            helpReportsToolStripMenuItem = new ToolStripMenuItem();
+            helpAboutToolStripMenuItem = new ToolStripMenuItem();
             log_out_button = new Button();
             manage_customers = new Button();
             manage_movies = new Button();
@@ -35,14 +44,81 @@
             welcome_title = new Label();
             logged_in_as_label = new Label();
             reports_button = new Button();
+            menuStrip1.SuspendLayout();
             SuspendLayout();
+            // 
+            // menuStrip1
+            // 
+            menuStrip1.Dock = DockStyle.Bottom;
+            menuStrip1.Items.AddRange(new ToolStripItem[] { helpToolStripMenuItem });
+            menuStrip1.Location = new Point(0, 692);
+            menuStrip1.Name = "menuStrip1";
+            menuStrip1.Size = new Size(1066, 24);
+            menuStrip1.TabIndex = 7;
+            menuStrip1.Text = "menuStrip1";
+            // 
+            // helpToolStripMenuItem
+            // 
+            helpToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { helpOverviewToolStripMenuItem, helpDashboardToolStripMenuItem, helpCustomersToolStripMenuItem, helpMoviesToolStripMenuItem, helpOrdersToolStripMenuItem, helpReportsToolStripMenuItem, helpAboutToolStripMenuItem });
+            helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            helpToolStripMenuItem.Size = new Size(44, 20);
+            helpToolStripMenuItem.Text = "Help";
+            // 
+            // helpOverviewToolStripMenuItem
+            // 
+            helpOverviewToolStripMenuItem.Name = "helpOverviewToolStripMenuItem";
+            helpOverviewToolStripMenuItem.Size = new Size(200, 22);
+            helpOverviewToolStripMenuItem.Text = "Getting Started";
+            helpOverviewToolStripMenuItem.Click += helpOverviewToolStripMenuItem_Click;
+            // 
+            // helpDashboardToolStripMenuItem
+            // 
+            helpDashboardToolStripMenuItem.Name = "helpDashboardToolStripMenuItem";
+            helpDashboardToolStripMenuItem.Size = new Size(200, 22);
+            helpDashboardToolStripMenuItem.Text = "Dashboard";
+            helpDashboardToolStripMenuItem.Click += helpDashboardToolStripMenuItem_Click;
+            // 
+            // helpCustomersToolStripMenuItem
+            // 
+            helpCustomersToolStripMenuItem.Name = "helpCustomersToolStripMenuItem";
+            helpCustomersToolStripMenuItem.Size = new Size(200, 22);
+            helpCustomersToolStripMenuItem.Text = "Customer Management";
+            helpCustomersToolStripMenuItem.Click += helpCustomersToolStripMenuItem_Click;
+            // 
+            // helpMoviesToolStripMenuItem
+            // 
+            helpMoviesToolStripMenuItem.Name = "helpMoviesToolStripMenuItem";
+            helpMoviesToolStripMenuItem.Size = new Size(200, 22);
+            helpMoviesToolStripMenuItem.Text = "Movie Management";
+            helpMoviesToolStripMenuItem.Click += helpMoviesToolStripMenuItem_Click;
+            // 
+            // helpOrdersToolStripMenuItem
+            // 
+            helpOrdersToolStripMenuItem.Name = "helpOrdersToolStripMenuItem";
+            helpOrdersToolStripMenuItem.Size = new Size(200, 22);
+            helpOrdersToolStripMenuItem.Text = "Order Entry";
+            helpOrdersToolStripMenuItem.Click += helpOrdersToolStripMenuItem_Click;
+            // 
+            // helpReportsToolStripMenuItem
+            // 
+            helpReportsToolStripMenuItem.Name = "helpReportsToolStripMenuItem";
+            helpReportsToolStripMenuItem.Size = new Size(200, 22);
+            helpReportsToolStripMenuItem.Text = "Reports";
+            helpReportsToolStripMenuItem.Click += helpReportsToolStripMenuItem_Click;
+            // 
+            // helpAboutToolStripMenuItem
+            // 
+            helpAboutToolStripMenuItem.Name = "helpAboutToolStripMenuItem";
+            helpAboutToolStripMenuItem.Size = new Size(200, 22);
+            helpAboutToolStripMenuItem.Text = "About";
+            helpAboutToolStripMenuItem.Click += helpAboutToolStripMenuItem_Click;
             // 
             // log_out_button
             // 
             log_out_button.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            log_out_button.Location = new Point(377, 396);
+            log_out_button.Location = new Point(421, 335);
             log_out_button.Name = "log_out_button";
-            log_out_button.Size = new Size(188, 74);
+            log_out_button.Size = new Size(177, 86);
             log_out_button.TabIndex = 0;
             log_out_button.Text = "Log Out";
             log_out_button.UseVisualStyleBackColor = true;
@@ -51,7 +127,7 @@
             // manage_customers
             // 
             manage_customers.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            manage_customers.Location = new Point(272, 114);
+            manage_customers.Location = new Point(310, 142);
             manage_customers.Name = "manage_customers";
             manage_customers.Size = new Size(188, 74);
             manage_customers.TabIndex = 1;
@@ -62,7 +138,7 @@
             // manage_movies
             // 
             manage_movies.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            manage_movies.Location = new Point(491, 114);
+            manage_movies.Location = new Point(523, 142);
             manage_movies.Name = "manage_movies";
             manage_movies.Size = new Size(188, 74);
             manage_movies.TabIndex = 2;
@@ -73,7 +149,7 @@
             // orders
             // 
             orders.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            orders.Location = new Point(272, 218);
+            orders.Location = new Point(310, 245);
             orders.Name = "orders";
             orders.Size = new Size(188, 74);
             orders.TabIndex = 3;
@@ -85,7 +161,7 @@
             // 
             welcome_title.AutoSize = true;
             welcome_title.Font = new Font("Segoe UI", 20F, FontStyle.Bold);
-            welcome_title.Location = new Point(257, 23);
+            welcome_title.Location = new Point(272, 34);
             welcome_title.Name = "welcome_title";
             welcome_title.Size = new Size(467, 37);
             welcome_title.TabIndex = 5;
@@ -95,7 +171,7 @@
             // 
             logged_in_as_label.AutoSize = true;
             logged_in_as_label.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
-            logged_in_as_label.Location = new Point(257, 74);
+            logged_in_as_label.Location = new Point(421, 80);
             logged_in_as_label.Name = "logged_in_as_label";
             logged_in_as_label.Size = new Size(158, 20);
             logged_in_as_label.TabIndex = 6;
@@ -104,7 +180,7 @@
             // reports_button
             // 
             reports_button.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            reports_button.Location = new Point(491, 218);
+            reports_button.Location = new Point(523, 245);
             reports_button.Name = "reports_button";
             reports_button.Size = new Size(188, 74);
             reports_button.TabIndex = 6;
@@ -116,7 +192,8 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(970, 526);
+            ClientSize = new Size(1066, 716);
+            Controls.Add(menuStrip1);
             Controls.Add(logged_in_as_label);
             Controls.Add(reports_button);
             Controls.Add(welcome_title);
@@ -124,14 +201,26 @@
             Controls.Add(manage_movies);
             Controls.Add(manage_customers);
             Controls.Add(log_out_button);
+            MainMenuStrip = menuStrip1;
             Name = "Dashboard_Form";
             Text = "Dashboard";
+            menuStrip1.ResumeLayout(false);
+            menuStrip1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
 
+        private MenuStrip menuStrip1;
+        private ToolStripMenuItem helpToolStripMenuItem;
+        private ToolStripMenuItem helpOverviewToolStripMenuItem;
+        private ToolStripMenuItem helpDashboardToolStripMenuItem;
+        private ToolStripMenuItem helpCustomersToolStripMenuItem;
+        private ToolStripMenuItem helpMoviesToolStripMenuItem;
+        private ToolStripMenuItem helpOrdersToolStripMenuItem;
+        private ToolStripMenuItem helpReportsToolStripMenuItem;
+        private ToolStripMenuItem helpAboutToolStripMenuItem;
         private Button log_out_button;
         private Button manage_customers;
         private Button manage_movies;
