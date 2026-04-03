@@ -28,6 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
+            menuStrip1 = new MenuStrip();
+            helpToolStripMenuItem = new ToolStripMenuItem();
+            helpOverviewToolStripMenuItem = new ToolStripMenuItem();
+            helpMoviesToolStripMenuItem = new ToolStripMenuItem();
+            helpOrdersToolStripMenuItem = new ToolStripMenuItem();
+            helpAboutToolStripMenuItem = new ToolStripMenuItem();
             movie_dashboardd_title = new Label();
             genre_dropdown = new ComboBox();
             title_search = new TextBox();
@@ -44,14 +50,59 @@
             clear_button = new Button();
             back_button = new Button();
             movie_grid = new DataGridView();
+            menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)movie_grid).BeginInit();
             SuspendLayout();
+            // 
+            // menuStrip1
+            // 
+            menuStrip1.Items.AddRange(new ToolStripItem[] { helpToolStripMenuItem });
+            menuStrip1.Location = new Point(0, 0);
+            menuStrip1.Name = "menuStrip1";
+            menuStrip1.Size = new Size(800, 24);
+            menuStrip1.TabIndex = 23;
+            menuStrip1.Text = "menuStrip1";
+            // 
+            // helpToolStripMenuItem
+            // 
+            helpToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { helpOverviewToolStripMenuItem, helpMoviesToolStripMenuItem, helpOrdersToolStripMenuItem, helpAboutToolStripMenuItem });
+            helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            helpToolStripMenuItem.Size = new Size(44, 20);
+            helpToolStripMenuItem.Text = "Help";
+            // 
+            // helpOverviewToolStripMenuItem
+            // 
+            helpOverviewToolStripMenuItem.Name = "helpOverviewToolStripMenuItem";
+            helpOverviewToolStripMenuItem.Size = new Size(180, 22);
+            helpOverviewToolStripMenuItem.Text = "Getting Started";
+            helpOverviewToolStripMenuItem.Click += helpOverviewToolStripMenuItem_Click;
+            // 
+            // helpMoviesToolStripMenuItem
+            // 
+            helpMoviesToolStripMenuItem.Name = "helpMoviesToolStripMenuItem";
+            helpMoviesToolStripMenuItem.Size = new Size(180, 22);
+            helpMoviesToolStripMenuItem.Text = "Movie Management";
+            helpMoviesToolStripMenuItem.Click += helpMoviesToolStripMenuItem_Click;
+            // 
+            // helpOrdersToolStripMenuItem
+            // 
+            helpOrdersToolStripMenuItem.Name = "helpOrdersToolStripMenuItem";
+            helpOrdersToolStripMenuItem.Size = new Size(180, 22);
+            helpOrdersToolStripMenuItem.Text = "Order Entry";
+            helpOrdersToolStripMenuItem.Click += helpOrdersToolStripMenuItem_Click;
+            // 
+            // helpAboutToolStripMenuItem
+            // 
+            helpAboutToolStripMenuItem.Name = "helpAboutToolStripMenuItem";
+            helpAboutToolStripMenuItem.Size = new Size(180, 22);
+            helpAboutToolStripMenuItem.Text = "About";
+            helpAboutToolStripMenuItem.Click += helpAboutToolStripMenuItem_Click;
             // 
             // movie_dashboardd_title
             // 
             movie_dashboardd_title.AutoSize = true;
             movie_dashboardd_title.Font = new Font("Segoe UI", 20F, FontStyle.Bold);
-            movie_dashboardd_title.Location = new Point(268, 9);
+            movie_dashboardd_title.Location = new Point(268, 29);
             movie_dashboardd_title.Name = "movie_dashboardd_title";
             movie_dashboardd_title.Size = new Size(245, 37);
             movie_dashboardd_title.TabIndex = 0;
@@ -207,6 +258,7 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(menuStrip1);
             Controls.Add(movie_grid);
             Controls.Add(back_button);
             Controls.Add(clear_button);
@@ -223,9 +275,12 @@
             Controls.Add(title_search);
             Controls.Add(genre_dropdown);
             Controls.Add(movie_dashboardd_title);
+            MainMenuStrip = menuStrip1;
             Name = "MovieForm";
             Text = "MovieForm";
             Load += MovieForm_Load;
+            menuStrip1.ResumeLayout(false);
+            menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)movie_grid).EndInit();
             ResumeLayout(false);
             PerformLayout();
@@ -233,6 +288,12 @@
 
         #endregion
 
+        private MenuStrip menuStrip1;
+        private ToolStripMenuItem helpToolStripMenuItem;
+        private ToolStripMenuItem helpOverviewToolStripMenuItem;
+        private ToolStripMenuItem helpMoviesToolStripMenuItem;
+        private ToolStripMenuItem helpOrdersToolStripMenuItem;
+        private ToolStripMenuItem helpAboutToolStripMenuItem;
         private Label movie_dashboardd_title;
         private ComboBox genre_dropdown;
         private TextBox title_search;
