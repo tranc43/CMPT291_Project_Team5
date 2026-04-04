@@ -66,21 +66,21 @@
             // helpGettingStartedToolStripMenuItem
             // 
             helpGettingStartedToolStripMenuItem.Name = "helpGettingStartedToolStripMenuItem";
-            helpGettingStartedToolStripMenuItem.Size = new Size(164, 22);
+            helpGettingStartedToolStripMenuItem.Size = new Size(153, 22);
             helpGettingStartedToolStripMenuItem.Text = "Getting Started";
             helpGettingStartedToolStripMenuItem.Click += helpGettingStartedToolStripMenuItem_Click;
             // 
             // helpLoginToolStripMenuItem
             // 
             helpLoginToolStripMenuItem.Name = "helpLoginToolStripMenuItem";
-            helpLoginToolStripMenuItem.Size = new Size(164, 22);
+            helpLoginToolStripMenuItem.Size = new Size(153, 22);
             helpLoginToolStripMenuItem.Text = "Login Screen";
             helpLoginToolStripMenuItem.Click += helpLoginToolStripMenuItem_Click;
             // 
             // helpAboutToolStripMenuItem
             // 
             helpAboutToolStripMenuItem.Name = "helpAboutToolStripMenuItem";
-            helpAboutToolStripMenuItem.Size = new Size(164, 22);
+            helpAboutToolStripMenuItem.Size = new Size(153, 22);
             helpAboutToolStripMenuItem.Text = "About";
             helpAboutToolStripMenuItem.Click += helpAboutToolStripMenuItem_Click;
             // 
@@ -126,7 +126,7 @@
             PasswordLabel.Font = new Font("Segoe UI", 20.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
             PasswordLabel.Location = new Point(264, 217);
             PasswordLabel.Name = "PasswordLabel";
-            PasswordLabel.Size = new Size(133, 37);
+            PasswordLabel.Size = new Size(128, 37);
             PasswordLabel.TabIndex = 5;
             PasswordLabel.Text = "Password";
             // 
@@ -163,7 +163,7 @@
             // Exit_Application
             // 
             Exit_Application.Font = new Font("Segoe UI", 12F, FontStyle.Underline);
-            Exit_Application.Location = new Point(420, 365);
+            Exit_Application.Location = new Point(420, 449);
             Exit_Application.Name = "Exit_Application";
             Exit_Application.Size = new Size(182, 77);
             Exit_Application.TabIndex = 8;
@@ -174,7 +174,7 @@
             // CustomerPortalButton
             // 
             CustomerPortalButton.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            CustomerPortalButton.Location = new Point(420, 462);
+            CustomerPortalButton.Location = new Point(420, 365);
             CustomerPortalButton.Name = "CustomerPortalButton";
             CustomerPortalButton.Size = new Size(182, 66);
             CustomerPortalButton.TabIndex = 10;

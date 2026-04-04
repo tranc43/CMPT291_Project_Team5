@@ -94,6 +94,10 @@ namespace MovieRental_Team5
 
         private void UpgradeEmployeePassword(SqlConnection conn, int employeeId, string plainTextPassword)
         {
+            /*@desc 
+             * this function is responsible for hashing employee passwords that are stored in the database thats plain text.
+             * 
+             */
             string updateQuery = "UPDATE Employee_Data SET Employee_Password = @password WHERE Employee_ID = @employeeId";
             using (SqlCommand updateCommand = new SqlCommand(updateQuery, conn))
             {
@@ -108,12 +112,12 @@ namespace MovieRental_Team5
             // Its being read in the function above
         }
 
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            // Its being read in the function above
-        }
-
+        /* The following section involves 
+         * the help menu and customer portal button,
+         * The help menu provides a guide on how to use the application,
+         * While the customer portal button allows customers to access their account and view the 
+         * rental history.
+         */
         private void Exit_Application_Click(object sender, EventArgs e)
         {
             Application.Exit();

@@ -6,10 +6,7 @@ namespace MovieRental_Team5
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing && (components != null))
-            {
-                components.Dispose();
-            }
+            if (disposing && (components != null)) components.Dispose();
             base.Dispose(disposing);
         }
 
@@ -49,18 +46,37 @@ namespace MovieRental_Team5
             current_rentals_grid = new DataGridView();
             history_tab = new TabPage();
             history_grid = new DataGridView();
+            queue_tab = new TabPage();
+            remove_from_queue_button = new Button();
+            add_to_queue_button = new Button();
+            queue_movie_selector = new ComboBox();
+            queue_movie_label = new Label();
+            queue_grid = new DataGridView();
             browse_tab = new TabPage();
             suggestions_grid = new DataGridView();
             suggestions_label = new Label();
             bestseller_grid = new DataGridView();
             bestsellers_label = new Label();
             browse_button = new Button();
+            actor_filter = new TextBox();
+            actor_filter_label = new Label();
             keyword_filter = new TextBox();
             keyword_filter_label = new Label();
             movie_type_filter = new ComboBox();
             movie_type_filter_label = new Label();
             available_movies_grid = new DataGridView();
             available_movies_label = new Label();
+            ratings_tab = new TabPage();
+            rate_actor_button = new Button();
+            actor_rating_input = new NumericUpDown();
+            rated_actor_selector = new ComboBox();
+            actor_rating_label = new Label();
+            rated_actor_label = new Label();
+            rate_movie_button = new Button();
+            movie_rating_input = new NumericUpDown();
+            rated_movie_selector = new ComboBox();
+            movie_rating_label = new Label();
+            rated_movie_label = new Label();
             menuStrip1.SuspendLayout();
             portal_tabs.SuspendLayout();
             account_tab.SuspendLayout();
@@ -68,12 +84,16 @@ namespace MovieRental_Team5
             ((System.ComponentModel.ISupportInitialize)current_rentals_grid).BeginInit();
             history_tab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)history_grid).BeginInit();
+            queue_tab.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)queue_grid).BeginInit();
             browse_tab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)suggestions_grid).BeginInit();
             ((System.ComponentModel.ISupportInitialize)bestseller_grid).BeginInit();
             ((System.ComponentModel.ISupportInitialize)available_movies_grid).BeginInit();
+            ratings_tab.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)actor_rating_input).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)movie_rating_input).BeginInit();
             SuspendLayout();
-            // menu
             menuStrip1.Items.AddRange(new ToolStripItem[] { helpToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
@@ -86,7 +106,6 @@ namespace MovieRental_Team5
             helpCustomersToolStripMenuItem.Click += helpCustomersToolStripMenuItem_Click;
             helpAboutToolStripMenuItem.Text = "About";
             helpAboutToolStripMenuItem.Click += helpAboutToolStripMenuItem_Click;
-            // header
             title_label.AutoSize = true;
             title_label.Font = new Font("Segoe UI", 20F, FontStyle.Bold);
             title_label.Location = new Point(446, 33);
@@ -106,14 +125,14 @@ namespace MovieRental_Team5
             back_button.Size = new Size(110, 33);
             back_button.Text = "Back";
             back_button.Click += back_button_Click;
-            // tabs
             portal_tabs.Controls.Add(account_tab);
             portal_tabs.Controls.Add(current_tab);
             portal_tabs.Controls.Add(history_tab);
+            portal_tabs.Controls.Add(queue_tab);
             portal_tabs.Controls.Add(browse_tab);
+            portal_tabs.Controls.Add(ratings_tab);
             portal_tabs.Location = new Point(22, 129);
             portal_tabs.Size = new Size(1210, 560);
-            // account tab
             account_tab.Text = "Account";
             Label[] labels = { label10, label11, label12, label13, label14, label15, label16, label17, label18 };
             string[] texts = { "Name", "Email", "City", "Province", "Address", "Postal Code", "Account Number", "Created", "Average Rating" };
@@ -132,15 +151,34 @@ namespace MovieRental_Team5
                 account_tab.Controls.Add(values[i]);
                 y += 45;
             }
-            // current tab
             current_tab.Text = "Currently Held Movies";
             current_rentals_grid.Dock = DockStyle.Fill;
             current_tab.Controls.Add(current_rentals_grid);
-            // history tab
             history_tab.Text = "Order History";
             history_grid.Dock = DockStyle.Fill;
             history_tab.Controls.Add(history_grid);
-            // browse tab
+            queue_tab.Text = "Queue";
+            queue_movie_label.AutoSize = true;
+            queue_movie_label.Location = new Point(23, 21);
+            queue_movie_label.Text = "Add Movie";
+            queue_movie_selector.DropDownStyle = ComboBoxStyle.DropDownList;
+            queue_movie_selector.Location = new Point(91, 18);
+            queue_movie_selector.Size = new Size(278, 23);
+            add_to_queue_button.Location = new Point(390, 15);
+            add_to_queue_button.Size = new Size(112, 30);
+            add_to_queue_button.Text = "Add To Queue";
+            add_to_queue_button.Click += add_to_queue_button_Click;
+            remove_from_queue_button.Location = new Point(518, 15);
+            remove_from_queue_button.Size = new Size(140, 30);
+            remove_from_queue_button.Text = "Remove Selected";
+            remove_from_queue_button.Click += remove_from_queue_button_Click;
+            queue_grid.Location = new Point(23, 62);
+            queue_grid.Size = new Size(1150, 441);
+            queue_tab.Controls.Add(queue_movie_label);
+            queue_tab.Controls.Add(queue_movie_selector);
+            queue_tab.Controls.Add(add_to_queue_button);
+            queue_tab.Controls.Add(remove_from_queue_button);
+            queue_tab.Controls.Add(queue_grid);
             browse_tab.Text = "Browse";
             movie_type_filter_label.AutoSize = true;
             movie_type_filter_label.Location = new Point(21, 18);
@@ -154,8 +192,13 @@ namespace MovieRental_Team5
             keyword_filter_label.Location = new Point(254, 18);
             keyword_filter_label.Text = "Keyword";
             keyword_filter.Location = new Point(312, 15);
-            keyword_filter.Size = new Size(185, 23);
-            browse_button.Location = new Point(518, 11);
+            keyword_filter.Size = new Size(155, 23);
+            actor_filter_label.AutoSize = true;
+            actor_filter_label.Location = new Point(484, 18);
+            actor_filter_label.Text = "Actor Name(s)";
+            actor_filter.Location = new Point(572, 15);
+            actor_filter.Size = new Size(182, 23);
+            browse_button.Location = new Point(775, 11);
             browse_button.Size = new Size(114, 30);
             browse_button.Text = "Browse Movies";
             browse_button.Click += browse_button_Click;
@@ -181,6 +224,8 @@ namespace MovieRental_Team5
             browse_tab.Controls.Add(movie_type_filter);
             browse_tab.Controls.Add(keyword_filter_label);
             browse_tab.Controls.Add(keyword_filter);
+            browse_tab.Controls.Add(actor_filter_label);
+            browse_tab.Controls.Add(actor_filter);
             browse_tab.Controls.Add(browse_button);
             browse_tab.Controls.Add(available_movies_label);
             browse_tab.Controls.Add(available_movies_grid);
@@ -188,7 +233,51 @@ namespace MovieRental_Team5
             browse_tab.Controls.Add(bestseller_grid);
             browse_tab.Controls.Add(suggestions_label);
             browse_tab.Controls.Add(suggestions_grid);
-            // form
+            ratings_tab.Text = "Ratings";
+            rated_movie_label.AutoSize = true;
+            rated_movie_label.Location = new Point(47, 48);
+            rated_movie_label.Text = "Rented Movie";
+            rated_movie_selector.DropDownStyle = ComboBoxStyle.DropDownList;
+            rated_movie_selector.Location = new Point(160, 45);
+            rated_movie_selector.Size = new Size(300, 23);
+            movie_rating_label.AutoSize = true;
+            movie_rating_label.Location = new Point(490, 48);
+            movie_rating_label.Text = "Rating";
+            movie_rating_input.Location = new Point(543, 45);
+            movie_rating_input.Maximum = new decimal(new int[] { 5, 0, 0, 0 });
+            movie_rating_input.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            movie_rating_input.Value = new decimal(new int[] { 5, 0, 0, 0 });
+            rate_movie_button.Location = new Point(652, 40);
+            rate_movie_button.Size = new Size(127, 32);
+            rate_movie_button.Text = "Save Movie Rating";
+            rate_movie_button.Click += rate_movie_button_Click;
+            rated_actor_label.AutoSize = true;
+            rated_actor_label.Location = new Point(47, 124);
+            rated_actor_label.Text = "Actor";
+            rated_actor_selector.DropDownStyle = ComboBoxStyle.DropDownList;
+            rated_actor_selector.Location = new Point(160, 121);
+            rated_actor_selector.Size = new Size(300, 23);
+            actor_rating_label.AutoSize = true;
+            actor_rating_label.Location = new Point(490, 124);
+            actor_rating_label.Text = "Rating";
+            actor_rating_input.Location = new Point(543, 121);
+            actor_rating_input.Maximum = new decimal(new int[] { 5, 0, 0, 0 });
+            actor_rating_input.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            actor_rating_input.Value = new decimal(new int[] { 5, 0, 0, 0 });
+            rate_actor_button.Location = new Point(652, 116);
+            rate_actor_button.Size = new Size(123, 32);
+            rate_actor_button.Text = "Save Actor Rating";
+            rate_actor_button.Click += rate_actor_button_Click;
+            ratings_tab.Controls.Add(rated_movie_label);
+            ratings_tab.Controls.Add(rated_movie_selector);
+            ratings_tab.Controls.Add(movie_rating_label);
+            ratings_tab.Controls.Add(movie_rating_input);
+            ratings_tab.Controls.Add(rate_movie_button);
+            ratings_tab.Controls.Add(rated_actor_label);
+            ratings_tab.Controls.Add(rated_actor_selector);
+            ratings_tab.Controls.Add(actor_rating_label);
+            ratings_tab.Controls.Add(actor_rating_input);
+            ratings_tab.Controls.Add(rate_actor_button);
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1260, 706);
@@ -211,11 +300,18 @@ namespace MovieRental_Team5
             ((System.ComponentModel.ISupportInitialize)current_rentals_grid).EndInit();
             history_tab.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)history_grid).EndInit();
+            queue_tab.ResumeLayout(false);
+            queue_tab.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)queue_grid).EndInit();
             browse_tab.ResumeLayout(false);
             browse_tab.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)suggestions_grid).EndInit();
             ((System.ComponentModel.ISupportInitialize)bestseller_grid).EndInit();
             ((System.ComponentModel.ISupportInitialize)available_movies_grid).EndInit();
+            ratings_tab.ResumeLayout(false);
+            ratings_tab.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)actor_rating_input).EndInit();
+            ((System.ComponentModel.ISupportInitialize)movie_rating_input).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -234,7 +330,9 @@ namespace MovieRental_Team5
         private TabPage account_tab;
         private TabPage current_tab;
         private TabPage history_tab;
+        private TabPage queue_tab;
         private TabPage browse_tab;
+        private TabPage ratings_tab;
         private Label label10;
         private Label label11;
         private Label label12;
@@ -255,10 +353,17 @@ namespace MovieRental_Team5
         private Label account_rating_value;
         private DataGridView current_rentals_grid;
         private DataGridView history_grid;
+        private DataGridView queue_grid;
+        private Label queue_movie_label;
+        private ComboBox queue_movie_selector;
+        private Button add_to_queue_button;
+        private Button remove_from_queue_button;
         private ComboBox movie_type_filter;
         private Label movie_type_filter_label;
         private TextBox keyword_filter;
         private Label keyword_filter_label;
+        private TextBox actor_filter;
+        private Label actor_filter_label;
         private Button browse_button;
         private Label available_movies_label;
         private DataGridView available_movies_grid;
@@ -266,5 +371,15 @@ namespace MovieRental_Team5
         private DataGridView bestseller_grid;
         private Label suggestions_label;
         private DataGridView suggestions_grid;
+        private Label rated_movie_label;
+        private ComboBox rated_movie_selector;
+        private Label movie_rating_label;
+        private NumericUpDown movie_rating_input;
+        private Button rate_movie_button;
+        private Label rated_actor_label;
+        private ComboBox rated_actor_selector;
+        private Label actor_rating_label;
+        private NumericUpDown actor_rating_input;
+        private Button rate_actor_button;
     }
 }
