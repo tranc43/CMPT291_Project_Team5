@@ -13,6 +13,12 @@ namespace MovieRental_Team5
         public ReportsForm()
         {
             InitializeComponent();
+            Load += ReportsForm_Load;
+        }
+
+        private void ReportsForm_Load(object? sender, EventArgs e)
+        {
+            AccessControl.EnsureEmployeeLoggedIn(this);
         }
     }
 }

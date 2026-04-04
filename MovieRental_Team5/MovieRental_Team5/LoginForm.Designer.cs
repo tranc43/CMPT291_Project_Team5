@@ -43,6 +43,7 @@
             LoginButton = new Button();
             label2 = new Label();
             Exit_Application = new Button();
+            CustomerPortalButton = new Button();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
@@ -170,12 +171,24 @@
             Exit_Application.UseVisualStyleBackColor = true;
             Exit_Application.Click += Exit_Application_Click;
             // 
+            // CustomerPortalButton
+            // 
+            CustomerPortalButton.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            CustomerPortalButton.Location = new Point(420, 462);
+            CustomerPortalButton.Name = "CustomerPortalButton";
+            CustomerPortalButton.Size = new Size(182, 66);
+            CustomerPortalButton.TabIndex = 10;
+            CustomerPortalButton.Text = "Customer Portal";
+            CustomerPortalButton.UseVisualStyleBackColor = true;
+            CustomerPortalButton.Click += CustomerPortalButton_Click;
+            // 
             // LoginForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(967, 586);
             Controls.Add(menuStrip1);
+            Controls.Add(CustomerPortalButton);
             Controls.Add(Exit_Application);
             Controls.Add(LoginButton);
             Controls.Add(PasswordField);
@@ -201,6 +214,7 @@
         private ToolStripMenuItem helpGettingStartedToolStripMenuItem;
         private ToolStripMenuItem helpLoginToolStripMenuItem;
         private ToolStripMenuItem helpAboutToolStripMenuItem;
+        private Button CustomerPortalButton;
         private Label Title;
         private ContextMenuStrip contextMenuStrip1;
         private Label Email_SIN_Label;

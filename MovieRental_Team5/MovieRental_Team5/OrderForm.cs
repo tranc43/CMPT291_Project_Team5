@@ -21,6 +21,11 @@ namespace MovieRental_Team5
 
         private void OrderForm_Load(object sender, EventArgs e)
         {
+            if (!AccessControl.EnsureEmployeeLoggedIn(this))
+            {
+                return;
+            }
+
             // Loading form
             load_customers();
             load_movies();

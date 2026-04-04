@@ -21,6 +21,11 @@ namespace MovieRental_Team5
 
         private void MovieForm_Load(object sender, EventArgs e)
         {
+            if (!AccessControl.EnsureEmployeeLoggedIn(this))
+            {
+                return;
+            }
+
             genre_dropdown.Items.Clear();
             genre_dropdown.Items.AddRange(new string[] { " Action", "Comedy", "Drama", "Foreign" });
             genre_dropdown.SelectedIndex = 0;

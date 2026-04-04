@@ -119,6 +119,12 @@ namespace MovieRental_Team5
             Application.Exit();
         }
 
+        private void CustomerPortalButton_Click(object sender, EventArgs e)
+        {
+            CustomerPortalForm customerPortalForm = new CustomerPortalForm();
+            customerPortalForm.Show();
+        }
+
         private void OpenHelpTopic(string topic)
         {
             using (HelpForm helpForm = new HelpForm(topic))
