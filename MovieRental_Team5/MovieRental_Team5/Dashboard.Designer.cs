@@ -187,7 +187,6 @@
             reports_button.Text = "Reports";
             reports_button.UseVisualStyleBackColor = true;
             reports_button.Click += reports_button_Click;
-            // 
             // Dashboard_Form
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);

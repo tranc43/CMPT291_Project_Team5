@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+using System;
 using System.Data;
 using System.Data.SqlClient;
-using System.Drawing;
-using System.Runtime.CompilerServices;
-using System.Text;
 using System.Windows.Forms;
 
 namespace MovieRental_Team5
@@ -13,7 +8,8 @@ namespace MovieRental_Team5
     public partial class MovieForm : Form
     {
         private readonly string connection = DatabaseConnection.ConnectionString;
-        private int selectedMovieID = -1; // for tracking movies editing/deleting
+        private int selectedMovieID = -1;
+
         public MovieForm()
         {
             InitializeComponent();
@@ -21,23 +17,40 @@ namespace MovieRental_Team5
 
         private void MovieForm_Load(object sender, EventArgs e)
         {
+            if (!AccessControl.EnsureEmployeeLoggedIn(this))
+            {
+                return;
+            }
+
             genre_dropdown.Items.Clear();
-            genre_dropdown.Items.AddRange(new string[] { " Action", "Comedy", "Drama", "Foreign" });
+            genre_dropdown.Items.AddRange(new string[] { "All", "Action", "Comedy", "Drama", "Foreign" });
             genre_dropdown.SelectedIndex = 0;
-            load_movie();
+            LoadActors();
+            LoadMovies();
+            ClearFields();
         }
-        private void load_movie()
+
+        private void LoadMovies()
         {
             try
             {
-                using (SqlConnection connection_new = new SqlConnection(connection))
+                using (SqlConnection connectionNew = new SqlConnection(connection))
                 {
-                    connection_new.Open();
-                    string movie_query = "SELECT Movie_ID, Movie_Name, Movie_Genre, Distribution_Fee, Num_Copies, Average_Rating FROM Movie_Data";
-                    SqlDataAdapter adapter = new SqlDataAdapter(movie_query, connection);
-                    DataTable data_t = new DataTable();
-                    adapter.Fill(data_t);
-                    movie_grid.DataSource = data_t;
+                    connectionNew.Open();
+                    string query = @"
+                        SELECT Movie_ID, Movie_Name, Movie_Genre, Distribution_Fee, Num_Copies, Average_Rating
+                        FROM Movie_Data
+                        WHERE (@name = '' OR Movie_Name LIKE '%' + @name + '%')
+                          AND (@genre = '' OR Movie_Genre = @genre)
+                        ORDER BY Movie_Name";
+
+                    SqlDataAdapter adapter = new SqlDataAdapter(query, connectionNew);
+                    adapter.SelectCommand.Parameters.AddWithValue("@name", search_movie_field.Text.Trim());
+                    adapter.SelectCommand.Parameters.AddWithValue("@genre", genre_search_dropdown.Text == "All" ? "" : genre_search_dropdown.Text);
+                    DataTable table = new DataTable();
+                    adapter.Fill(table);
+                    movie_grid.DataSource = table;
+                    movie_grid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
                 }
             }
             catch (Exception ex)
@@ -46,157 +59,330 @@ namespace MovieRental_Team5
             }
         }
 
+        private void LoadActors()
+        {
+            actor_dropdown.Items.Clear();
+
+            try
+            {
+                using (SqlConnection connectionNew = new SqlConnection(connection))
+                {
+                    connectionNew.Open();
+                    string query = "SELECT Actor_ID, Actor_Name FROM Actor_Data ORDER BY Actor_Name";
+                    SqlCommand command = new SqlCommand(query, connectionNew);
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        actor_dropdown.Items.Add(new LookupItem(
+                            Convert.ToInt32(reader["Actor_ID"]),
+                            reader["Actor_Name"]?.ToString() ?? ""));
+                    }
+                }
+
+                if (actor_dropdown.Items.Count > 0)
+                {
+                    actor_dropdown.SelectedIndex = 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("There is an error loading actors: " + ex.Message);
+            }
+        }
+
+        private void LoadAssignedActors()
+        {
+            if (selectedMovieID == -1)
+            {
+                movie_actor_grid.DataSource = null;
+                return;
+            }
+
+            try
+            {
+                using (SqlConnection connectionNew = new SqlConnection(connection))
+                {
+                    connectionNew.Open();
+                    string query = @"
+                        SELECT a.Actor_ID, a.Actor_Name, a.Gender, a.Average_Rating
+                        FROM Appears_In ai
+                        INNER JOIN Actor_Data a ON ai.Actor_ID = a.Actor_ID
+                        WHERE ai.Movie_ID = @movieId
+                        ORDER BY a.Actor_Name";
+
+                    SqlDataAdapter adapter = new SqlDataAdapter(query, connectionNew);
+                    adapter.SelectCommand.Parameters.AddWithValue("@movieId", selectedMovieID);
+                    DataTable table = new DataTable();
+                    adapter.Fill(table);
+                    movie_actor_grid.DataSource = table;
+                    movie_actor_grid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("There is an error loading assigned actors: " + ex.Message);
+            }
+        }
+
         private void load_movies_Click(object sender, EventArgs e)
         {
-            load_movie();
+            LoadMovies();
+        }
+
+        private void search_button_Click(object sender, EventArgs e)
+        {
+            LoadMovies();
         }
 
         private void movie_grid_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            /* This functions purpose is to display the movie title, genre, distribution fee, num of copies
-             * 
-             */
-            if (e.RowIndex >= 0)
+            if (e.RowIndex < 0)
             {
-                DataGridViewRow row = movie_grid.Rows[e.RowIndex];
-                selectedMovieID = Convert.ToInt32(row.Cells["Movie_ID"].Value);
-                title_search.Text = row.Cells["Movie_Name"].Value.ToString();
-                genre_dropdown.SelectedItem = row.Cells["Movie_Genre"].Value.ToString();
-                fee_field.Text = row.Cells["Distribution_Fee"].Value.ToString();
-                num_copies.Text = row.Cells["Num_Copies"].Value.ToString();
+                return;
             }
+
+            DataGridViewRow row = movie_grid.Rows[e.RowIndex];
+            selectedMovieID = Convert.ToInt32(row.Cells["Movie_ID"].Value);
+            title_field.Text = row.Cells["Movie_Name"].Value?.ToString() ?? "";
+            genre_dropdown.SelectedItem = row.Cells["Movie_Genre"].Value?.ToString() ?? "Action";
+            fee_field.Text = row.Cells["Distribution_Fee"].Value?.ToString() ?? "";
+            num_copies.Text = row.Cells["Num_Copies"].Value?.ToString() ?? "";
+            LoadAssignedActors();
         }
 
         private void add_movie_Click(object sender, EventArgs e)
         {
-            /* this functions purpose is to add a movie to the database and ensure all fields are required to be filled out before adding.
-             * 
-             */
-            if (string.IsNullOrEmpty(title_search.Text) || string.IsNullOrEmpty(fee_field.Text) || string.IsNullOrEmpty(num_copies.Text))
+            if (!ValidateMovieFields())
             {
-                MessageBox.Show("There is an error! All fields must be entered!"); return;
+                return;
             }
 
             try
             {
-                using (SqlConnection connection_new = new SqlConnection(connection))
+                using (SqlConnection connectionNew = new SqlConnection(connection))
                 {
-                    connection_new.Open();
-                    string insert_query = "INSERT INTO Movie_Data (Movie_Name, Movie_Genre, Distribution_Fee, Num_Copies) VALUES (@name, @genre, @fee, @copies)";
-                    SqlCommand cmd = new SqlCommand(insert_query, connection_new);
-                    cmd.Parameters.AddWithValue("@name", title_search.Text.Trim());
-                    cmd.Parameters.AddWithValue("@genre", genre_dropdown.SelectedItem.ToString().Trim());
-                    cmd.Parameters.AddWithValue("@fee", decimal.Parse(fee_field.Text));
-                    cmd.Parameters.AddWithValue("@copies", int.Parse(num_copies.Text));
-              
-                    cmd.ExecuteNonQuery();
-                    MessageBox.Show("Movie added successfully!");
-                    load_movie();
-                    clear_fields();
+                    connectionNew.Open();
+                    string query = "INSERT INTO Movie_Data (Movie_Name, Movie_Genre, Distribution_Fee, Num_Copies) VALUES (@name, @genre, @fee, @copies)";
+                    SqlCommand command = new SqlCommand(query, connectionNew);
+                    command.Parameters.AddWithValue("@name", title_field.Text.Trim());
+                    command.Parameters.AddWithValue("@genre", genre_dropdown.SelectedItem?.ToString() ?? "Action");
+                    command.Parameters.AddWithValue("@fee", decimal.Parse(fee_field.Text));
+                    command.Parameters.AddWithValue("@copies", int.Parse(num_copies.Text));
+                    command.ExecuteNonQuery();
                 }
+
+                MessageBox.Show("Movie added successfully!");
+                LoadMovies();
+                ClearFields();
             }
-            catch (Exception ex) { MessageBox.Show("There is an error adding a movie " + ex); }
-
-        }
-
-
-
-        private void clear_fields()
-        {
-            // this functions purpose is to clear all the fields and reset the movie ID
-            title_search.Text = "";
-            fee_field.Text = "";
-            num_copies.Text = "";
-            genre_dropdown.SelectedIndex = 0;
-            selectedMovieID = -1;
-        }
-        private void clear_button_Click(object sender, EventArgs e)
-        {
-            // This functions purpose is to clear all the fields
-            clear_fields();
-        }
-
-        private void back_button_Click(object sender, EventArgs e)
-        {
-            // back button to return to dashboard
-            this.Close();
+            catch (Exception ex)
+            {
+                MessageBox.Show("There is an error adding a movie: " + ex.Message);
+            }
         }
 
         private void update_movie_Click(object sender, EventArgs e)
         {
-            /* this functions purpose is to update a movie in the database and also ensures fall fields are required to be filled out. 
-             * 
-             */
             if (selectedMovieID == -1)
             {
-                MessageBox.Show("Error! Please select a movie in order to update");
+                MessageBox.Show("Please select a movie to update.");
+                return;
+            }
+
+            if (!ValidateMovieFields())
+            {
                 return;
             }
 
             try
             {
-                using (SqlConnection connection_new = new SqlConnection(connection))
+                using (SqlConnection connectionNew = new SqlConnection(connection))
                 {
-                    connection_new.Open();
-                    string update_query = "UPDATE Movie_Data SET Movie_Name = @name, Movie_Genre = @genre, Distribution_Fee = @fee, Num_Copies = @copies WHERE Movie_ID = @id";
-                    SqlCommand cmd = new SqlCommand(update_query, connection_new);
-                    cmd.Parameters.AddWithValue("@name", title_search.Text.Trim());
-                    cmd.Parameters.AddWithValue("@genre", genre_dropdown.SelectedItem.ToString().Trim());
-                    cmd.Parameters.AddWithValue("@fee", decimal.Parse(fee_field.Text));
-                    cmd.Parameters.AddWithValue("@copies", int.Parse(num_copies.Text));
-                    cmd.Parameters.AddWithValue("@id", selectedMovieID);
-                    cmd.ExecuteNonQuery();
-                    MessageBox.Show("Success! Movie updated successfully!");
-                    load_movie();
-                    clear_fields();
+                    connectionNew.Open();
+                    string query = "UPDATE Movie_Data SET Movie_Name = @name, Movie_Genre = @genre, Distribution_Fee = @fee, Num_Copies = @copies WHERE Movie_ID = @id";
+                    SqlCommand command = new SqlCommand(query, connectionNew);
+                    command.Parameters.AddWithValue("@name", title_field.Text.Trim());
+                    command.Parameters.AddWithValue("@genre", genre_dropdown.SelectedItem?.ToString() ?? "Action");
+                    command.Parameters.AddWithValue("@fee", decimal.Parse(fee_field.Text));
+                    command.Parameters.AddWithValue("@copies", int.Parse(num_copies.Text));
+                    command.Parameters.AddWithValue("@id", selectedMovieID);
+                    command.ExecuteNonQuery();
                 }
+
+                MessageBox.Show("Movie updated successfully!");
+                LoadMovies();
+                ClearFields();
             }
-            catch (Exception ex) { MessageBox.Show("There is an error updating a movie " + ex); }
+            catch (Exception ex)
+            {
+                MessageBox.Show("There is an error updating a movie: " + ex.Message);
+            }
         }
 
         private void delete_movie_Click(object sender, EventArgs e)
         {
-            /* this functions purpose is to delete a movie from the database
-             * check whether or not if the movie has orders or not 
-             * Has a confirmation
-             */
             if (selectedMovieID == -1)
             {
-                MessageBox.Show("Error! Please select a movie in order to delete");
+                MessageBox.Show("Please select a movie to delete.");
                 return;
             }
+
             DialogResult result = MessageBox.Show("Are you sure you want to delete this movie?", "Confirm Delete", MessageBoxButtons.YesNo);
-            if (result == DialogResult.Yes)
+            if (result != DialogResult.Yes)
             {
-                try                 {
-                    using (SqlConnection connection_new = new SqlConnection(connection))
-                    {
-                        connection_new.Open();
-                        // Checks if the movie is associated with any existing rentals. 
-                        string check_query = "SELECT COUNT(*) FROM Order_Data WHERE Movie_ID = @id";
-                        SqlCommand checkCmd = new SqlCommand(check_query, connection_new);
-                        checkCmd.Parameters.AddWithValue("@id", selectedMovieID);
-                        int order_count = (int)checkCmd.ExecuteScalar();
-
-                        if (order_count > 0)
-                        {
-                            MessageBox.Show("Error! This movie cannot be deleted because it is associated with existing rentals.");
-                            return;
-                        }
-
-                        // Deletion confirmation and deleting movie.
-                    
-                        string delete_query = "DELETE FROM Movie_Data WHERE Movie_ID = @id";
-                        SqlCommand cmd = new SqlCommand(delete_query, connection_new);
-                        cmd.Parameters.AddWithValue("@id", selectedMovieID);
-                        cmd.ExecuteNonQuery();
-                        MessageBox.Show("Success! Movie deleted successfully!");
-                        load_movie();
-                        clear_fields();
-                    }
-                }
-                catch (Exception ex) { MessageBox.Show("There is an error deleting a movie " + ex); }
+                return;
             }
+
+            try
+            {
+                using (SqlConnection connectionNew = new SqlConnection(connection))
+                {
+                    connectionNew.Open();
+
+                    SqlCommand checkCommand = new SqlCommand("SELECT COUNT(*) FROM Order_Data WHERE Movie_ID = @id", connectionNew);
+                    checkCommand.Parameters.AddWithValue("@id", selectedMovieID);
+                    int orderCount = Convert.ToInt32(checkCommand.ExecuteScalar());
+
+                    if (orderCount > 0)
+                    {
+                        MessageBox.Show("This movie cannot be deleted because it is associated with existing rentals.");
+                        return;
+                    }
+
+                    SqlCommand deleteAppearances = new SqlCommand("DELETE FROM Appears_In WHERE Movie_ID = @id", connectionNew);
+                    deleteAppearances.Parameters.AddWithValue("@id", selectedMovieID);
+                    deleteAppearances.ExecuteNonQuery();
+
+                    SqlCommand command = new SqlCommand("DELETE FROM Movie_Data WHERE Movie_ID = @id", connectionNew);
+                    command.Parameters.AddWithValue("@id", selectedMovieID);
+                    command.ExecuteNonQuery();
+                }
+
+                MessageBox.Show("Movie deleted successfully!");
+                LoadMovies();
+                ClearFields();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("There is an error deleting a movie: " + ex.Message);
+            }
+        }
+
+        private void assign_actor_button_Click(object sender, EventArgs e)
+        {
+            if (selectedMovieID == -1)
+            {
+                MessageBox.Show("Please select a movie first.");
+                return;
+            }
+
+            if (actor_dropdown.SelectedItem is not LookupItem actor)
+            {
+                MessageBox.Show("Please select an actor.");
+                return;
+            }
+
+            try
+            {
+                using (SqlConnection connectionNew = new SqlConnection(connection))
+                {
+                    connectionNew.Open();
+                    string query = @"
+                        IF NOT EXISTS (SELECT 1 FROM Appears_In WHERE Movie_ID = @movieId AND Actor_ID = @actorId)
+                        INSERT INTO Appears_In (Movie_ID, Actor_ID) VALUES (@movieId, @actorId)";
+                    SqlCommand command = new SqlCommand(query, connectionNew);
+                    command.Parameters.AddWithValue("@movieId", selectedMovieID);
+                    command.Parameters.AddWithValue("@actorId", actor.Id);
+                    command.ExecuteNonQuery();
+                }
+
+                LoadAssignedActors();
+                MessageBox.Show("Actor assigned successfully.");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("There is an error assigning the actor: " + ex.Message);
+            }
+        }
+
+        private void remove_actor_button_Click(object sender, EventArgs e)
+        {
+            if (selectedMovieID == -1)
+            {
+                MessageBox.Show("Please select a movie first.");
+                return;
+            }
+
+            if (movie_actor_grid.CurrentRow == null || movie_actor_grid.CurrentRow.Cells["Actor_ID"].Value == null)
+            {
+                MessageBox.Show("Please select an assigned actor to remove.");
+                return;
+            }
+
+            int actorId = Convert.ToInt32(movie_actor_grid.CurrentRow.Cells["Actor_ID"].Value);
+
+            try
+            {
+                using (SqlConnection connectionNew = new SqlConnection(connection))
+                {
+                    connectionNew.Open();
+                    SqlCommand command = new SqlCommand("DELETE FROM Appears_In WHERE Movie_ID = @movieId AND Actor_ID = @actorId", connectionNew);
+                    command.Parameters.AddWithValue("@movieId", selectedMovieID);
+                    command.Parameters.AddWithValue("@actorId", actorId);
+                    command.ExecuteNonQuery();
+                }
+
+                LoadAssignedActors();
+                MessageBox.Show("Actor removed successfully.");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("There is an error removing the actor: " + ex.Message);
+            }
+        }
+
+        private bool ValidateMovieFields()
+        {
+            if (string.IsNullOrWhiteSpace(title_field.Text) || string.IsNullOrWhiteSpace(fee_field.Text) || string.IsNullOrWhiteSpace(num_copies.Text))
+            {
+                MessageBox.Show("All movie fields must be entered.");
+                return false;
+            }
+
+            if (!decimal.TryParse(fee_field.Text, out decimal fee) || fee < 0)
+            {
+                MessageBox.Show("Distribution fee must be a valid positive number.");
+                return false;
+            }
+
+            if (!int.TryParse(num_copies.Text, out int copies) || copies < 0)
+            {
+                MessageBox.Show("Number of copies must be a valid positive whole number.");
+                return false;
+            }
+
+            return true;
+        }
+
+        private void ClearFields()
+        {
+            title_field.Text = "";
+            fee_field.Text = "";
+            num_copies.Text = "";
+            genre_dropdown.SelectedItem = "Action";
+            selectedMovieID = -1;
+            movie_actor_grid.DataSource = null;
+        }
+
+        private void clear_button_Click(object sender, EventArgs e)
+        {
+            ClearFields();
+        }
+
+        private void back_button_Click(object sender, EventArgs e)
+        {
+            Close();
         }
 
         private void OpenHelpTopic(string topic)
@@ -225,6 +411,23 @@ namespace MovieRental_Team5
         private void helpAboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OpenHelpTopic(HelpTopics.About);
+        }
+
+        private class LookupItem
+        {
+            public int Id;
+            public string DisplayText;
+
+            public LookupItem(int id, string displayText)
+            {
+                Id = id;
+                DisplayText = displayText;
+            }
+
+            public override string ToString()
+            {
+                return DisplayText;
+            }
         }
     }
 }

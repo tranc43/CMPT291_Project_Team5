@@ -48,8 +48,9 @@
             // 
             // menuStrip1
             // 
+            menuStrip1.Dock = DockStyle.Bottom;
             menuStrip1.Items.AddRange(new ToolStripItem[] { helpToolStripMenuItem });
-            menuStrip1.Location = new Point(0, 0);
+            menuStrip1.Location = new Point(0, 562);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Size = new Size(967, 24);
             menuStrip1.TabIndex = 9;
@@ -65,21 +66,21 @@
             // helpGettingStartedToolStripMenuItem
             // 
             helpGettingStartedToolStripMenuItem.Name = "helpGettingStartedToolStripMenuItem";
-            helpGettingStartedToolStripMenuItem.Size = new Size(164, 22);
+            helpGettingStartedToolStripMenuItem.Size = new Size(180, 22);
             helpGettingStartedToolStripMenuItem.Text = "Getting Started";
             helpGettingStartedToolStripMenuItem.Click += helpGettingStartedToolStripMenuItem_Click;
             // 
             // helpLoginToolStripMenuItem
             // 
             helpLoginToolStripMenuItem.Name = "helpLoginToolStripMenuItem";
-            helpLoginToolStripMenuItem.Size = new Size(164, 22);
+            helpLoginToolStripMenuItem.Size = new Size(180, 22);
             helpLoginToolStripMenuItem.Text = "Login Screen";
             helpLoginToolStripMenuItem.Click += helpLoginToolStripMenuItem_Click;
             // 
             // helpAboutToolStripMenuItem
             // 
             helpAboutToolStripMenuItem.Name = "helpAboutToolStripMenuItem";
-            helpAboutToolStripMenuItem.Size = new Size(164, 22);
+            helpAboutToolStripMenuItem.Size = new Size(180, 22);
             helpAboutToolStripMenuItem.Text = "About";
             helpAboutToolStripMenuItem.Click += helpAboutToolStripMenuItem_Click;
             // 
@@ -125,7 +126,7 @@
             PasswordLabel.Font = new Font("Segoe UI", 20.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
             PasswordLabel.Location = new Point(264, 217);
             PasswordLabel.Name = "PasswordLabel";
-            PasswordLabel.Size = new Size(133, 37);
+            PasswordLabel.Size = new Size(128, 37);
             PasswordLabel.TabIndex = 5;
             PasswordLabel.Text = "Password";
             // 
@@ -162,7 +163,7 @@
             // Exit_Application
             // 
             Exit_Application.Font = new Font("Segoe UI", 12F, FontStyle.Underline);
-            Exit_Application.Location = new Point(420, 365);
+            Exit_Application.Location = new Point(420, 359);
             Exit_Application.Name = "Exit_Application";
             Exit_Application.Size = new Size(182, 77);
             Exit_Application.TabIndex = 8;

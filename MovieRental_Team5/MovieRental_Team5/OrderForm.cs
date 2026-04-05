@@ -17,13 +17,18 @@ namespace MovieRental_Team5
             back_button.Click += back_button_Click;
             record_order_button.Click += record_order_button_Click;
             button1.Click += clear_order_button_Click;
+            comboBox2.SelectedIndexChanged += comboBox2_SelectedIndexChanged;
         }
 
         private void OrderForm_Load(object sender, EventArgs e)
         {
+            if (!AccessControl.EnsureEmployeeLoggedIn(this))
+            {
+                return;
+            }
+
             // Loading form
             load_customers();
-            load_movies();
             load_orders();
             set_employee_label();
             clear_order_fields();
@@ -82,6 +87,7 @@ namespace MovieRental_Team5
                      * comparing the number of copies to the number of orders that have a return date in at a later date.
                      */
                     conn.Open();
+                    int? selectedCustomerId = GetSelectedCustomerId();
                     string query = @"
                         SELECT m.Movie_ID, m.Movie_Name
                         FROM Movie_Data m
@@ -93,9 +99,21 @@ namespace MovieRental_Team5
                             AND DATETIMEFROMPARTS(o.Return_Year, o.Return_Month, o.Return_Day,
                                 DATEPART(HOUR, o.Return_Time), DATEPART(MINUTE, o.Return_Time), DATEPART(SECOND, o.Return_Time), 0) > GETDATE()
                         )
-                        ORDER BY m.Movie_Name";
+                        ORDER BY
+                            CASE
+                                WHEN @customerId IS NOT NULL AND EXISTS
+                                (
+                                    SELECT 1
+                                    FROM Queue q
+                                    WHERE q.Customer_ID = @customerId
+                                      AND q.Movie_ID = m.Movie_ID
+                                ) THEN 0
+                                ELSE 1
+                            END,
+                            m.Movie_Name";
 
                     SqlCommand cmd = new SqlCommand(query, conn);
+                    cmd.Parameters.AddWithValue("@customerId", (object?)selectedCustomerId ?? DBNull.Value);
                     SqlDataReader reader = cmd.ExecuteReader();
 
                     while (reader.Read())
@@ -116,6 +134,56 @@ namespace MovieRental_Team5
             catch (Exception ex)
             {
                 MessageBox.Show("There is an error loading movies: " + ex.Message);
+            }
+        }
+
+        private int? GetSelectedCustomerId()
+        {
+            if (comboBox2.SelectedItem is OrderLookupItem customerItem)
+            {
+                return customerItem.Id;
+            }
+
+            return null;
+        }
+
+        private void load_customer_queue()
+        {
+            int? customerId = GetSelectedCustomerId();
+
+            if (customerId == null)
+            {
+                queue_grid.DataSource = null;
+                return;
+            }
+
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string query = @"
+                        SELECT
+                            m.Movie_ID,
+                            m.Movie_Name,
+                            m.Movie_Genre,
+                            m.Average_Rating
+                        FROM Queue q
+                        INNER JOIN Movie_Data m ON q.Movie_ID = m.Movie_ID
+                        WHERE q.Customer_ID = @customerId
+                        ORDER BY m.Movie_Name";
+
+                    SqlDataAdapter adapter = new SqlDataAdapter(query, conn);
+                    adapter.SelectCommand.Parameters.AddWithValue("@customerId", customerId.Value);
+                    DataTable table = new DataTable();
+                    adapter.Fill(table);
+                    queue_grid.DataSource = table;
+                    queue_grid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("There is an error loading the customer queue: " + ex.Message);
             }
         }
 
@@ -184,11 +252,6 @@ namespace MovieRental_Team5
                 comboBox2.SelectedIndex = 0;
             }
 
-            if (comboBox3.Items.Count > 0)
-            {
-                comboBox3.SelectedIndex = 0;
-            }
-
             DateTime now = DateTime.Now;
             DateTime later = now.AddDays(3);
 
@@ -196,6 +259,51 @@ namespace MovieRental_Team5
             checkout_date.Value = now;
             return_date.Value = later;
             return_time.Value = later;
+        }
+
+        private void comboBox2_SelectedIndexChanged(object? sender, EventArgs e)
+        {
+            load_movies();
+            load_customer_queue();
+
+            if (queue_grid.Rows.Count > 0 && queue_grid.Rows[0].Cells["Movie_ID"].Value != null)
+            {
+                int queuedMovieId = Convert.ToInt32(queue_grid.Rows[0].Cells["Movie_ID"].Value);
+
+                for (int i = 0; i < comboBox3.Items.Count; i++)
+                {
+                    if (comboBox3.Items[i] is OrderLookupItem movieItem && movieItem.Id == queuedMovieId)
+                    {
+                        comboBox3.SelectedIndex = i;
+                        break;
+                    }
+                }
+            }
+            else if (comboBox3.Items.Count > 0)
+            {
+                comboBox3.SelectedIndex = 0;
+            }
+        }
+
+        private void queue_grid_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0 || queue_grid.Rows[e.RowIndex].Cells["Movie_ID"].Value == null)
+            {
+                return;
+            }
+
+            int movieId = Convert.ToInt32(queue_grid.Rows[e.RowIndex].Cells["Movie_ID"].Value);
+
+            for (int i = 0; i < comboBox3.Items.Count; i++)
+            {
+                if (comboBox3.Items[i] is OrderLookupItem movieItem && movieItem.Id == movieId)
+                {
+                    comboBox3.SelectedIndex = i;
+                    return;
+                }
+            }
+
+            MessageBox.Show("That queued movie is not currently available.");
         }
 
         private void back_button_Click(object sender, EventArgs e)
@@ -291,11 +399,18 @@ namespace MovieRental_Team5
                     insertCmd.Parameters.AddWithValue("@customerId", customerItem.Id);
                     insertCmd.Parameters.AddWithValue("@employeeId", CurrentSession.EmployeeId);
                     insertCmd.ExecuteNonQuery();
+
+                    string removeQueueQuery = "DELETE FROM Queue WHERE Customer_ID = @customerId AND Movie_ID = @movieId";
+                    SqlCommand removeQueueCmd = new SqlCommand(removeQueueQuery, conn);
+                    removeQueueCmd.Parameters.AddWithValue("@customerId", customerItem.Id);
+                    removeQueueCmd.Parameters.AddWithValue("@movieId", movieItem.Id);
+                    removeQueueCmd.ExecuteNonQuery();
                 }
 
                 MessageBox.Show("Order recorded successfully!");
                 load_orders();
                 load_movies();
+                load_customer_queue();
                 clear_order_fields();
             }
             catch (Exception ex)

@@ -29,6 +29,11 @@ namespace MovieRental_Team5
              * 
              */
         {
+            if (!AccessControl.EnsureEmployeeLoggedIn(this))
+            {
+                return;
+            }
+
             string displayName = employee_name;
 
             if (!string.IsNullOrWhiteSpace(CurrentSession.EmployeeName))
