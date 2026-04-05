@@ -48,20 +48,23 @@ namespace MovieRental_Team5
                 2 => @"SELECT m.Movie_Name, COUNT(*) AS Active_Rentals
                        FROM Order_Data o
                        INNER JOIN Movie_Data m ON o.Movie_ID = m.Movie_ID
-                       WHERE DATETIMEFROMPARTS(o.Return_Year, o.Return_Month, o.Return_Day,
-                           DATEPART(HOUR, o.Return_Time), DATEPART(MINUTE, o.Return_Time), DATEPART(SECOND, o.Return_Time), 0) > GETDATE()
+                       WHERE o.Return_Date > GETDATE()
                        GROUP BY m.Movie_Name
                        ORDER BY COUNT(*) DESC, m.Movie_Name",
-                3 => @"SELECT TOP (10) a.Actor_Name, COUNT(*) AS Movie_Count, AVG(CAST(ISNULL(a.Average_Rating, 0) AS DECIMAL(4,2))) AS Average_Rating
-                       FROM Appears_In ai
-                       INNER JOIN Actor_Data a ON ai.Actor_ID = a.Actor_ID
+                3 => @"SELECT TOP (10)
+                            a.Actor_Name,
+                            COUNT(ai.Movie_ID) AS Movie_Count,
+                            AVG(CAST(ra.Rating AS DECIMAL(4,2))) AS Average_Rating
+                       FROM Actor_Data a
+                       LEFT JOIN Appears_In ai ON a.Actor_ID = ai.Actor_ID
+                       LEFT JOIN Rate_Actor ra ON a.Actor_ID = ra.Actor_ID
                        GROUP BY a.Actor_Name
-                       ORDER BY COUNT(*) DESC, a.Actor_Name",
-                _ => @"SELECT c.Customer_ID, c.First_Name, c.Last_Name, COUNT(q.Movie_ID) AS Queue_Size
+                       ORDER BY COUNT(ai.Movie_ID) DESC, a.Actor_Name",
+                _ => @"SELECT c.Customer_ID, c.First_Name, c.Last_Name, COUNT(mq.Movie_ID) AS Queue_Size
                        FROM Customer_Data c
-                       LEFT JOIN Queue q ON c.Customer_ID = q.Customer_ID
+                       LEFT JOIN Movie_Queue mq ON c.Customer_ID = mq.Customer_ID
                        GROUP BY c.Customer_ID, c.First_Name, c.Last_Name
-                       ORDER BY COUNT(q.Movie_ID) DESC, c.Last_Name, c.First_Name"
+                       ORDER BY COUNT(mq.Movie_ID) DESC, c.Last_Name, c.First_Name"
             };
 
             try

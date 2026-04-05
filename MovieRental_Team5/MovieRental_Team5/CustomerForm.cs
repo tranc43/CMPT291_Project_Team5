@@ -37,23 +37,28 @@ namespace MovieRental_Team5
                     connection.Open();
                     string query = @"
                         SELECT
-                            Customer_ID,
-                            First_Name,
-                            Last_Name,
-                            Email_Address,
-                            City,
-                            Province,
-                            Address,
-                            Postal_Code,
-                            Account_Number,
-                            Account_Creation_Date,
-                            Credit_Card_Number,
-                            Average_Rating
-                        FROM Customer_Data
-                        WHERE (@firstName = '' OR First_Name LIKE '%' + @firstName + '%')
-                          AND (@lastName = '' OR Last_Name LIKE '%' + @lastName + '%')
-                          AND (@email = '' OR Email_Address LIKE '%' + @email + '%')
-                        ORDER BY Last_Name, First_Name";
+                            c.Customer_ID,
+                            c.First_Name,
+                            c.Last_Name,
+                            c.Email_Address,
+                            c.City,
+                            c.Province,
+                            c.Address,
+                            c.Postal_Code,
+                            c.Account_Number,
+                            c.Account_Creation_Date,
+                            c.Credit_Card_Number,
+                            (
+                                SELECT AVG(CAST(rm.Rating AS DECIMAL(4,2)))
+                                FROM Rate_Movie rm
+                                INNER JOIN Order_Data od ON rm.Order_ID = od.Order_ID
+                                WHERE od.Customer_ID = c.Customer_ID
+                            ) AS Average_Rating
+                        FROM Customer_Data c
+                        WHERE (@firstName = '' OR c.First_Name LIKE '%' + @firstName + '%')
+                          AND (@lastName = '' OR c.Last_Name LIKE '%' + @lastName + '%')
+                          AND (@email = '' OR c.Email_Address LIKE '%' + @email + '%')
+                        ORDER BY c.Last_Name, c.First_Name";
 
                     SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
                     adapter.SelectCommand.Parameters.AddWithValue("@firstName", customer_search_first_field.Text.Trim());
@@ -104,6 +109,12 @@ namespace MovieRental_Team5
                 return false;
             }
 
+            if (!int.TryParse(account_number_field.Text.Trim(), out _))
+            {
+                MessageBox.Show("Account number must be a whole number.");
+                return false;
+            }
+
             return true;
         }
 
@@ -125,7 +136,7 @@ namespace MovieRental_Team5
             postal_code_field.Text = row.Cells["Postal_Code"].Value?.ToString() ?? "";
             account_number_field.Text = row.Cells["Account_Number"].Value?.ToString() ?? "";
             credit_card_field.Text = row.Cells["Credit_Card_Number"].Value?.ToString() ?? "";
-            average_rating_field.Text = row.Cells["Average_Rating"].Value?.ToString() ?? "";
+            average_rating_field.Text = row.Cells["Average_Rating"].Value == DBNull.Value ? "" : row.Cells["Average_Rating"].Value?.ToString() ?? "";
 
             if (row.Cells["Account_Creation_Date"].Value is DateTime creationDate)
             {
@@ -170,10 +181,10 @@ namespace MovieRental_Team5
                     string query = @"
                         INSERT INTO Customer_Data
                         (First_Name, Last_Name, Email_Address, City, Province, Address, Postal_Code,
-                         Account_Number, Account_Creation_Date, Credit_Card_Number, Average_Rating)
+                         Account_Number, Account_Creation_Date, Credit_Card_Number)
                         VALUES
                         (@firstName, @lastName, @email, @city, @province, @address, @postalCode,
-                         @accountNumber, @accountCreationDate, @creditCardNumber, @averageRating)";
+                         @accountNumber, @accountCreationDate, @creditCardNumber)";
 
                     SqlCommand command = new SqlCommand(query, connection);
                     command.Parameters.AddWithValue("@firstName", first_name_field.Text.Trim());
@@ -183,10 +194,9 @@ namespace MovieRental_Team5
                     command.Parameters.AddWithValue("@province", province_field.Text.Trim());
                     command.Parameters.AddWithValue("@address", address_field.Text.Trim());
                     command.Parameters.AddWithValue("@postalCode", postal_code_field.Text.Trim());
-                    command.Parameters.AddWithValue("@accountNumber", account_number_field.Text.Trim());
+                    command.Parameters.AddWithValue("@accountNumber", int.Parse(account_number_field.Text.Trim()));
                     command.Parameters.AddWithValue("@accountCreationDate", account_creation_picker.Value.Date);
                     command.Parameters.AddWithValue("@creditCardNumber", credit_card_field.Text.Trim());
-                    command.Parameters.AddWithValue("@averageRating", 0);
                     command.ExecuteNonQuery();
                 }
 
@@ -240,7 +250,7 @@ namespace MovieRental_Team5
                     command.Parameters.AddWithValue("@province", province_field.Text.Trim());
                     command.Parameters.AddWithValue("@address", address_field.Text.Trim());
                     command.Parameters.AddWithValue("@postalCode", postal_code_field.Text.Trim());
-                    command.Parameters.AddWithValue("@accountNumber", account_number_field.Text.Trim());
+                    command.Parameters.AddWithValue("@accountNumber", int.Parse(account_number_field.Text.Trim()));
                     command.Parameters.AddWithValue("@accountCreationDate", account_creation_picker.Value.Date);
                     command.Parameters.AddWithValue("@creditCardNumber", credit_card_field.Text.Trim());
                     command.Parameters.AddWithValue("@customerId", selectedCustomerId);
@@ -292,6 +302,10 @@ namespace MovieRental_Team5
                         return;
                     }
 
+                    SqlCommand deleteQueue = new SqlCommand("DELETE FROM Movie_Queue WHERE Customer_ID = @customerId", connection);
+                    deleteQueue.Parameters.AddWithValue("@customerId", selectedCustomerId);
+                    deleteQueue.ExecuteNonQuery();
+
                     string deleteQuery = "DELETE FROM Customer_Data WHERE Customer_ID = @customerId";
                     SqlCommand deleteCommand = new SqlCommand(deleteQuery, connection);
                     deleteCommand.Parameters.AddWithValue("@customerId", selectedCustomerId);
@@ -330,14 +344,20 @@ namespace MovieRental_Team5
                     connection.Open();
                     string query = @"
                         SELECT
+                            mq.Queue_Position,
                             m.Movie_ID,
                             m.Movie_Name,
                             m.Movie_Genre,
-                            m.Average_Rating
-                        FROM Queue q
-                        INNER JOIN Movie_Data m ON q.Movie_ID = m.Movie_ID
-                        WHERE q.Customer_ID = @customerId
-                        ORDER BY m.Movie_Name";
+                            (
+                                SELECT AVG(CAST(rm.Rating AS DECIMAL(4,2)))
+                                FROM Rate_Movie rm
+                                INNER JOIN Order_Data od ON rm.Order_ID = od.Order_ID
+                                WHERE od.Movie_ID = m.Movie_ID
+                            ) AS Average_Rating
+                        FROM Movie_Queue mq
+                        INNER JOIN Movie_Data m ON mq.Movie_ID = m.Movie_ID
+                        WHERE mq.Customer_ID = @customerId
+                        ORDER BY mq.Queue_Position";
 
                     SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
                     adapter.SelectCommand.Parameters.AddWithValue("@customerId", selectedCustomerId);
@@ -364,8 +384,8 @@ namespace MovieRental_Team5
                         SELECT
                             o.Order_ID,
                             m.Movie_Name,
-                            CONCAT(o.Checkout_Year, '-', RIGHT('00' + CAST(o.Checkout_Month AS varchar(2)), 2), '-', RIGHT('00' + CAST(o.Checkout_Day AS varchar(2)), 2)) AS Checkout_Date,
-                            CONCAT(o.Return_Year, '-', RIGHT('00' + CAST(o.Return_Month AS varchar(2)), 2), '-', RIGHT('00' + CAST(o.Return_Day AS varchar(2)), 2)) AS Return_Date
+                            o.Checkout,
+                            o.Return_Date
                         FROM Order_Data o
                         INNER JOIN Movie_Data m ON o.Movie_ID = m.Movie_ID
                         WHERE o.Customer_ID = @customerId

@@ -48,7 +48,8 @@ namespace MovieRental_Team5
 
                     empCmd.Parameters.AddWithValue("@input", sin);
                     SqlDataReader empReader = empCmd.ExecuteReader();
-
+                    
+                  
                     if (empReader.HasRows)
                     {
                         empReader.Read();
