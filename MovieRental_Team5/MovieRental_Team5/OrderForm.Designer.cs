@@ -55,8 +55,11 @@
             record_order_button = new Button();
             button1 = new Button();
             employee_ID_label = new Label();
+            queue_label = new Label();
+            queue_grid = new DataGridView();
             menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)queue_grid).BeginInit();
             SuspendLayout();
             // 
             // menuStrip1
@@ -65,7 +68,7 @@
             menuStrip1.Items.AddRange(new ToolStripItem[] { helpToolStripMenuItem });
             menuStrip1.Location = new Point(0, 673);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(795, 24);
+            menuStrip1.Size = new Size(1020, 24);
             menuStrip1.TabIndex = 22;
             menuStrip1.Text = "menuStrip1";
             // 
@@ -107,26 +110,26 @@
             // dataGridView1
             // 
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Location = new Point(116, 54);
+            dataGridView1.Location = new Point(30, 54);
             dataGridView1.Name = "dataGridView1";
-            dataGridView1.Size = new Size(554, 303);
+            dataGridView1.Size = new Size(472, 303);
             dataGridView1.TabIndex = 0;
             dataGridView1.CellContentClick += dataGridView1_CellContentClick;
             // 
             // OrderTitle
             // 
             OrderTitle.AutoSize = true;
-            OrderTitle.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
-            OrderTitle.Location = new Point(36, 443);
+            OrderTitle.Font = new Font("Segoe UI", 20F, FontStyle.Bold);
+            OrderTitle.Location = new Point(30, 391);
             OrderTitle.Name = "OrderTitle";
-            OrderTitle.Size = new Size(138, 28);
+            OrderTitle.Size = new Size(188, 37);
             OrderTitle.TabIndex = 1;
             OrderTitle.Text = "Record Order";
             // 
             // checkout_date
             // 
             checkout_date.Format = DateTimePickerFormat.Time;
-            checkout_date.Location = new Point(294, 539);
+            checkout_date.Location = new Point(350, 502);
             checkout_date.Name = "checkout_date";
             checkout_date.ShowUpDown = true;
             checkout_date.Size = new Size(200, 23);
@@ -134,7 +137,7 @@
             // 
             // checkout_time
             // 
-            checkout_time.Location = new Point(294, 498);
+            checkout_time.Location = new Point(350, 461);
             checkout_time.Name = "checkout_time";
             checkout_time.Size = new Size(200, 23);
             checkout_time.TabIndex = 3;
@@ -143,7 +146,7 @@
             // back_button
             // 
             back_button.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
-            back_button.Location = new Point(701, 631);
+            back_button.Location = new Point(855, 631);
             back_button.Name = "back_button";
             back_button.Size = new Size(94, 39);
             back_button.TabIndex = 4;
@@ -153,18 +156,18 @@
             // comboBox2
             // 
             comboBox2.FormattingEnabled = true;
-            comboBox2.Location = new Point(47, 513);
+            comboBox2.Location = new Point(44, 463);
             comboBox2.Name = "comboBox2";
-            comboBox2.Size = new Size(138, 23);
+            comboBox2.Size = new Size(160, 23);
             comboBox2.TabIndex = 6;
             comboBox2.Text = "Select Customer ID";
             // 
             // comboBox3
             // 
             comboBox3.FormattingEnabled = true;
-            comboBox3.Location = new Point(58, 585);
+            comboBox3.Location = new Point(43, 531);
             comboBox3.Name = "comboBox3";
-            comboBox3.Size = new Size(121, 23);
+            comboBox3.Size = new Size(150, 23);
             comboBox3.TabIndex = 7;
             comboBox3.Text = "Select Movie";
             // 
@@ -173,7 +176,7 @@
             select_customer_label.AutoSize = true;
             select_customer_label.FlatStyle = FlatStyle.Flat;
             select_customer_label.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
-            select_customer_label.Location = new Point(36, 482);
+            select_customer_label.Location = new Point(39, 428);
             select_customer_label.Name = "select_customer_label";
             select_customer_label.Size = new Size(165, 28);
             select_customer_label.TabIndex = 8;
@@ -184,7 +187,7 @@
             label2.AutoSize = true;
             label2.FlatStyle = FlatStyle.Flat;
             label2.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
-            label2.Location = new Point(51, 554);
+            label2.Location = new Point(43, 500);
             label2.Name = "label2";
             label2.Size = new Size(134, 28);
             label2.TabIndex = 9;
@@ -195,7 +198,7 @@
             current_orders_label.AutoSize = true;
             current_orders_label.FlatStyle = FlatStyle.Flat;
             current_orders_label.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
-            current_orders_label.Location = new Point(329, 23);
+            current_orders_label.Location = new Point(178, 23);
             current_orders_label.Name = "current_orders_label";
             current_orders_label.Size = new Size(152, 28);
             current_orders_label.TabIndex = 10;
@@ -206,7 +209,7 @@
             checkout_label.AutoSize = true;
             checkout_label.FlatStyle = FlatStyle.Flat;
             checkout_label.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
-            checkout_label.Location = new Point(320, 441);
+            checkout_label.Location = new Point(282, 428);
             checkout_label.Name = "checkout_label";
             checkout_label.Size = new Size(151, 28);
             checkout_label.TabIndex = 11;
@@ -217,7 +220,7 @@
             date_label.AutoSize = true;
             date_label.FlatStyle = FlatStyle.Flat;
             date_label.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
-            date_label.Location = new Point(226, 493);
+            date_label.Location = new Point(282, 456);
             date_label.Name = "date_label";
             date_label.Size = new Size(62, 28);
             date_label.TabIndex = 12;
@@ -228,7 +231,7 @@
             time_label.AutoSize = true;
             time_label.FlatStyle = FlatStyle.Flat;
             time_label.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
-            time_label.Location = new Point(226, 534);
+            time_label.Location = new Point(282, 497);
             time_label.Name = "time_label";
             time_label.Size = new Size(64, 28);
             time_label.TabIndex = 13;
@@ -239,7 +242,7 @@
             label3.AutoSize = true;
             label3.FlatStyle = FlatStyle.Flat;
             label3.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
-            label3.Location = new Point(502, 534);
+            label3.Location = new Point(581, 497);
             label3.Name = "label3";
             label3.Size = new Size(64, 28);
             label3.TabIndex = 18;
@@ -250,7 +253,7 @@
             label4.AutoSize = true;
             label4.FlatStyle = FlatStyle.Flat;
             label4.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
-            label4.Location = new Point(500, 493);
+            label4.Location = new Point(579, 456);
             label4.Name = "label4";
             label4.Size = new Size(62, 28);
             label4.TabIndex = 17;
@@ -260,16 +263,16 @@
             // 
             return_label.AutoSize = true;
             return_label.FlatStyle = FlatStyle.Flat;
-            return_label.Font = new Font("Segoe UI", 20F, FontStyle.Bold);
-            return_label.Location = new Point(552, 434);
+            return_label.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
+            return_label.Location = new Point(581, 428);
             return_label.Name = "return_label";
-            return_label.Size = new Size(171, 37);
+            return_label.Size = new Size(127, 28);
             return_label.TabIndex = 16;
             return_label.Text = "Return Date";
             // 
             // return_date
             // 
-            return_date.Location = new Point(568, 498);
+            return_date.Location = new Point(647, 461);
             return_date.Name = "return_date";
             return_date.Size = new Size(200, 23);
             return_date.TabIndex = 15;
@@ -278,7 +281,7 @@
             // return_time
             // 
             return_time.Format = DateTimePickerFormat.Time;
-            return_time.Location = new Point(568, 539);
+            return_time.Location = new Point(647, 502);
             return_time.Name = "return_time";
             return_time.ShowUpDown = true;
             return_time.Size = new Size(200, 23);
@@ -287,7 +290,7 @@
             // record_order_button
             // 
             record_order_button.Font = new Font("Segoe UI", 15F);
-            record_order_button.Location = new Point(466, 596);
+            record_order_button.Location = new Point(563, 547);
             record_order_button.Name = "record_order_button";
             record_order_button.Size = new Size(145, 35);
             record_order_button.TabIndex = 19;
@@ -297,7 +300,7 @@
             // button1
             // 
             button1.Font = new Font("Segoe UI", 15F);
-            button1.Location = new Point(294, 596);
+            button1.Location = new Point(400, 547);
             button1.Name = "button1";
             button1.Size = new Size(150, 35);
             button1.TabIndex = 20;
@@ -309,17 +312,39 @@
             employee_ID_label.AutoSize = true;
             employee_ID_label.FlatStyle = FlatStyle.Flat;
             employee_ID_label.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
-            employee_ID_label.Location = new Point(12, 397);
+            employee_ID_label.Location = new Point(12, 636);
             employee_ID_label.Name = "employee_ID_label";
             employee_ID_label.Size = new Size(131, 28);
             employee_ID_label.TabIndex = 21;
             employee_ID_label.Text = "Employee ID";
             // 
+            // queue_label
+            // 
+            queue_label.AutoSize = true;
+            queue_label.FlatStyle = FlatStyle.Flat;
+            queue_label.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
+            queue_label.Location = new Point(641, 23);
+            queue_label.Name = "queue_label";
+            queue_label.Size = new Size(169, 28);
+            queue_label.TabIndex = 23;
+            queue_label.Text = "Customer Queue";
+            // 
+            // queue_grid
+            // 
+            queue_grid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            queue_grid.Location = new Point(563, 54);
+            queue_grid.Name = "queue_grid";
+            queue_grid.Size = new Size(430, 303);
+            queue_grid.TabIndex = 24;
+            queue_grid.CellClick += queue_grid_CellClick;
+            // 
             // OrderForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(795, 697);
+            ClientSize = new Size(1020, 697);
+            Controls.Add(queue_grid);
+            Controls.Add(queue_label);
             Controls.Add(menuStrip1);
             Controls.Add(employee_ID_label);
             Controls.Add(button1);
@@ -348,6 +373,7 @@
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)queue_grid).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -381,5 +407,7 @@
         private Button record_order_button;
         private Button button1;
         private Label employee_ID_label;
+        private Label queue_label;
+        private DataGridView queue_grid;
     }
 }

@@ -25,6 +25,7 @@ namespace MovieRental_Team5
 
             LoadCustomers();
             ClearFields();
+            LoadCustomerQueueAndHistory();
         }
 
         private void LoadCustomers()
@@ -49,9 +50,15 @@ namespace MovieRental_Team5
                             Credit_Card_Number,
                             Average_Rating
                         FROM Customer_Data
+                        WHERE (@firstName = '' OR First_Name LIKE '%' + @firstName + '%')
+                          AND (@lastName = '' OR Last_Name LIKE '%' + @lastName + '%')
+                          AND (@email = '' OR Email_Address LIKE '%' + @email + '%')
                         ORDER BY Last_Name, First_Name";
 
                     SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
+                    adapter.SelectCommand.Parameters.AddWithValue("@firstName", customer_search_first_field.Text.Trim());
+                    adapter.SelectCommand.Parameters.AddWithValue("@lastName", customer_search_last_field.Text.Trim());
+                    adapter.SelectCommand.Parameters.AddWithValue("@email", customer_search_email_field.Text.Trim());
                     DataTable table = new DataTable();
                     adapter.Fill(table);
                     customer_grid.DataSource = table;
@@ -78,6 +85,7 @@ namespace MovieRental_Team5
             average_rating_field.Text = "";
             account_creation_picker.Value = DateTime.Today;
             selectedCustomerId = -1;
+            LoadCustomerQueueAndHistory();
         }
 
         private bool ValidateRequiredFields()
@@ -123,9 +131,16 @@ namespace MovieRental_Team5
             {
                 account_creation_picker.Value = creationDate;
             }
+
+            LoadCustomerQueueAndHistory();
         }
 
         private void load_customers_button_Click(object sender, EventArgs e)
+        {
+            LoadCustomers();
+        }
+
+        private void search_customers_button_Click(object sender, EventArgs e)
         {
             LoadCustomers();
         }
@@ -290,6 +305,83 @@ namespace MovieRental_Team5
             catch (Exception ex)
             {
                 MessageBox.Show("There is an error deleting a customer: " + ex.Message);
+            }
+        }
+
+        private void LoadCustomerQueueAndHistory()
+        {
+            if (selectedCustomerId == -1)
+            {
+                customer_queue_grid.DataSource = null;
+                customer_history_grid.DataSource = null;
+                return;
+            }
+
+            LoadCustomerQueue();
+            LoadCustomerHistory();
+        }
+
+        private void LoadCustomerQueue()
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    string query = @"
+                        SELECT
+                            m.Movie_ID,
+                            m.Movie_Name,
+                            m.Movie_Genre,
+                            m.Average_Rating
+                        FROM Queue q
+                        INNER JOIN Movie_Data m ON q.Movie_ID = m.Movie_ID
+                        WHERE q.Customer_ID = @customerId
+                        ORDER BY m.Movie_Name";
+
+                    SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
+                    adapter.SelectCommand.Parameters.AddWithValue("@customerId", selectedCustomerId);
+                    DataTable table = new DataTable();
+                    adapter.Fill(table);
+                    customer_queue_grid.DataSource = table;
+                    customer_queue_grid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("There is an error loading the customer queue: " + ex.Message);
+            }
+        }
+
+        private void LoadCustomerHistory()
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    string query = @"
+                        SELECT
+                            o.Order_ID,
+                            m.Movie_Name,
+                            CONCAT(o.Checkout_Year, '-', RIGHT('00' + CAST(o.Checkout_Month AS varchar(2)), 2), '-', RIGHT('00' + CAST(o.Checkout_Day AS varchar(2)), 2)) AS Checkout_Date,
+                            CONCAT(o.Return_Year, '-', RIGHT('00' + CAST(o.Return_Month AS varchar(2)), 2), '-', RIGHT('00' + CAST(o.Return_Day AS varchar(2)), 2)) AS Return_Date
+                        FROM Order_Data o
+                        INNER JOIN Movie_Data m ON o.Movie_ID = m.Movie_ID
+                        WHERE o.Customer_ID = @customerId
+                        ORDER BY o.Order_ID DESC";
+
+                    SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
+                    adapter.SelectCommand.Parameters.AddWithValue("@customerId", selectedCustomerId);
+                    DataTable table = new DataTable();
+                    adapter.Fill(table);
+                    customer_history_grid.DataSource = table;
+                    customer_history_grid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("There is an error loading the customer order history: " + ex.Message);
             }
         }
 

@@ -113,20 +113,12 @@ namespace MovieRental_Team5
         }
 
         /* The following section involves 
-         * the help menu and customer portal button,
-         * The help menu provides a guide on how to use the application,
-         * While the customer portal button allows customers to access their account and view the 
-         * rental history.
+         * the help menu,
+         * The help menu provides a guide on how to use the application.
          */
         private void Exit_Application_Click(object sender, EventArgs e)
         {
             Application.Exit();
-        }
-
-        private void CustomerPortalButton_Click(object sender, EventArgs e)
-        {
-            CustomerPortalForm customerPortalForm = new CustomerPortalForm();
-            customerPortalForm.Show();
         }
 
         private void OpenHelpTopic(string topic)
