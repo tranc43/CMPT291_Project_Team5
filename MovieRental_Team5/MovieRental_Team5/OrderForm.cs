@@ -69,6 +69,42 @@ namespace MovieRental_Team5
             return comboBox2.SelectedItem is OrderLookupItem customerItem ? customerItem.Id : null;
         }
 
+        private OrderLookupItem? GetNextAvailableQueuedMovie(SqlConnection conn, int customerId)
+        {
+            string query = @"
+                SELECT TOP 1
+                    m.Movie_ID,
+                    m.Movie_Name
+                FROM Movie_Queue mq
+                INNER JOIN Movie_Data m ON mq.Movie_ID = m.Movie_ID
+                WHERE mq.Customer_ID = @customerId
+                  AND m.Num_Copies >
+                  (
+                      SELECT COUNT(*)
+                      FROM Order_Data o
+                      WHERE o.Movie_ID = m.Movie_ID
+                        AND o.Return_Date > GETDATE()
+                  )
+                ORDER BY mq.Queue_Position, m.Movie_ID";
+
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@customerId", customerId);
+
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    if (!reader.Read())
+                    {
+                        return null;
+                    }
+
+                    int movieId = Convert.ToInt32(reader["Movie_ID"]);
+                    string movieName = movieId + " - " + reader["Movie_Name"];
+                    return new OrderLookupItem(movieId, movieName);
+                }
+            }
+        }
+
         private void load_movies()
         {
             comboBox3.Items.Clear();
@@ -222,9 +258,9 @@ namespace MovieRental_Team5
                 : "Employee ID: not logged in";
         }
 
-        private void clear_order_fields()
+        private void clear_order_fields(bool preserveCustomerSelection = false)
         {
-            if (comboBox2.Items.Count > 0)
+            if (!preserveCustomerSelection && comboBox2.Items.Count > 0)
             {
                 comboBox2.SelectedIndex = 0;
             }
@@ -323,6 +359,16 @@ namespace MovieRental_Team5
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
+                    OrderLookupItem? nextQueuedMovie = GetNextAvailableQueuedMovie(conn, customerItem.Id);
+
+                    if (nextQueuedMovie != null && movieItem.Id != nextQueuedMovie.Id)
+                    {
+                        MessageBox.Show("This customer must be rented their next available queued movie first: " + nextQueuedMovie.DisplayText);
+                        load_movies();
+                        load_customer_queue();
+                        return;
+                    }
+
                     string availabilityQuery = @"
                         SELECT Num_Copies -
                         (
@@ -372,7 +418,7 @@ namespace MovieRental_Team5
                 load_orders();
                 load_movies();
                 load_customer_queue();
-                clear_order_fields();
+                clear_order_fields(true);
             }
             catch (Exception ex)
             {

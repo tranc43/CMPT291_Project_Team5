@@ -146,6 +146,7 @@ namespace MovieRental_Team5
             LoadCustomerQueueAndHistory();
         }
 
+        // UI elements
         private void load_customers_button_Click(object sender, EventArgs e)
         {
             LoadCustomers();
@@ -404,7 +405,7 @@ namespace MovieRental_Team5
                 MessageBox.Show("There is an error loading the customer order history: " + ex.Message);
             }
         }
-
+    // Help form
         private void OpenHelpTopic(string topic)
         {
             using (HelpForm helpForm = new HelpForm(topic))

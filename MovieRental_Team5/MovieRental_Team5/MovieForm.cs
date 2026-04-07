@@ -17,11 +17,12 @@ namespace MovieRental_Team5
 
         private void MovieForm_Load(object sender, EventArgs e)
         {
+            // checks if employee is logged in 
             if (!AccessControl.EnsureEmployeeLoggedIn(this))
             {
                 return;
             }
-
+            // genre dropdown selection
             genre_dropdown.Items.Clear();
             genre_dropdown.Items.AddRange(new string[] { "Action", "Comedy", "Drama", "Foreign" });
             genre_dropdown.SelectedIndex = 0;
@@ -389,6 +390,10 @@ namespace MovieRental_Team5
         }
 
         private void ClearFields()
+            /*@desc: this functions is used to clear the fields
+             * and resetting everything back to default.
+             * 
+             */
         {
             title_field.Text = "";
             fee_field.Text = "";
@@ -397,7 +402,9 @@ namespace MovieRental_Team5
             selectedMovieID = -1;
             movie_actor_grid.DataSource = null;
         }
-
+        /* this section for the code is for the buttons like the back button,
+         * clear button, Help button, etc.
+         */
         private void clear_button_Click(object sender, EventArgs e)
         {
             ClearFields();
@@ -435,7 +442,7 @@ namespace MovieRental_Team5
         {
             OpenHelpTopic(HelpTopics.About);
         }
-
+        // this class is used to represent items in the actor dropdown 
         private class LookupItem
         {
             public int Id;

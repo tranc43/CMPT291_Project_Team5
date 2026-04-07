@@ -120,7 +120,7 @@
             // 
             OrderTitle.AutoSize = true;
             OrderTitle.Font = new Font("Segoe UI", 20F, FontStyle.Bold);
-            OrderTitle.Location = new Point(30, 391);
+            OrderTitle.Location = new Point(21, 421);
             OrderTitle.Name = "OrderTitle";
             OrderTitle.Size = new Size(188, 37);
             OrderTitle.TabIndex = 1;
@@ -156,7 +156,7 @@
             // comboBox2
             // 
             comboBox2.FormattingEnabled = true;
-            comboBox2.Location = new Point(44, 463);
+            comboBox2.Location = new Point(35, 496);
             comboBox2.Name = "comboBox2";
             comboBox2.Size = new Size(160, 23);
             comboBox2.TabIndex = 6;
@@ -165,7 +165,7 @@
             // comboBox3
             // 
             comboBox3.FormattingEnabled = true;
-            comboBox3.Location = new Point(43, 531);
+            comboBox3.Location = new Point(34, 564);
             comboBox3.Name = "comboBox3";
             comboBox3.Size = new Size(150, 23);
             comboBox3.TabIndex = 7;
@@ -176,7 +176,7 @@
             select_customer_label.AutoSize = true;
             select_customer_label.FlatStyle = FlatStyle.Flat;
             select_customer_label.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
-            select_customer_label.Location = new Point(39, 428);
+            select_customer_label.Location = new Point(30, 461);
             select_customer_label.Name = "select_customer_label";
             select_customer_label.Size = new Size(165, 28);
             select_customer_label.TabIndex = 8;
@@ -187,7 +187,7 @@
             label2.AutoSize = true;
             label2.FlatStyle = FlatStyle.Flat;
             label2.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
-            label2.Location = new Point(43, 500);
+            label2.Location = new Point(34, 533);
             label2.Name = "label2";
             label2.Size = new Size(134, 28);
             label2.TabIndex = 9;
@@ -290,21 +290,21 @@
             // record_order_button
             // 
             record_order_button.Font = new Font("Segoe UI", 15F);
-            record_order_button.Location = new Point(563, 547);
+            record_order_button.Location = new Point(608, 547);
             record_order_button.Name = "record_order_button";
-            record_order_button.Size = new Size(145, 35);
+            record_order_button.Size = new Size(239, 35);
             record_order_button.TabIndex = 19;
-            record_order_button.Text = "record order";
+            record_order_button.Text = "Record order Rental";
             record_order_button.UseVisualStyleBackColor = true;
             // 
             // button1
             // 
             button1.Font = new Font("Segoe UI", 15F);
-            button1.Location = new Point(400, 547);
+            button1.Location = new Point(350, 547);
             button1.Name = "button1";
-            button1.Size = new Size(150, 35);
+            button1.Size = new Size(199, 35);
             button1.TabIndex = 20;
-            button1.Text = "clear order";
+            button1.Text = "clear order fields";
             button1.UseVisualStyleBackColor = true;
             // 
             // employee_ID_label
