@@ -7,11 +7,10 @@ namespace MovieRental_Team5
 {
     public partial class OrderForm : Form
     {
-        string connectionString = DatabaseConnection.ConnectionString;
+        private readonly string connectionString = DatabaseConnection.ConnectionString;
 
         public OrderForm()
         {
-            // Initializing the form
             InitializeComponent();
             Load += OrderForm_Load;
             back_button.Click += back_button_Click;
@@ -27,7 +26,6 @@ namespace MovieRental_Team5
                 return;
             }
 
-            // Loading form
             load_customers();
             load_orders();
             set_employee_label();
@@ -40,10 +38,6 @@ namespace MovieRental_Team5
 
             try
             {
-                /*@ desc 
-                 * this functions purpose is to load the customers
-                 * inside of the box, it'll display the ID, First & Last name and it'll order it.
-                 */
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
@@ -53,13 +47,10 @@ namespace MovieRental_Team5
 
                     while (reader.Read())
                     {
-                        // Creating a display string that displays the customer information
                         int customerId = Convert.ToInt32(reader["Customer_ID"]);
-                        string customerName = customerId + " - " + reader["First_Name"].ToString() + " " + reader["Last_Name"].ToString();
+                        string customerName = customerId + " - " + reader["First_Name"] + " " + reader["Last_Name"];
                         comboBox2.Items.Add(new OrderLookupItem(customerId, customerName));
                     }
-
-                    reader.Close();
                 }
 
                 if (comboBox2.Items.Count > 0)
@@ -73,6 +64,47 @@ namespace MovieRental_Team5
             }
         }
 
+        private int? GetSelectedCustomerId()
+        {
+            return comboBox2.SelectedItem is OrderLookupItem customerItem ? customerItem.Id : null;
+        }
+
+        private OrderLookupItem? GetNextAvailableQueuedMovie(SqlConnection conn, int customerId)
+        {
+            string query = @"
+                SELECT TOP 1
+                    m.Movie_ID,
+                    m.Movie_Name
+                FROM Movie_Queue mq
+                INNER JOIN Movie_Data m ON mq.Movie_ID = m.Movie_ID
+                WHERE mq.Customer_ID = @customerId
+                  AND m.Num_Copies >
+                  (
+                      SELECT COUNT(*)
+                      FROM Order_Data o
+                      WHERE o.Movie_ID = m.Movie_ID
+                        AND o.Return_Date > GETDATE()
+                  )
+                ORDER BY mq.Queue_Position, m.Movie_ID";
+
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@customerId", customerId);
+
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    if (!reader.Read())
+                    {
+                        return null;
+                    }
+
+                    int movieId = Convert.ToInt32(reader["Movie_ID"]);
+                    string movieName = movieId + " - " + reader["Movie_Name"];
+                    return new OrderLookupItem(movieId, movieName);
+                }
+            }
+        }
+
         private void load_movies()
         {
             comboBox3.Items.Clear();
@@ -81,13 +113,9 @@ namespace MovieRental_Team5
             {
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
-                    /*@desc 
-                     * this section of the code is to load the movies that exist and itll display 
-                     * the ID and name of the movie, it'll also order it by the name. The query also checks if there are copies available by 
-                     * comparing the number of copies to the number of orders that have a return date in at a later date.
-                     */
                     conn.Open();
                     int? selectedCustomerId = GetSelectedCustomerId();
+
                     string query = @"
                         SELECT m.Movie_ID, m.Movie_Name
                         FROM Movie_Data m
@@ -96,19 +124,28 @@ namespace MovieRental_Team5
                             SELECT COUNT(*)
                             FROM Order_Data o
                             WHERE o.Movie_ID = m.Movie_ID
-                            AND DATETIMEFROMPARTS(o.Return_Year, o.Return_Month, o.Return_Day,
-                                DATEPART(HOUR, o.Return_Time), DATEPART(MINUTE, o.Return_Time), DATEPART(SECOND, o.Return_Time), 0) > GETDATE()
+                              AND o.Return_Date > GETDATE()
                         )
                         ORDER BY
                             CASE
                                 WHEN @customerId IS NOT NULL AND EXISTS
                                 (
                                     SELECT 1
-                                    FROM Queue q
-                                    WHERE q.Customer_ID = @customerId
-                                      AND q.Movie_ID = m.Movie_ID
+                                    FROM Movie_Queue mq
+                                    WHERE mq.Customer_ID = @customerId
+                                      AND mq.Movie_ID = m.Movie_ID
                                 ) THEN 0
                                 ELSE 1
+                            END,
+                            CASE
+                                WHEN @customerId IS NOT NULL THEN
+                                (
+                                    SELECT TOP 1 mq.Queue_Position
+                                    FROM Movie_Queue mq
+                                    WHERE mq.Customer_ID = @customerId
+                                      AND mq.Movie_ID = m.Movie_ID
+                                )
+                                ELSE NULL
                             END,
                             m.Movie_Name";
 
@@ -119,11 +156,9 @@ namespace MovieRental_Team5
                     while (reader.Read())
                     {
                         int movieId = Convert.ToInt32(reader["Movie_ID"]);
-                        string movieName = movieId + " - " + reader["Movie_Name"].ToString();
+                        string movieName = movieId + " - " + reader["Movie_Name"];
                         comboBox3.Items.Add(new OrderLookupItem(movieId, movieName));
                     }
-
-                    reader.Close();
                 }
 
                 if (comboBox3.Items.Count > 0)
@@ -135,16 +170,6 @@ namespace MovieRental_Team5
             {
                 MessageBox.Show("There is an error loading movies: " + ex.Message);
             }
-        }
-
-        private int? GetSelectedCustomerId()
-        {
-            if (comboBox2.SelectedItem is OrderLookupItem customerItem)
-            {
-                return customerItem.Id;
-            }
-
-            return null;
         }
 
         private void load_customer_queue()
@@ -164,14 +189,20 @@ namespace MovieRental_Team5
                     conn.Open();
                     string query = @"
                         SELECT
+                            mq.Queue_Position,
                             m.Movie_ID,
                             m.Movie_Name,
                             m.Movie_Genre,
-                            m.Average_Rating
-                        FROM Queue q
-                        INNER JOIN Movie_Data m ON q.Movie_ID = m.Movie_ID
-                        WHERE q.Customer_ID = @customerId
-                        ORDER BY m.Movie_Name";
+                            (
+                                SELECT AVG(CAST(rm.Rating AS DECIMAL(4,2)))
+                                FROM Rate_Movie rm
+                                INNER JOIN Order_Data od ON rm.Order_ID = od.Order_ID
+                                WHERE od.Movie_ID = m.Movie_ID
+                            ) AS Average_Rating
+                        FROM Movie_Queue mq
+                        INNER JOIN Movie_Data m ON mq.Movie_ID = m.Movie_ID
+                        WHERE mq.Customer_ID = @customerId
+                        ORDER BY mq.Queue_Position";
 
                     SqlDataAdapter adapter = new SqlDataAdapter(query, conn);
                     adapter.SelectCommand.Parameters.AddWithValue("@customerId", customerId.Value);
@@ -188,10 +219,6 @@ namespace MovieRental_Team5
         }
 
         private void load_orders()
-            /*@desc: this functions purpose is to load orders into the data grid view
-             * Displaying the customer information and movie information
-             * Also displaying the rest of the information such as return date and checkout.
-             */
         {
             try
             {
@@ -199,15 +226,13 @@ namespace MovieRental_Team5
                 {
                     conn.Open();
                     string query = @"
-                        SELECT 
+                        SELECT
                             o.Order_ID,
                             m.Movie_Name,
                             c.First_Name + ' ' + c.Last_Name AS Customer_Name,
                             o.Employee_ID,
-                            CONCAT(o.Checkout_Year, '-', RIGHT('00' + CAST(o.Checkout_Month AS varchar(2)), 2), '-', RIGHT('00' + CAST(o.Checkout_Day AS varchar(2)), 2)) AS Checkout_Date,
-                            CONVERT(varchar(8), o.Checkout_Time, 108) AS Checkout_Time,
-                            CONCAT(o.Return_Year, '-', RIGHT('00' + CAST(o.Return_Month AS varchar(2)), 2), '-', RIGHT('00' + CAST(o.Return_Day AS varchar(2)), 2)) AS Return_Date,
-                            CONVERT(varchar(8), o.Return_Time, 108) AS Return_Time
+                            o.Checkout,
+                            o.Return_Date
                         FROM Order_Data o
                         INNER JOIN Movie_Data m ON o.Movie_ID = m.Movie_ID
                         INNER JOIN Customer_Data c ON o.Customer_ID = c.Customer_ID
@@ -228,33 +253,20 @@ namespace MovieRental_Team5
 
         private void set_employee_label()
         {
-            /*@desc this functions purpose is to set the employee label to the ID thats logged in
-             * 
-             */
-            if (CurrentSession.EmployeeId != -1)
-            {
-                employee_ID_label.Text = "Employee ID: " + CurrentSession.EmployeeId;
-            }
-            else
-            {
-                employee_ID_label.Text = "Employee ID: not logged in";
-            }
+            employee_ID_label.Text = CurrentSession.EmployeeId != -1
+                ? "Employee ID: " + CurrentSession.EmployeeId
+                : "Employee ID: not logged in";
         }
 
-        private void clear_order_fields()
+        private void clear_order_fields(bool preserveCustomerSelection = false)
         {
-            /*@desc
-             * this functions purpose is to clear the order fields and resetting them 
-             * to default values
-             */
-            if (comboBox2.Items.Count > 0)
+            if (!preserveCustomerSelection && comboBox2.Items.Count > 0)
             {
                 comboBox2.SelectedIndex = 0;
             }
 
             DateTime now = DateTime.Now;
             DateTime later = now.AddDays(3);
-
             checkout_time.Value = now;
             checkout_date.Value = now;
             return_date.Value = later;
@@ -308,7 +320,7 @@ namespace MovieRental_Team5
 
         private void back_button_Click(object sender, EventArgs e)
         {
-            this.Close();
+            Close();
         }
 
         private void clear_order_button_Click(object sender, EventArgs e)
@@ -318,12 +330,6 @@ namespace MovieRental_Team5
 
         private void record_order_button_Click(object sender, EventArgs e)
         {
-            /*@desc
-             * this functions purpose is to record the order into the database
-             * it first check if theres an employee logged in or not and checks if the customer and movie are selected
-             * it checks if the return date is after the checkout date before proceeding
-             * checks if  the movie is available by comparing the number of copies to num of orders
-             */
             if (CurrentSession.EmployeeId == -1)
             {
                 MessageBox.Show("There is an error. No employee is logged in.");
@@ -339,8 +345,7 @@ namespace MovieRental_Team5
             OrderLookupItem customerItem = (OrderLookupItem)comboBox2.SelectedItem;
             OrderLookupItem movieItem = (OrderLookupItem)comboBox3.SelectedItem;
 
-            // Combining date and time for check out
-            DateTime checkoutDateTime = checkout_time.Value.Date + checkout_date.Value.TimeOfDay;
+            DateTime checkoutDateTime = checkout_date.Value.Date + checkout_time.Value.TimeOfDay;
             DateTime returnDateTime = return_date.Value.Date + return_time.Value.TimeOfDay;
 
             if (returnDateTime <= checkoutDateTime)
@@ -354,15 +359,23 @@ namespace MovieRental_Team5
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
-                    // this query checks if movie is available by comparing # of copies to # of orders.
+                    OrderLookupItem? nextQueuedMovie = GetNextAvailableQueuedMovie(conn, customerItem.Id);
+
+                    if (nextQueuedMovie != null && movieItem.Id != nextQueuedMovie.Id)
+                    {
+                        MessageBox.Show("This customer must be rented their next available queued movie first: " + nextQueuedMovie.DisplayText);
+                        load_movies();
+                        load_customer_queue();
+                        return;
+                    }
+
                     string availabilityQuery = @"
                         SELECT Num_Copies -
                         (
                             SELECT COUNT(*)
                             FROM Order_Data
                             WHERE Movie_ID = @movieId
-                            AND DATETIMEFROMPARTS(Return_Year, Return_Month, Return_Day,
-                                DATEPART(HOUR, Return_Time), DATEPART(MINUTE, Return_Time), DATEPART(SECOND, Return_Time), 0) > GETDATE()
+                              AND Return_Date > GETDATE()
                         )
                         FROM Movie_Data
                         WHERE Movie_ID = @movieId";
@@ -377,41 +390,35 @@ namespace MovieRental_Team5
                         load_movies();
                         return;
                     }
-           
+
                     string insertQuery = @"
                         INSERT INTO Order_Data
-                        (Checkout_Year, Checkout_Month, Checkout_Day, Checkout_Time,
-                         Return_Year, Return_Month, Return_Day, Return_Time, Movie_ID, Customer_ID, Employee_ID)
+                        (Checkout, Return_Date, Movie_ID, Customer_ID, Employee_ID)
                         VALUES
-                        (@checkoutYear, @checkoutMonth, @checkoutDay, @checkoutTime,
-                         @returnYear, @returnMonth, @returnDay, @returnTime, @movieId, @customerId, @employeeId)";
-                    // this block of code inserts the order into the database with the necessary information for th eorder.
+                        (@checkout, @returnDate, @movieId, @customerId, @employeeId)";
+
                     SqlCommand insertCmd = new SqlCommand(insertQuery, conn);
-                    insertCmd.Parameters.AddWithValue("@checkoutYear", checkoutDateTime.Year);
-                    insertCmd.Parameters.AddWithValue("@checkoutMonth", checkoutDateTime.Month);
-                    insertCmd.Parameters.AddWithValue("@checkoutDay", checkoutDateTime.Day);
-                    insertCmd.Parameters.AddWithValue("@checkoutTime", checkoutDateTime.TimeOfDay);
-                    insertCmd.Parameters.AddWithValue("@returnYear", returnDateTime.Year);
-                    insertCmd.Parameters.AddWithValue("@returnMonth", returnDateTime.Month);
-                    insertCmd.Parameters.AddWithValue("@returnDay", returnDateTime.Day);
-                    insertCmd.Parameters.AddWithValue("@returnTime", returnDateTime.TimeOfDay);
+                    insertCmd.Parameters.AddWithValue("@checkout", checkoutDateTime);
+                    insertCmd.Parameters.AddWithValue("@returnDate", returnDateTime);
                     insertCmd.Parameters.AddWithValue("@movieId", movieItem.Id);
                     insertCmd.Parameters.AddWithValue("@customerId", customerItem.Id);
                     insertCmd.Parameters.AddWithValue("@employeeId", CurrentSession.EmployeeId);
                     insertCmd.ExecuteNonQuery();
 
-                    string removeQueueQuery = "DELETE FROM Queue WHERE Customer_ID = @customerId AND Movie_ID = @movieId";
+                    string removeQueueQuery = "DELETE FROM Movie_Queue WHERE Customer_ID = @customerId AND Movie_ID = @movieId";
                     SqlCommand removeQueueCmd = new SqlCommand(removeQueueQuery, conn);
                     removeQueueCmd.Parameters.AddWithValue("@customerId", customerItem.Id);
                     removeQueueCmd.Parameters.AddWithValue("@movieId", movieItem.Id);
                     removeQueueCmd.ExecuteNonQuery();
+
+                    ResequenceCustomerQueue(conn, customerItem.Id);
                 }
 
                 MessageBox.Show("Order recorded successfully!");
                 load_orders();
                 load_movies();
                 load_customer_queue();
-                clear_order_fields();
+                clear_order_fields(true);
             }
             catch (Exception ex)
             {
@@ -436,9 +443,34 @@ namespace MovieRental_Team5
             }
         }
 
+        private void ResequenceCustomerQueue(SqlConnection conn, int customerId)
+        {
+            string query = @"
+                WITH OrderedQueue AS
+                (
+                    SELECT
+                        Customer_ID,
+                        Movie_ID,
+                        ROW_NUMBER() OVER (ORDER BY Queue_Position, Movie_ID) AS NewQueuePosition
+                    FROM Movie_Queue
+                    WHERE Customer_ID = @customerId
+                )
+                UPDATE mq
+                SET Queue_Position = oq.NewQueuePosition
+                FROM Movie_Queue mq
+                INNER JOIN OrderedQueue oq
+                    ON mq.Customer_ID = oq.Customer_ID
+                   AND mq.Movie_ID = oq.Movie_ID";
+
+            using (SqlCommand command = new SqlCommand(query, conn))
+            {
+                command.Parameters.AddWithValue("@customerId", customerId);
+                command.ExecuteNonQuery();
+            }
+        }
+
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-
         }
 
         private void OpenHelpTopic(string topic)

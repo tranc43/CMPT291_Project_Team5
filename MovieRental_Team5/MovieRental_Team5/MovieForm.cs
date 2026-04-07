@@ -17,13 +17,14 @@ namespace MovieRental_Team5
 
         private void MovieForm_Load(object sender, EventArgs e)
         {
+            // checks if employee is logged in 
             if (!AccessControl.EnsureEmployeeLoggedIn(this))
             {
                 return;
             }
-
+            // genre dropdown selection
             genre_dropdown.Items.Clear();
-            genre_dropdown.Items.AddRange(new string[] { "All", "Action", "Comedy", "Drama", "Foreign" });
+            genre_dropdown.Items.AddRange(new string[] { "Action", "Comedy", "Drama", "Foreign" });
             genre_dropdown.SelectedIndex = 0;
             LoadActors();
             LoadMovies();
@@ -38,11 +39,22 @@ namespace MovieRental_Team5
                 {
                     connectionNew.Open();
                     string query = @"
-                        SELECT Movie_ID, Movie_Name, Movie_Genre, Distribution_Fee, Num_Copies, Average_Rating
-                        FROM Movie_Data
-                        WHERE (@name = '' OR Movie_Name LIKE '%' + @name + '%')
-                          AND (@genre = '' OR Movie_Genre = @genre)
-                        ORDER BY Movie_Name";
+                        SELECT
+                            m.Movie_ID,
+                            m.Movie_Name,
+                            m.Movie_Genre,
+                            m.Distribution_Fee,
+                            m.Num_Copies,
+                            (
+                                SELECT AVG(CAST(rm.Rating AS DECIMAL(4,2)))
+                                FROM Rate_Movie rm
+                                INNER JOIN Order_Data od ON rm.Order_ID = od.Order_ID
+                                WHERE od.Movie_ID = m.Movie_ID
+                            ) AS Average_Rating
+                        FROM Movie_Data m
+                        WHERE (@name = '' OR m.Movie_Name LIKE '%' + @name + '%')
+                          AND (@genre = '' OR m.Movie_Genre = @genre)
+                        ORDER BY m.Movie_Name";
 
                     SqlDataAdapter adapter = new SqlDataAdapter(query, connectionNew);
                     adapter.SelectCommand.Parameters.AddWithValue("@name", search_movie_field.Text.Trim());
@@ -105,7 +117,15 @@ namespace MovieRental_Team5
                 {
                     connectionNew.Open();
                     string query = @"
-                        SELECT a.Actor_ID, a.Actor_Name, a.Gender, a.Average_Rating
+                        SELECT
+                            a.Actor_ID,
+                            a.Actor_Name,
+                            a.Gender,
+                            (
+                                SELECT AVG(CAST(ra.Rating AS DECIMAL(4,2)))
+                                FROM Rate_Actor ra
+                                WHERE ra.Actor_ID = a.Actor_ID
+                            ) AS Average_Rating
                         FROM Appears_In ai
                         INNER JOIN Actor_Data a ON ai.Actor_ID = a.Actor_ID
                         WHERE ai.Movie_ID = @movieId
@@ -254,6 +274,10 @@ namespace MovieRental_Team5
                     deleteAppearances.Parameters.AddWithValue("@id", selectedMovieID);
                     deleteAppearances.ExecuteNonQuery();
 
+                    SqlCommand deleteQueue = new SqlCommand("DELETE FROM Movie_Queue WHERE Movie_ID = @id", connectionNew);
+                    deleteQueue.Parameters.AddWithValue("@id", selectedMovieID);
+                    deleteQueue.ExecuteNonQuery();
+
                     SqlCommand command = new SqlCommand("DELETE FROM Movie_Data WHERE Movie_ID = @id", connectionNew);
                     command.Parameters.AddWithValue("@id", selectedMovieID);
                     command.ExecuteNonQuery();
@@ -366,6 +390,10 @@ namespace MovieRental_Team5
         }
 
         private void ClearFields()
+            /*@desc: this functions is used to clear the fields
+             * and resetting everything back to default.
+             * 
+             */
         {
             title_field.Text = "";
             fee_field.Text = "";
@@ -374,7 +402,9 @@ namespace MovieRental_Team5
             selectedMovieID = -1;
             movie_actor_grid.DataSource = null;
         }
-
+        /* this section for the code is for the buttons like the back button,
+         * clear button, Help button, etc.
+         */
         private void clear_button_Click(object sender, EventArgs e)
         {
             ClearFields();
@@ -412,7 +442,7 @@ namespace MovieRental_Team5
         {
             OpenHelpTopic(HelpTopics.About);
         }
-
+        // this class is used to represent items in the actor dropdown 
         private class LookupItem
         {
             public int Id;

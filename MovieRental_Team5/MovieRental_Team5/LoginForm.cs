@@ -30,6 +30,11 @@ namespace MovieRental_Team5
         }
         private void LoginButton_Click(object sender, EventArgs e)
         {
+            /*@desc
+             * this function is used for handling the logic implementation
+             * there are error checks in place to assure various scenarios are handled
+             * The functions also implements the hashing of employee passwords and updating them as the hash version in the DB.
+             */
             string sin = EmailField.Text.Trim();
             string password = PasswordField.Text;
 
@@ -43,38 +48,41 @@ namespace MovieRental_Team5
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
+                    // this query is used to retrieve employee data based on the the provided sin 
                     string employee_query = "SELECT Employee_ID, First_Name, Last_Name, Employee_Password FROM Employee_Data WHERE SIN = @input";
                     SqlCommand empCmd = new SqlCommand(employee_query, conn);
 
                     empCmd.Parameters.AddWithValue("@input", sin);
                     SqlDataReader empReader = empCmd.ExecuteReader();
-
+                    
+                  // password matching using the PasswordSecurity file which handles the hashing and vericiation of passwords.
                     if (empReader.HasRows)
                     {
                         empReader.Read();
                         string storedPassword = empReader["Employee_Password"].ToString();
                         bool passwordMatches = PasswordSecurity.VerifyPassword(password, storedPassword);
-
+                        // throw error for invalid password or SIN
                         if (!passwordMatches)
                         {
                             empReader.Close();
-                            MessageBox.Show("Invalid employee SIN or password.", "Login Error");
+                            MessageBox.Show("Invalid Password or SIN!", "Login Error");
                             return;
                         }
-
+      
+                        // we check if the passsword needs to be hashed and updated in the database.
                         int employeeId = Convert.ToInt32(empReader["Employee_ID"]);
                         string employee_name = empReader["First_Name"].ToString() + " " + empReader["Last_Name"].ToString();
                         bool passwordNeedsUpgrade = !PasswordSecurity.IsHashed(storedPassword);
 
                         empReader.Close();
-
+                        // this is just for the already existing passwords in plain text in the DB, it just hashes
                         if (passwordNeedsUpgrade)
                         {
                             UpgradeEmployeePassword(conn, employeeId, password);
                         }
 
                         CurrentSession.SetEmployee(employeeId, sin, employee_name);
-
+                        // success!
                         MessageBox.Show("Login Successful! " + " Welcome Back, " + employee_name + " ! ");
                         Dashboard_Form dashboard = new Dashboard_Form(employee_name);
                         dashboard.Show();

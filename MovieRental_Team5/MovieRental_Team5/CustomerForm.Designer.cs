@@ -89,7 +89,7 @@ namespace MovieRental_Team5
             menuStrip1.Items.AddRange(new ToolStripItem[] { helpToolStripMenuItem });
             menuStrip1.Location = new Point(0, 804);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(1227, 24);
+            menuStrip1.Size = new Size(1418, 24);
             menuStrip1.TabIndex = 0;
             menuStrip1.Text = "menuStrip1";
             // 
@@ -125,7 +125,7 @@ namespace MovieRental_Team5
             // 
             customer_title.AutoSize = true;
             customer_title.Font = new Font("Segoe UI", 20F, FontStyle.Bold);
-            customer_title.Location = new Point(822, 51);
+            customer_title.Location = new Point(941, 51);
             customer_title.Name = "customer_title";
             customer_title.Size = new Size(288, 37);
             customer_title.TabIndex = 1;
@@ -136,7 +136,7 @@ namespace MovieRental_Team5
             customer_grid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             customer_grid.Location = new Point(696, 91);
             customer_grid.Name = "customer_grid";
-            customer_grid.Size = new Size(519, 468);
+            customer_grid.Size = new Size(722, 468);
             customer_grid.TabIndex = 2;
             customer_grid.CellClick += customer_grid_CellClick;
             // 
@@ -144,7 +144,7 @@ namespace MovieRental_Team5
             // 
             controls_label.AutoSize = true;
             controls_label.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
-            controls_label.Location = new Point(905, 579);
+            controls_label.Location = new Point(1017, 562);
             controls_label.Name = "controls_label";
             controls_label.Size = new Size(111, 32);
             controls_label.TabIndex = 3;
@@ -329,7 +329,7 @@ namespace MovieRental_Team5
             // 
             // load_customers_button
             // 
-            load_customers_button.Location = new Point(828, 619);
+            load_customers_button.Location = new Point(940, 602);
             load_customers_button.Name = "load_customers_button";
             load_customers_button.Size = new Size(121, 40);
             load_customers_button.TabIndex = 26;
@@ -339,7 +339,7 @@ namespace MovieRental_Team5
             // 
             // add_customer_button
             // 
-            add_customer_button.Location = new Point(967, 619);
+            add_customer_button.Location = new Point(1079, 602);
             add_customer_button.Name = "add_customer_button";
             add_customer_button.Size = new Size(121, 40);
             add_customer_button.TabIndex = 27;
@@ -349,7 +349,7 @@ namespace MovieRental_Team5
             // 
             // update_customer_button
             // 
-            update_customer_button.Location = new Point(829, 668);
+            update_customer_button.Location = new Point(941, 651);
             update_customer_button.Name = "update_customer_button";
             update_customer_button.Size = new Size(121, 40);
             update_customer_button.TabIndex = 28;
@@ -359,7 +359,7 @@ namespace MovieRental_Team5
             // 
             // delete_customer_button
             // 
-            delete_customer_button.Location = new Point(967, 668);
+            delete_customer_button.Location = new Point(1079, 651);
             delete_customer_button.Name = "delete_customer_button";
             delete_customer_button.Size = new Size(121, 40);
             delete_customer_button.TabIndex = 29;
@@ -369,7 +369,7 @@ namespace MovieRental_Team5
             // 
             // clear_button
             // 
-            clear_button.Location = new Point(828, 720);
+            clear_button.Location = new Point(1206, 651);
             clear_button.Name = "clear_button";
             clear_button.Size = new Size(121, 40);
             clear_button.TabIndex = 30;
@@ -379,7 +379,7 @@ namespace MovieRental_Team5
             // 
             // back_button
             // 
-            back_button.Location = new Point(1094, 761);
+            back_button.Location = new Point(1271, 761);
             back_button.Name = "back_button";
             back_button.Size = new Size(121, 40);
             back_button.TabIndex = 31;
@@ -506,7 +506,7 @@ namespace MovieRental_Team5
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1227, 828);
+            ClientSize = new Size(1418, 828);
             Controls.Add(label2);
             Controls.Add(label1);
             Controls.Add(search_customers_button);
