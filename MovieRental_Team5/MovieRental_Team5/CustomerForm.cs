@@ -18,6 +18,9 @@ namespace MovieRental_Team5
 
         private void CustomerForm_Load(object? sender, EventArgs e)
         {
+            /*@desc this method is called when the form loads and checks if an employee is logged in. If not,
+             * 
+             */
             if (!AccessControl.EnsureEmployeeLoggedIn(this))
             {
                 return;
@@ -78,6 +81,9 @@ namespace MovieRental_Team5
 
         private void ClearFields()
         {
+            /*@desc this method is used to clear all input fields
+             * then reset the customer queue and history grids.
+             */
             first_name_field.Text = "";
             last_name_field.Text = "";
             email_field.Text = "";
