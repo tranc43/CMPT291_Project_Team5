@@ -119,37 +119,9 @@ namespace MovieRental_Team5
         {
             // Its being read in the function above
         }
-
-        /* The following section involves 
-         * the help menu,
-         * The help menu provides a guide on how to use the application.
-         */
         private void Exit_Application_Click(object sender, EventArgs e)
         {
             Application.Exit();
-        }
-
-        private void OpenHelpTopic(string topic)
-        {
-            using (HelpForm helpForm = new HelpForm(topic))
-            {
-                helpForm.ShowDialog(this);
-            }
-        }
-
-        private void helpGettingStartedToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            OpenHelpTopic(HelpTopics.GettingStarted);
-        }
-
-        private void helpLoginToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            OpenHelpTopic(HelpTopics.Login);
-        }
-
-        private void helpAboutToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            OpenHelpTopic(HelpTopics.About);
         }
     }
 }

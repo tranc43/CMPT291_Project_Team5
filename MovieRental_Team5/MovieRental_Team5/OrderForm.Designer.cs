@@ -28,12 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            menuStrip1 = new MenuStrip();
-            helpToolStripMenuItem = new ToolStripMenuItem();
-            helpOverviewToolStripMenuItem = new ToolStripMenuItem();
-            helpOrdersToolStripMenuItem = new ToolStripMenuItem();
-            helpMoviesToolStripMenuItem = new ToolStripMenuItem();
-            helpAboutToolStripMenuItem = new ToolStripMenuItem();
             dataGridView1 = new DataGridView();
             OrderTitle = new Label();
             checkout_date = new DateTimePicker();
@@ -57,56 +51,9 @@
             employee_ID_label = new Label();
             queue_label = new Label();
             queue_grid = new DataGridView();
-            menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)queue_grid).BeginInit();
             SuspendLayout();
-            // 
-            // menuStrip1
-            // 
-            menuStrip1.Dock = DockStyle.Bottom;
-            menuStrip1.Items.AddRange(new ToolStripItem[] { helpToolStripMenuItem });
-            menuStrip1.Location = new Point(0, 673);
-            menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(1020, 24);
-            menuStrip1.TabIndex = 22;
-            menuStrip1.Text = "menuStrip1";
-            // 
-            // helpToolStripMenuItem
-            // 
-            helpToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { helpOverviewToolStripMenuItem, helpOrdersToolStripMenuItem, helpMoviesToolStripMenuItem, helpAboutToolStripMenuItem });
-            helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            helpToolStripMenuItem.Size = new Size(44, 20);
-            helpToolStripMenuItem.Text = "Help";
-            // 
-            // helpOverviewToolStripMenuItem
-            // 
-            helpOverviewToolStripMenuItem.Name = "helpOverviewToolStripMenuItem";
-            helpOverviewToolStripMenuItem.Size = new Size(181, 22);
-            helpOverviewToolStripMenuItem.Text = "Getting Started";
-            helpOverviewToolStripMenuItem.Click += helpOverviewToolStripMenuItem_Click;
-            // 
-            // helpOrdersToolStripMenuItem
-            // 
-            helpOrdersToolStripMenuItem.Name = "helpOrdersToolStripMenuItem";
-            helpOrdersToolStripMenuItem.Size = new Size(181, 22);
-            helpOrdersToolStripMenuItem.Text = "Order Entry";
-            helpOrdersToolStripMenuItem.Click += helpOrdersToolStripMenuItem_Click;
-            // 
-            // helpMoviesToolStripMenuItem
-            // 
-            helpMoviesToolStripMenuItem.Name = "helpMoviesToolStripMenuItem";
-            helpMoviesToolStripMenuItem.Size = new Size(181, 22);
-            helpMoviesToolStripMenuItem.Text = "Movie Management";
-            helpMoviesToolStripMenuItem.Click += helpMoviesToolStripMenuItem_Click;
-            // 
-            // helpAboutToolStripMenuItem
-            // 
-            helpAboutToolStripMenuItem.Name = "helpAboutToolStripMenuItem";
-            helpAboutToolStripMenuItem.Size = new Size(181, 22);
-            helpAboutToolStripMenuItem.Text = "About";
-            helpAboutToolStripMenuItem.Click += helpAboutToolStripMenuItem_Click;
-            // 
             // dataGridView1
             // 
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -345,7 +292,6 @@
             ClientSize = new Size(1020, 697);
             Controls.Add(queue_grid);
             Controls.Add(queue_label);
-            Controls.Add(menuStrip1);
             Controls.Add(employee_ID_label);
             Controls.Add(button1);
             Controls.Add(record_order_button);
@@ -367,11 +313,8 @@
             Controls.Add(checkout_date);
             Controls.Add(OrderTitle);
             Controls.Add(dataGridView1);
-            MainMenuStrip = menuStrip1;
             Name = "OrderForm";
             Text = "OrderForm";
-            menuStrip1.ResumeLayout(false);
-            menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             ((System.ComponentModel.ISupportInitialize)queue_grid).EndInit();
             ResumeLayout(false);
@@ -380,12 +323,6 @@
 
         #endregion
 
-        private MenuStrip menuStrip1;
-        private ToolStripMenuItem helpToolStripMenuItem;
-        private ToolStripMenuItem helpOverviewToolStripMenuItem;
-        private ToolStripMenuItem helpOrdersToolStripMenuItem;
-        private ToolStripMenuItem helpMoviesToolStripMenuItem;
-        private ToolStripMenuItem helpAboutToolStripMenuItem;
         private DataGridView dataGridView1;
         private Label OrderTitle;
         private DateTimePicker checkout_date;

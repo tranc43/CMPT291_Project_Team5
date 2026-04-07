@@ -411,28 +411,5 @@ namespace MovieRental_Team5
                 MessageBox.Show("There is an error loading the customer order history: " + ex.Message);
             }
         }
-    // Help form
-        private void OpenHelpTopic(string topic)
-        {
-            using (HelpForm helpForm = new HelpForm(topic))
-            {
-                helpForm.ShowDialog(this);
-            }
-        }
-
-        private void helpOverviewToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            OpenHelpTopic(HelpTopics.GettingStarted);
-        }
-
-        private void helpCustomersToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            OpenHelpTopic(HelpTopics.CustomerManagement);
-        }
-
-        private void helpAboutToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            OpenHelpTopic(HelpTopics.About);
-        }
     }
 }

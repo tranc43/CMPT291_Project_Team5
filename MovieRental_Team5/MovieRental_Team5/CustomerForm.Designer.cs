@@ -28,11 +28,6 @@ namespace MovieRental_Team5
         /// </summary>
         private void InitializeComponent()
         {
-            menuStrip1 = new MenuStrip();
-            helpToolStripMenuItem = new ToolStripMenuItem();
-            helpOverviewToolStripMenuItem = new ToolStripMenuItem();
-            helpCustomersToolStripMenuItem = new ToolStripMenuItem();
-            helpAboutToolStripMenuItem = new ToolStripMenuItem();
             customer_title = new Label();
             customer_grid = new DataGridView();
             controls_label = new Label();
@@ -77,50 +72,10 @@ namespace MovieRental_Team5
             customer_history_grid = new DataGridView();
             label1 = new Label();
             label2 = new Label();
-            menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)customer_grid).BeginInit();
             ((System.ComponentModel.ISupportInitialize)customer_queue_grid).BeginInit();
             ((System.ComponentModel.ISupportInitialize)customer_history_grid).BeginInit();
             SuspendLayout();
-            // 
-            // menuStrip1
-            // 
-            menuStrip1.Dock = DockStyle.Bottom;
-            menuStrip1.Items.AddRange(new ToolStripItem[] { helpToolStripMenuItem });
-            menuStrip1.Location = new Point(0, 804);
-            menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(1418, 24);
-            menuStrip1.TabIndex = 0;
-            menuStrip1.Text = "menuStrip1";
-            // 
-            // helpToolStripMenuItem
-            // 
-            helpToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { helpOverviewToolStripMenuItem, helpCustomersToolStripMenuItem, helpAboutToolStripMenuItem });
-            helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            helpToolStripMenuItem.Size = new Size(44, 20);
-            helpToolStripMenuItem.Text = "Help";
-            // 
-            // helpOverviewToolStripMenuItem
-            // 
-            helpOverviewToolStripMenuItem.Name = "helpOverviewToolStripMenuItem";
-            helpOverviewToolStripMenuItem.Size = new Size(200, 22);
-            helpOverviewToolStripMenuItem.Text = "Getting Started";
-            helpOverviewToolStripMenuItem.Click += helpOverviewToolStripMenuItem_Click;
-            // 
-            // helpCustomersToolStripMenuItem
-            // 
-            helpCustomersToolStripMenuItem.Name = "helpCustomersToolStripMenuItem";
-            helpCustomersToolStripMenuItem.Size = new Size(200, 22);
-            helpCustomersToolStripMenuItem.Text = "Customer Management";
-            helpCustomersToolStripMenuItem.Click += helpCustomersToolStripMenuItem_Click;
-            // 
-            // helpAboutToolStripMenuItem
-            // 
-            helpAboutToolStripMenuItem.Name = "helpAboutToolStripMenuItem";
-            helpAboutToolStripMenuItem.Size = new Size(200, 22);
-            helpAboutToolStripMenuItem.Text = "About";
-            helpAboutToolStripMenuItem.Click += helpAboutToolStripMenuItem_Click;
-            // 
             // customer_title
             // 
             customer_title.AutoSize = true;
@@ -551,12 +506,8 @@ namespace MovieRental_Team5
             Controls.Add(controls_label);
             Controls.Add(customer_grid);
             Controls.Add(customer_title);
-            Controls.Add(menuStrip1);
-            MainMenuStrip = menuStrip1;
             Name = "CustomerForm";
             Text = "CustomerForm";
-            menuStrip1.ResumeLayout(false);
-            menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)customer_grid).EndInit();
             ((System.ComponentModel.ISupportInitialize)customer_queue_grid).EndInit();
             ((System.ComponentModel.ISupportInitialize)customer_history_grid).EndInit();
@@ -566,11 +517,6 @@ namespace MovieRental_Team5
 
         #endregion
 
-        private MenuStrip menuStrip1;
-        private ToolStripMenuItem helpToolStripMenuItem;
-        private ToolStripMenuItem helpOverviewToolStripMenuItem;
-        private ToolStripMenuItem helpCustomersToolStripMenuItem;
-        private ToolStripMenuItem helpAboutToolStripMenuItem;
         private Label customer_title;
         private DataGridView customer_grid;
         private Label controls_label;

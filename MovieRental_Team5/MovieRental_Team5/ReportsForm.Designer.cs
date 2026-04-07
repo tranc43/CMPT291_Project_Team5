@@ -12,58 +12,14 @@ namespace MovieRental_Team5
 
         private void InitializeComponent()
         {
-            menuStrip1 = new MenuStrip();
-            helpToolStripMenuItem = new ToolStripMenuItem();
-            helpOverviewToolStripMenuItem = new ToolStripMenuItem();
-            helpReportsToolStripMenuItem = new ToolStripMenuItem();
-            helpAboutToolStripMenuItem = new ToolStripMenuItem();
             title_label = new Label();
             report_selector = new ComboBox();
             run_report_button = new Button();
             back_button = new Button();
             report_grid = new DataGridView();
             label1 = new Label();
-            menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)report_grid).BeginInit();
             SuspendLayout();
-            // 
-            // menuStrip1
-            // 
-            menuStrip1.Dock = DockStyle.Bottom;
-            menuStrip1.Items.AddRange(new ToolStripItem[] { helpToolStripMenuItem });
-            menuStrip1.Location = new Point(0, 546);
-            menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(950, 24);
-            menuStrip1.TabIndex = 5;
-            // 
-            // helpToolStripMenuItem
-            // 
-            helpToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { helpOverviewToolStripMenuItem, helpReportsToolStripMenuItem, helpAboutToolStripMenuItem });
-            helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            helpToolStripMenuItem.Size = new Size(44, 20);
-            helpToolStripMenuItem.Text = "Help";
-            // 
-            // helpOverviewToolStripMenuItem
-            // 
-            helpOverviewToolStripMenuItem.Name = "helpOverviewToolStripMenuItem";
-            helpOverviewToolStripMenuItem.Size = new Size(180, 22);
-            helpOverviewToolStripMenuItem.Text = "Getting Started";
-            helpOverviewToolStripMenuItem.Click += helpOverviewToolStripMenuItem_Click;
-            // 
-            // helpReportsToolStripMenuItem
-            // 
-            helpReportsToolStripMenuItem.Name = "helpReportsToolStripMenuItem";
-            helpReportsToolStripMenuItem.Size = new Size(180, 22);
-            helpReportsToolStripMenuItem.Text = "Reports";
-            helpReportsToolStripMenuItem.Click += helpReportsToolStripMenuItem_Click;
-            // 
-            // helpAboutToolStripMenuItem
-            // 
-            helpAboutToolStripMenuItem.Name = "helpAboutToolStripMenuItem";
-            helpAboutToolStripMenuItem.Size = new Size(180, 22);
-            helpAboutToolStripMenuItem.Text = "About";
-            helpAboutToolStripMenuItem.Click += helpAboutToolStripMenuItem_Click;
-            // 
             // title_label
             // 
             title_label.AutoSize = true;
@@ -130,22 +86,13 @@ namespace MovieRental_Team5
             Controls.Add(run_report_button);
             Controls.Add(report_selector);
             Controls.Add(title_label);
-            Controls.Add(menuStrip1);
-            MainMenuStrip = menuStrip1;
             Name = "ReportsForm";
             Text = "ReportsForm";
-            menuStrip1.ResumeLayout(false);
-            menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)report_grid).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
 
-        private MenuStrip menuStrip1;
-        private ToolStripMenuItem helpToolStripMenuItem;
-        private ToolStripMenuItem helpOverviewToolStripMenuItem;
-        private ToolStripMenuItem helpReportsToolStripMenuItem;
-        private ToolStripMenuItem helpAboutToolStripMenuItem;
         private Label title_label;
         private ComboBox report_selector;
         private Button run_report_button;

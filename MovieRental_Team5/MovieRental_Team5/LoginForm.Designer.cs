@@ -29,11 +29,6 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            menuStrip1 = new MenuStrip();
-            helpToolStripMenuItem = new ToolStripMenuItem();
-            helpGettingStartedToolStripMenuItem = new ToolStripMenuItem();
-            helpLoginToolStripMenuItem = new ToolStripMenuItem();
-            helpAboutToolStripMenuItem = new ToolStripMenuItem();
             Title = new Label();
             contextMenuStrip1 = new ContextMenuStrip(components);
             Email_SIN_Label = new Label();
@@ -43,47 +38,7 @@
             LoginButton = new Button();
             label2 = new Label();
             Exit_Application = new Button();
-            menuStrip1.SuspendLayout();
             SuspendLayout();
-            // 
-            // menuStrip1
-            // 
-            menuStrip1.Dock = DockStyle.Bottom;
-            menuStrip1.Items.AddRange(new ToolStripItem[] { helpToolStripMenuItem });
-            menuStrip1.Location = new Point(0, 562);
-            menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(967, 24);
-            menuStrip1.TabIndex = 9;
-            menuStrip1.Text = "menuStrip1";
-            // 
-            // helpToolStripMenuItem
-            // 
-            helpToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { helpGettingStartedToolStripMenuItem, helpLoginToolStripMenuItem, helpAboutToolStripMenuItem });
-            helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            helpToolStripMenuItem.Size = new Size(44, 20);
-            helpToolStripMenuItem.Text = "Help";
-            // 
-            // helpGettingStartedToolStripMenuItem
-            // 
-            helpGettingStartedToolStripMenuItem.Name = "helpGettingStartedToolStripMenuItem";
-            helpGettingStartedToolStripMenuItem.Size = new Size(180, 22);
-            helpGettingStartedToolStripMenuItem.Text = "Getting Started";
-            helpGettingStartedToolStripMenuItem.Click += helpGettingStartedToolStripMenuItem_Click;
-            // 
-            // helpLoginToolStripMenuItem
-            // 
-            helpLoginToolStripMenuItem.Name = "helpLoginToolStripMenuItem";
-            helpLoginToolStripMenuItem.Size = new Size(180, 22);
-            helpLoginToolStripMenuItem.Text = "Login Screen";
-            helpLoginToolStripMenuItem.Click += helpLoginToolStripMenuItem_Click;
-            // 
-            // helpAboutToolStripMenuItem
-            // 
-            helpAboutToolStripMenuItem.Name = "helpAboutToolStripMenuItem";
-            helpAboutToolStripMenuItem.Size = new Size(180, 22);
-            helpAboutToolStripMenuItem.Text = "About";
-            helpAboutToolStripMenuItem.Click += helpAboutToolStripMenuItem_Click;
-            // 
             // Title
             // 
             Title.AutoSize = true;
@@ -176,7 +131,6 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(967, 586);
-            Controls.Add(menuStrip1);
             Controls.Add(Exit_Application);
             Controls.Add(LoginButton);
             Controls.Add(PasswordField);
@@ -185,23 +139,15 @@
             Controls.Add(label2);
             Controls.Add(Email_SIN_Label);
             Controls.Add(Title);
-            MainMenuStrip = menuStrip1;
             Name = "LoginForm";
             Text = "Form1";
             Load += Form1_Load;
-            menuStrip1.ResumeLayout(false);
-            menuStrip1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
 
-        private MenuStrip menuStrip1;
-        private ToolStripMenuItem helpToolStripMenuItem;
-        private ToolStripMenuItem helpGettingStartedToolStripMenuItem;
-        private ToolStripMenuItem helpLoginToolStripMenuItem;
-        private ToolStripMenuItem helpAboutToolStripMenuItem;
         private Label Title;
         private ContextMenuStrip contextMenuStrip1;
         private Label Email_SIN_Label;
