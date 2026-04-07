@@ -1,6 +1,6 @@
 namespace MovieRental_Team5
 {
-    partial class CustomerForm
+    partial class Customer_Form
     {
         /// <summary>
         /// Required designer variable.
@@ -457,7 +457,7 @@ namespace MovieRental_Team5
             label2.Text = "Customer Details";
             label2.TextAlign = ContentAlignment.TopCenter;
             // 
-            // CustomerForm
+            // Customer_Form
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -506,7 +506,7 @@ namespace MovieRental_Team5
             Controls.Add(controls_label);
             Controls.Add(customer_grid);
             Controls.Add(customer_title);
-            Name = "CustomerForm";
+            Name = "Customer_Form";
             Text = "CustomerForm";
             ((System.ComponentModel.ISupportInitialize)customer_grid).EndInit();
             ((System.ComponentModel.ISupportInitialize)customer_queue_grid).EndInit();

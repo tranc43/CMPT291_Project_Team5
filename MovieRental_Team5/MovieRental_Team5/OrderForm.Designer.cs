@@ -1,6 +1,6 @@
 ﻿namespace MovieRental_Team5
 {
-    partial class OrderForm
+    partial class Order_Form
     {
         /// <summary>
         /// Required designer variable.
@@ -285,7 +285,7 @@
             queue_grid.TabIndex = 24;
             queue_grid.CellClick += queue_grid_CellClick;
             // 
-            // OrderForm
+            // Order_Form
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -313,7 +313,7 @@
             Controls.Add(checkout_date);
             Controls.Add(OrderTitle);
             Controls.Add(dataGridView1);
-            Name = "OrderForm";
+            Name = "Order_Form";
             Text = "OrderForm";
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             ((System.ComponentModel.ISupportInitialize)queue_grid).EndInit();

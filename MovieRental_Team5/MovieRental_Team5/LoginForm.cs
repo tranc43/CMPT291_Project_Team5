@@ -1,23 +1,34 @@
+/* CLASS: CMPT 291
+ * LAB: X02L
+ * ASSIGNMENT: RENTAL DATABASE PROJECT
+ * AUTHOR(S): TEAM 5 - FIN, CHRISTIAN, BRICE, PIERRE
+ * DUE DATE: APRIL 10TH 2025
+ */
+
 using System;
 using System.Data.SqlClient;
 using System.Windows.Forms;
 
 namespace MovieRental_Team5
 {
-    public partial class LoginForm : Form
+    public partial class Login_Form : Form
     {
-        string connectionString = DatabaseConnection.ConnectionString;
+        private readonly string connection_string = Database_Connection.connection_string;
 
-        public LoginForm()
+        public Login_Form()
         {
             InitializeComponent();
         }
         // this is making sure if the sql connection succeeds. If it does, it will show a message box saying "Database connection successful!" If it fails, it will show a message box with the error message.
-        private void Form1_Load(object sender, EventArgs e)
+        private void form_1_load(object sender, EventArgs e)
         {
+            /*@desc 
+             * this function is for testing that youve successfully connected
+             * to the database.
+             */
             try
             {
-                using (SqlConnection connection = new SqlConnection(connectionString))
+                using (SqlConnection connection = new SqlConnection(connection_string))
                 {
                     connection.Open();
                     MessageBox.Show("Database connection successful!");
@@ -28,15 +39,15 @@ namespace MovieRental_Team5
                 MessageBox.Show("Database connection failed: " + ex.Message);
             }
         }
-        private void LoginButton_Click(object sender, EventArgs e)
+        private void login_button_click(object sender, EventArgs e)
         {
             /*@desc
              * this function is used for handling the logic implementation
              * there are error checks in place to assure various scenarios are handled
              * The functions also implements the hashing of employee passwords and updating them as the hash version in the DB.
              */
-            string sin = EmailField.Text.Trim();
-            string password = PasswordField.Text;
+            string sin = email_field.Text.Trim();
+            string password = password_field.Text;
 
             if (string.IsNullOrEmpty(sin) || string.IsNullOrEmpty(password))
             {
@@ -45,47 +56,47 @@ namespace MovieRental_Team5
             }
             try
             {
-                using (SqlConnection conn = new SqlConnection(connectionString))
+                using (SqlConnection conn = new SqlConnection(connection_string))
                 {
                     conn.Open();
                     // this query is used to retrieve employee data based on the the provided sin 
                     string employee_query = "SELECT Employee_ID, First_Name, Last_Name, Employee_Password FROM Employee_Data WHERE SIN = @input";
-                    SqlCommand empCmd = new SqlCommand(employee_query, conn);
+                    SqlCommand emp_cmd = new SqlCommand(employee_query, conn);
 
-                    empCmd.Parameters.AddWithValue("@input", sin);
-                    SqlDataReader empReader = empCmd.ExecuteReader();
+                    emp_cmd.Parameters.AddWithValue("@input", sin);
+                    SqlDataReader emp_reader = emp_cmd.ExecuteReader();
                     
                   // password matching using the PasswordSecurity file which handles the hashing and vericiation of passwords.
-                    if (empReader.HasRows)
+                    if (emp_reader.HasRows)
                     {
-                        empReader.Read();
-                        string storedPassword = empReader["Employee_Password"].ToString();
-                        bool passwordMatches = PasswordSecurity.VerifyPassword(password, storedPassword);
+                        emp_reader.Read();
+                        string stored_password = emp_reader["Employee_Password"].ToString();
+                        bool password_matches = Password_Security.verify_password(password, stored_password);
                         // throw error for invalid password or SIN
-                        if (!passwordMatches)
+                        if (!password_matches)
                         {
-                            empReader.Close();
+                            emp_reader.Close();
                             MessageBox.Show("Invalid Password or SIN!", "Login Error");
                             return;
                         }
       
                         // we check if the passsword needs to be hashed and updated in the database.
-                        int employeeId = Convert.ToInt32(empReader["Employee_ID"]);
-                        string employee_name = empReader["First_Name"].ToString() + " " + empReader["Last_Name"].ToString();
-                        bool passwordNeedsUpgrade = !PasswordSecurity.IsHashed(storedPassword);
+                        int employee_id = Convert.ToInt32(emp_reader["Employee_ID"]);
+                        string employee_name = emp_reader["First_Name"].ToString() + " " + emp_reader["Last_Name"].ToString();
+                        bool password_needs_upgrade = !Password_Security.is_hashed(stored_password);
 
-                        empReader.Close();
+                        emp_reader.Close();
                         // this is just for the already existing passwords in plain text in the DB, it just hashes
-                        if (passwordNeedsUpgrade)
+                        if (password_needs_upgrade)
                         {
-                            UpgradeEmployeePassword(conn, employeeId, password);
+                            upgrade_employee_password(conn, employee_id, password);
                         }
 
-                        CurrentSession.SetEmployee(employeeId, sin, employee_name);
+                        Current_Session.set_employee(employee_id, sin, employee_name);
                         // success!
                         MessageBox.Show("Login Successful! " + " Welcome Back, " + employee_name + " ! ");
-                        Dashboard_Form dashboard = new Dashboard_Form(employee_name);
-                        dashboard.Show();
+                        Dashboard_Form dashboard_form = new Dashboard_Form(employee_name);
+                        dashboard_form.Show();
                         this.Hide();
                         return;
                     }
@@ -100,26 +111,26 @@ namespace MovieRental_Team5
             }
         }
 
-        private void UpgradeEmployeePassword(SqlConnection conn, int employeeId, string plainTextPassword)
+        private void upgrade_employee_password(SqlConnection conn, int employee_id, string plain_text_password)
         {
             /*@desc 
              * this function is responsible for hashing employee passwords that are stored in the database thats plain text.
              * 
              */
-            string updateQuery = "UPDATE Employee_Data SET Employee_Password = @password WHERE Employee_ID = @employeeId";
-            using (SqlCommand updateCommand = new SqlCommand(updateQuery, conn))
+            string update_query = "UPDATE Employee_Data SET Employee_Password = @password WHERE Employee_ID = @employeeId";
+            using (SqlCommand update_command = new SqlCommand(update_query, conn))
             {
-                updateCommand.Parameters.AddWithValue("@password", PasswordSecurity.HashPassword(plainTextPassword));
-                updateCommand.Parameters.AddWithValue("@employeeId", employeeId);
-                updateCommand.ExecuteNonQuery();
+                update_command.Parameters.AddWithValue("@password", Password_Security.hash_password(plain_text_password));
+                update_command.Parameters.AddWithValue("@employeeId", employee_id);
+                update_command.ExecuteNonQuery();
             }
         }
 
-        private void EmailAddressInput(object sender, EventArgs e)
+        private void email_address_input(object sender, EventArgs e)
         {
             // Its being read in the function above
         }
-        private void Exit_Application_Click(object sender, EventArgs e)
+        private void exit_application_click(object sender, EventArgs e)
         {
             Application.Exit();
         }

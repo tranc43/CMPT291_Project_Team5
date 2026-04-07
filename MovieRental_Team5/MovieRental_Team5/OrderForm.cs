@@ -1,3 +1,9 @@
+/* CLASS: CMPT 291
+ * LAB: X02L
+ * ASSIGNMENT: RENTAL DATABASE PROJECT
+ * AUTHOR(S): TEAM 5 - FIN, CHRISTIAN, BRICE, PIERRE
+ * DUE DATE: APRIL 10TH 2025
+ */
 using System;
 using System.Data;
 using System.Data.SqlClient;
@@ -5,23 +11,23 @@ using System.Windows.Forms;
 
 namespace MovieRental_Team5
 {
-    public partial class OrderForm : Form
+    public partial class Order_Form : Form
     {
-        private readonly string connectionString = DatabaseConnection.ConnectionString;
+        private readonly string connection_string = Database_Connection.connection_string;
 
-        public OrderForm()
+        public Order_Form()
         {
             InitializeComponent();
-            Load += OrderForm_Load;
+            Load += order_form_load;
             back_button.Click += back_button_Click;
             record_order_button.Click += record_order_button_Click;
             button1.Click += clear_order_button_Click;
-            comboBox2.SelectedIndexChanged += comboBox2_SelectedIndexChanged;
+            comboBox2.SelectedIndexChanged += combo_box_2_selected_index_changed;
         }
 
-        private void OrderForm_Load(object sender, EventArgs e)
+        private void order_form_load(object sender, EventArgs e)
         {
-            if (!AccessControl.EnsureEmployeeLoggedIn(this))
+            if (!Access_Control.ensure_employee_logged_in(this))
             {
                 return;
             }
@@ -38,7 +44,7 @@ namespace MovieRental_Team5
 
             try
             {
-                using (SqlConnection conn = new SqlConnection(connectionString))
+                using (SqlConnection conn = new SqlConnection(connection_string))
                 {
                     conn.Open();
                     string query = "SELECT Customer_ID, First_Name, Last_Name FROM Customer_Data ORDER BY Last_Name, First_Name";
@@ -49,7 +55,7 @@ namespace MovieRental_Team5
                     {
                         int customerId = Convert.ToInt32(reader["Customer_ID"]);
                         string customerName = customerId + " - " + reader["First_Name"] + " " + reader["Last_Name"];
-                        comboBox2.Items.Add(new OrderLookupItem(customerId, customerName));
+                        comboBox2.Items.Add(new Order_Lookup_Item(customerId, customerName));
                     }
                 }
 
@@ -64,12 +70,12 @@ namespace MovieRental_Team5
             }
         }
 
-        private int? GetSelectedCustomerId()
+        private int? get_selected_customer_id()
         {
-            return comboBox2.SelectedItem is OrderLookupItem customerItem ? customerItem.Id : null;
+            return comboBox2.SelectedItem is Order_Lookup_Item customer_item ? customer_item.Id : null;
         }
 
-        private OrderLookupItem? GetNextAvailableQueuedMovie(SqlConnection conn, int customerId)
+        private Order_Lookup_Item? get_next_available_queued_movie(SqlConnection conn, int customer_id)
         {
             string query = @"
                 SELECT TOP 1
@@ -89,7 +95,7 @@ namespace MovieRental_Team5
 
             using (SqlCommand cmd = new SqlCommand(query, conn))
             {
-                cmd.Parameters.AddWithValue("@customerId", customerId);
+                cmd.Parameters.AddWithValue("@customerId", customer_id);
 
                 using (SqlDataReader reader = cmd.ExecuteReader())
                 {
@@ -100,7 +106,7 @@ namespace MovieRental_Team5
 
                     int movieId = Convert.ToInt32(reader["Movie_ID"]);
                     string movieName = movieId + " - " + reader["Movie_Name"];
-                    return new OrderLookupItem(movieId, movieName);
+                    return new Order_Lookup_Item(movieId, movieName);
                 }
             }
         }
@@ -111,10 +117,10 @@ namespace MovieRental_Team5
 
             try
             {
-                using (SqlConnection conn = new SqlConnection(connectionString))
+                using (SqlConnection conn = new SqlConnection(connection_string))
                 {
                     conn.Open();
-                    int? selectedCustomerId = GetSelectedCustomerId();
+                    int? selected_customer_id = get_selected_customer_id();
 
                     string query = @"
                         SELECT m.Movie_ID, m.Movie_Name
@@ -150,14 +156,14 @@ namespace MovieRental_Team5
                             m.Movie_Name";
 
                     SqlCommand cmd = new SqlCommand(query, conn);
-                    cmd.Parameters.AddWithValue("@customerId", (object?)selectedCustomerId ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@customerId", (object?)selected_customer_id ?? DBNull.Value);
                     SqlDataReader reader = cmd.ExecuteReader();
 
                     while (reader.Read())
                     {
                         int movieId = Convert.ToInt32(reader["Movie_ID"]);
                         string movieName = movieId + " - " + reader["Movie_Name"];
-                        comboBox3.Items.Add(new OrderLookupItem(movieId, movieName));
+                        comboBox3.Items.Add(new Order_Lookup_Item(movieId, movieName));
                     }
                 }
 
@@ -174,9 +180,9 @@ namespace MovieRental_Team5
 
         private void load_customer_queue()
         {
-            int? customerId = GetSelectedCustomerId();
+            int? customer_id = get_selected_customer_id();
 
-            if (customerId == null)
+            if (customer_id == null)
             {
                 queue_grid.DataSource = null;
                 return;
@@ -184,7 +190,7 @@ namespace MovieRental_Team5
 
             try
             {
-                using (SqlConnection conn = new SqlConnection(connectionString))
+                using (SqlConnection conn = new SqlConnection(connection_string))
                 {
                     conn.Open();
                     string query = @"
@@ -205,7 +211,7 @@ namespace MovieRental_Team5
                         ORDER BY mq.Queue_Position";
 
                     SqlDataAdapter adapter = new SqlDataAdapter(query, conn);
-                    adapter.SelectCommand.Parameters.AddWithValue("@customerId", customerId.Value);
+                    adapter.SelectCommand.Parameters.AddWithValue("@customerId", customer_id.Value);
                     DataTable table = new DataTable();
                     adapter.Fill(table);
                     queue_grid.DataSource = table;
@@ -222,7 +228,7 @@ namespace MovieRental_Team5
         {
             try
             {
-                using (SqlConnection conn = new SqlConnection(connectionString))
+                using (SqlConnection conn = new SqlConnection(connection_string))
                 {
                     conn.Open();
                     string query = @"
@@ -253,8 +259,8 @@ namespace MovieRental_Team5
 
         private void set_employee_label()
         {
-            employee_ID_label.Text = CurrentSession.EmployeeId != -1
-                ? "Employee ID: " + CurrentSession.EmployeeId
+            employee_ID_label.Text = Current_Session.employee_id != -1
+                ? "Employee ID: " + Current_Session.employee_id
                 : "Employee ID: not logged in";
         }
 
@@ -273,7 +279,7 @@ namespace MovieRental_Team5
             return_time.Value = later;
         }
 
-        private void comboBox2_SelectedIndexChanged(object? sender, EventArgs e)
+        private void combo_box_2_selected_index_changed(object? sender, EventArgs e)
         {
             load_movies();
             load_customer_queue();
@@ -284,7 +290,7 @@ namespace MovieRental_Team5
 
                 for (int i = 0; i < comboBox3.Items.Count; i++)
                 {
-                    if (comboBox3.Items[i] is OrderLookupItem movieItem && movieItem.Id == queuedMovieId)
+                    if (comboBox3.Items[i] is Order_Lookup_Item movie_item && movie_item.Id == queuedMovieId)
                     {
                         comboBox3.SelectedIndex = i;
                         break;
@@ -308,7 +314,7 @@ namespace MovieRental_Team5
 
             for (int i = 0; i < comboBox3.Items.Count; i++)
             {
-                if (comboBox3.Items[i] is OrderLookupItem movieItem && movieItem.Id == movieId)
+                if (comboBox3.Items[i] is Order_Lookup_Item movie_item && movie_item.Id == movieId)
                 {
                     comboBox3.SelectedIndex = i;
                     return;
@@ -330,7 +336,7 @@ namespace MovieRental_Team5
 
         private void record_order_button_Click(object sender, EventArgs e)
         {
-            if (CurrentSession.EmployeeId == -1)
+            if (Current_Session.employee_id == -1)
             {
                 MessageBox.Show("There is an error. No employee is logged in.");
                 return;
@@ -342,8 +348,8 @@ namespace MovieRental_Team5
                 return;
             }
 
-            OrderLookupItem customerItem = (OrderLookupItem)comboBox2.SelectedItem;
-            OrderLookupItem movieItem = (OrderLookupItem)comboBox3.SelectedItem;
+            Order_Lookup_Item customer_item = (Order_Lookup_Item)comboBox2.SelectedItem;
+            Order_Lookup_Item movie_item = (Order_Lookup_Item)comboBox3.SelectedItem;
 
             DateTime checkoutDateTime = checkout_date.Value.Date + checkout_time.Value.TimeOfDay;
             DateTime returnDateTime = return_date.Value.Date + return_time.Value.TimeOfDay;
@@ -356,14 +362,14 @@ namespace MovieRental_Team5
 
             try
             {
-                using (SqlConnection conn = new SqlConnection(connectionString))
+                using (SqlConnection conn = new SqlConnection(connection_string))
                 {
                     conn.Open();
-                    OrderLookupItem? nextQueuedMovie = GetNextAvailableQueuedMovie(conn, customerItem.Id);
+                    Order_Lookup_Item? next_queued_movie = get_next_available_queued_movie(conn, customer_item.Id);
 
-                    if (nextQueuedMovie != null && movieItem.Id != nextQueuedMovie.Id)
+                    if (next_queued_movie != null && movie_item.Id != next_queued_movie.Id)
                     {
-                        MessageBox.Show("This customer must be rented their next available queued movie first: " + nextQueuedMovie.DisplayText);
+                        MessageBox.Show("This customer must be rented their next available queued movie first: " + next_queued_movie.DisplayText);
                         load_movies();
                         load_customer_queue();
                         return;
@@ -381,7 +387,7 @@ namespace MovieRental_Team5
                         WHERE Movie_ID = @movieId";
 
                     SqlCommand availabilityCmd = new SqlCommand(availabilityQuery, conn);
-                    availabilityCmd.Parameters.AddWithValue("@movieId", movieItem.Id);
+                    availabilityCmd.Parameters.AddWithValue("@movieId", movie_item.Id);
                     object availableCopiesValue = availabilityCmd.ExecuteScalar();
 
                     if (availableCopiesValue == null || Convert.ToInt32(availableCopiesValue) <= 0)
@@ -400,18 +406,18 @@ namespace MovieRental_Team5
                     SqlCommand insertCmd = new SqlCommand(insertQuery, conn);
                     insertCmd.Parameters.AddWithValue("@checkout", checkoutDateTime);
                     insertCmd.Parameters.AddWithValue("@returnDate", returnDateTime);
-                    insertCmd.Parameters.AddWithValue("@movieId", movieItem.Id);
-                    insertCmd.Parameters.AddWithValue("@customerId", customerItem.Id);
-                    insertCmd.Parameters.AddWithValue("@employeeId", CurrentSession.EmployeeId);
+                    insertCmd.Parameters.AddWithValue("@movieId", movie_item.Id);
+                    insertCmd.Parameters.AddWithValue("@customerId", customer_item.Id);
+                    insertCmd.Parameters.AddWithValue("@employeeId", Current_Session.employee_id);
                     insertCmd.ExecuteNonQuery();
 
                     string removeQueueQuery = "DELETE FROM Movie_Queue WHERE Customer_ID = @customerId AND Movie_ID = @movieId";
                     SqlCommand removeQueueCmd = new SqlCommand(removeQueueQuery, conn);
-                    removeQueueCmd.Parameters.AddWithValue("@customerId", customerItem.Id);
-                    removeQueueCmd.Parameters.AddWithValue("@movieId", movieItem.Id);
+                    removeQueueCmd.Parameters.AddWithValue("@customerId", customer_item.Id);
+                    removeQueueCmd.Parameters.AddWithValue("@movieId", movie_item.Id);
                     removeQueueCmd.ExecuteNonQuery();
 
-                    ResequenceCustomerQueue(conn, customerItem.Id);
+                    resequence_customer_queue(conn, customer_item.Id);
                 }
 
                 MessageBox.Show("Order recorded successfully!");
@@ -426,12 +432,12 @@ namespace MovieRental_Team5
             }
         }
 
-        private class OrderLookupItem
+        private class Order_Lookup_Item
         {
             public int Id;
             public string DisplayText;
 
-            public OrderLookupItem(int id, string displayText)
+            public Order_Lookup_Item(int id, string displayText)
             {
                 Id = id;
                 DisplayText = displayText;
@@ -443,7 +449,7 @@ namespace MovieRental_Team5
             }
         }
 
-        private void ResequenceCustomerQueue(SqlConnection conn, int customerId)
+        private void resequence_customer_queue(SqlConnection conn, int customer_id)
         {
             string query = @"
                 WITH OrderedQueue AS
@@ -464,7 +470,7 @@ namespace MovieRental_Team5
 
             using (SqlCommand command = new SqlCommand(query, conn))
             {
-                command.Parameters.AddWithValue("@customerId", customerId);
+                command.Parameters.AddWithValue("@customerId", customer_id);
                 command.ExecuteNonQuery();
             }
         }

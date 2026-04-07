@@ -1,3 +1,9 @@
+/* CLASS: CMPT 291
+ * LAB: X02L
+ * ASSIGNMENT: RENTAL DATABASE PROJECT
+ * AUTHOR(S): TEAM 5 - FIN, CHRISTIAN, BRICE, PIERRE
+ * DUE DATE: APRIL 10TH 2025
+ */
 using System;
 using System.Data;
 using System.Data.SqlClient;
@@ -5,37 +11,37 @@ using System.Windows.Forms;
 
 namespace MovieRental_Team5
 {
-    public partial class CustomerForm : Form
+    public partial class Customer_Form : Form
     {
-        private readonly string connectionString = DatabaseConnection.ConnectionString;
-        private int selectedCustomerId = -1;
+        private readonly string connection_string = Database_Connection.connection_string;
+        private int selected_customer_id = -1;
 
-        public CustomerForm()
+        public Customer_Form()
         {
             InitializeComponent();
-            Load += CustomerForm_Load;
+            Load += customer_form_load;
         }
 
-        private void CustomerForm_Load(object? sender, EventArgs e)
+        private void customer_form_load(object? sender, EventArgs e)
         {
             /*@desc this method is called when the form loads and checks if an employee is logged in. If not,
              * 
              */
-            if (!AccessControl.EnsureEmployeeLoggedIn(this))
+            if (!Access_Control.ensure_employee_logged_in(this))
             {
                 return;
             }
 
-            LoadCustomers();
-            ClearFields();
-            LoadCustomerQueueAndHistory();
+            load_customers();
+            clear_fields();
+            load_customer_queue_and_history();
         }
 
-        private void LoadCustomers()
+        private void load_customers()
         {
             try
             {
-                using (SqlConnection connection = new SqlConnection(connectionString))
+                using (SqlConnection connection = new SqlConnection(connection_string))
                 {
                     connection.Open();
                     string query = @"
@@ -79,7 +85,7 @@ namespace MovieRental_Team5
             }
         }
 
-        private void ClearFields()
+        private void clear_fields()
         {
             /*@desc this method is used to clear all input fields
              * then reset the customer queue and history grids.
@@ -95,11 +101,16 @@ namespace MovieRental_Team5
             credit_card_field.Text = "";
             average_rating_field.Text = "";
             account_creation_picker.Value = DateTime.Today;
-            selectedCustomerId = -1;
-            LoadCustomerQueueAndHistory();
+            selected_customer_id = -1;
+            load_customer_queue_and_history();
         }
 
-        private bool ValidateRequiredFields()
+        private bool validate_required_fields()
+            /*@desc
+             * this method is used to check if all fields are validated
+             * else it'll throw an error message and return false
+             * It also checks for the account number as well.
+             */
         {
             if (string.IsNullOrWhiteSpace(first_name_field.Text) ||
                 string.IsNullOrWhiteSpace(last_name_field.Text) ||
@@ -132,7 +143,7 @@ namespace MovieRental_Team5
             }
 
             DataGridViewRow row = customer_grid.Rows[e.RowIndex];
-            selectedCustomerId = Convert.ToInt32(row.Cells["Customer_ID"].Value);
+            selected_customer_id = Convert.ToInt32(row.Cells["Customer_ID"].Value);
             first_name_field.Text = row.Cells["First_Name"].Value?.ToString() ?? "";
             last_name_field.Text = row.Cells["Last_Name"].Value?.ToString() ?? "";
             email_field.Text = row.Cells["Email_Address"].Value?.ToString() ?? "";
@@ -149,23 +160,23 @@ namespace MovieRental_Team5
                 account_creation_picker.Value = creationDate;
             }
 
-            LoadCustomerQueueAndHistory();
+            load_customer_queue_and_history();
         }
 
         // UI elements
         private void load_customers_button_Click(object sender, EventArgs e)
         {
-            LoadCustomers();
+            load_customers();
         }
 
         private void search_customers_button_Click(object sender, EventArgs e)
         {
-            LoadCustomers();
+            load_customers();
         }
 
         private void clear_button_Click(object sender, EventArgs e)
         {
-            ClearFields();
+            clear_fields();
         }
 
         private void back_button_Click(object sender, EventArgs e)
@@ -175,14 +186,14 @@ namespace MovieRental_Team5
 
         private void add_customer_button_Click(object sender, EventArgs e)
         {
-            if (!ValidateRequiredFields())
+            if (!validate_required_fields())
             {
                 return;
             }
 
             try
             {
-                using (SqlConnection connection = new SqlConnection(connectionString))
+                using (SqlConnection connection = new SqlConnection(connection_string))
                 {
                     connection.Open();
                     string query = @"
@@ -208,8 +219,8 @@ namespace MovieRental_Team5
                 }
 
                 MessageBox.Show("Customer added successfully!");
-                LoadCustomers();
-                ClearFields();
+                load_customers();
+                clear_fields();
             }
             catch (Exception ex)
             {
@@ -219,20 +230,20 @@ namespace MovieRental_Team5
 
         private void update_customer_button_Click(object sender, EventArgs e)
         {
-            if (selectedCustomerId == -1)
+            if (selected_customer_id == -1)
             {
                 MessageBox.Show("Please select a customer to update.");
                 return;
             }
 
-            if (!ValidateRequiredFields())
+            if (!validate_required_fields())
             {
                 return;
             }
 
             try
             {
-                using (SqlConnection connection = new SqlConnection(connectionString))
+                using (SqlConnection connection = new SqlConnection(connection_string))
                 {
                     connection.Open();
                     string query = @"
@@ -260,13 +271,13 @@ namespace MovieRental_Team5
                     command.Parameters.AddWithValue("@accountNumber", int.Parse(account_number_field.Text.Trim()));
                     command.Parameters.AddWithValue("@accountCreationDate", account_creation_picker.Value.Date);
                     command.Parameters.AddWithValue("@creditCardNumber", credit_card_field.Text.Trim());
-                    command.Parameters.AddWithValue("@customerId", selectedCustomerId);
+                    command.Parameters.AddWithValue("@customerId", selected_customer_id);
                     command.ExecuteNonQuery();
                 }
 
                 MessageBox.Show("Customer updated successfully!");
-                LoadCustomers();
-                ClearFields();
+                load_customers();
+                clear_fields();
             }
             catch (Exception ex)
             {
@@ -276,7 +287,7 @@ namespace MovieRental_Team5
 
         private void delete_customer_button_Click(object sender, EventArgs e)
         {
-            if (selectedCustomerId == -1)
+            if (selected_customer_id == -1)
             {
                 MessageBox.Show("Please select a customer to delete.");
                 return;
@@ -295,12 +306,12 @@ namespace MovieRental_Team5
 
             try
             {
-                using (SqlConnection connection = new SqlConnection(connectionString))
+                using (SqlConnection connection = new SqlConnection(connection_string))
                 {
                     connection.Open();
                     string checkQuery = "SELECT COUNT(*) FROM Order_Data WHERE Customer_ID = @customerId";
                     SqlCommand checkCommand = new SqlCommand(checkQuery, connection);
-                    checkCommand.Parameters.AddWithValue("@customerId", selectedCustomerId);
+                    checkCommand.Parameters.AddWithValue("@customerId", selected_customer_id);
                     int orderCount = Convert.ToInt32(checkCommand.ExecuteScalar());
 
                     if (orderCount > 0)
@@ -310,18 +321,18 @@ namespace MovieRental_Team5
                     }
 
                     SqlCommand deleteQueue = new SqlCommand("DELETE FROM Movie_Queue WHERE Customer_ID = @customerId", connection);
-                    deleteQueue.Parameters.AddWithValue("@customerId", selectedCustomerId);
+                    deleteQueue.Parameters.AddWithValue("@customerId", selected_customer_id);
                     deleteQueue.ExecuteNonQuery();
 
                     string deleteQuery = "DELETE FROM Customer_Data WHERE Customer_ID = @customerId";
                     SqlCommand deleteCommand = new SqlCommand(deleteQuery, connection);
-                    deleteCommand.Parameters.AddWithValue("@customerId", selectedCustomerId);
+                    deleteCommand.Parameters.AddWithValue("@customerId", selected_customer_id);
                     deleteCommand.ExecuteNonQuery();
                 }
 
                 MessageBox.Show("Customer deleted successfully!");
-                LoadCustomers();
-                ClearFields();
+                load_customers();
+                clear_fields();
             }
             catch (Exception ex)
             {
@@ -329,24 +340,24 @@ namespace MovieRental_Team5
             }
         }
 
-        private void LoadCustomerQueueAndHistory()
+        private void load_customer_queue_and_history()
         {
-            if (selectedCustomerId == -1)
+            if (selected_customer_id == -1)
             {
                 customer_queue_grid.DataSource = null;
                 customer_history_grid.DataSource = null;
                 return;
             }
 
-            LoadCustomerQueue();
-            LoadCustomerHistory();
+            load_customer_queue();
+            load_customer_history();
         }
 
-        private void LoadCustomerQueue()
+        private void load_customer_queue()
         {
             try
             {
-                using (SqlConnection connection = new SqlConnection(connectionString))
+                using (SqlConnection connection = new SqlConnection(connection_string))
                 {
                     connection.Open();
                     string query = @"
@@ -367,7 +378,7 @@ namespace MovieRental_Team5
                         ORDER BY mq.Queue_Position";
 
                     SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
-                    adapter.SelectCommand.Parameters.AddWithValue("@customerId", selectedCustomerId);
+                    adapter.SelectCommand.Parameters.AddWithValue("@customerId", selected_customer_id);
                     DataTable table = new DataTable();
                     adapter.Fill(table);
                     customer_queue_grid.DataSource = table;
@@ -380,11 +391,11 @@ namespace MovieRental_Team5
             }
         }
 
-        private void LoadCustomerHistory()
+        private void load_customer_history()
         {
             try
             {
-                using (SqlConnection connection = new SqlConnection(connectionString))
+                using (SqlConnection connection = new SqlConnection(connection_string))
                 {
                     connection.Open();
                     string query = @"
@@ -399,7 +410,7 @@ namespace MovieRental_Team5
                         ORDER BY o.Order_ID DESC";
 
                     SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
-                    adapter.SelectCommand.Parameters.AddWithValue("@customerId", selectedCustomerId);
+                    adapter.SelectCommand.Parameters.AddWithValue("@customerId", selected_customer_id);
                     DataTable table = new DataTable();
                     adapter.Fill(table);
                     customer_history_grid.DataSource = table;

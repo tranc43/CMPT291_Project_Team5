@@ -1,6 +1,6 @@
 namespace MovieRental_Team5
 {
-    partial class MovieForm
+    partial class Movie_Form
     {
         private System.ComponentModel.IContainer components = null;
 
@@ -29,7 +29,7 @@ namespace MovieRental_Team5
             num_copies = new TextBox();
             title_field = new TextBox();
             genre_dropdown = new ComboBox();
-            load_movies = new Button();
+            load_movies_button = new Button();
             add_movie = new Button();
             update_movie = new Button();
             delete_movie = new Button();
@@ -199,14 +199,14 @@ namespace MovieRental_Team5
             genre_dropdown.Size = new Size(190, 23);
             genre_dropdown.TabIndex = 13;
             // 
-            // load_movies
+            // load_movies_button
             // 
-            load_movies.Location = new Point(387, 444);
-            load_movies.Name = "load_movies";
-            load_movies.Size = new Size(106, 38);
-            load_movies.TabIndex = 10;
-            load_movies.Text = "Load Movies";
-            load_movies.Click += load_movies_Click;
+            load_movies_button.Location = new Point(387, 444);
+            load_movies_button.Name = "load_movies_button";
+            load_movies_button.Size = new Size(106, 38);
+            load_movies_button.TabIndex = 10;
+            load_movies_button.Text = "Load Movies";
+            load_movies_button.Click += load_movies_Click;
             // 
             // add_movie
             // 
@@ -317,7 +317,7 @@ namespace MovieRental_Team5
             label2.TabIndex = 30;
             label2.Text = "Actor Controls";
             // 
-            // MovieForm
+            // Movie_Form
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -334,7 +334,7 @@ namespace MovieRental_Team5
             Controls.Add(delete_movie);
             Controls.Add(update_movie);
             Controls.Add(add_movie);
-            Controls.Add(load_movies);
+            Controls.Add(load_movies_button);
             Controls.Add(num_copies);
             Controls.Add(fee_field);
             Controls.Add(genre_dropdown);
@@ -352,9 +352,9 @@ namespace MovieRental_Team5
             Controls.Add(movie_grid);
             Controls.Add(input_movie_title);
             Controls.Add(movie_dashboardd_title);
-            Name = "MovieForm";
+            Name = "Movie_Form";
             Text = "MovieForm";
-            Load += MovieForm_Load;
+            Load += movie_form_load;
             ((System.ComponentModel.ISupportInitialize)movie_grid).EndInit();
             ((System.ComponentModel.ISupportInitialize)movie_actor_grid).EndInit();
             ResumeLayout(false);
@@ -378,7 +378,7 @@ namespace MovieRental_Team5
         private ComboBox genre_dropdown;
         private TextBox fee_field;
         private TextBox num_copies;
-        private Button load_movies;
+        private Button load_movies_button;
         private Button add_movie;
         private Button update_movie;
         private Button delete_movie;
