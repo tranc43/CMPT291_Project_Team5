@@ -301,6 +301,11 @@ namespace MovieRental_Team5
 
         private void assign_actor_button_Click(object sender, EventArgs e)
         {
+            /*@desc 
+             * this functions serves for assigning actors to a movie
+             * It ensures that movie and and actors are selected first prior to assigning.
+             * 
+             */
             if (selected_movie_id == -1)
             {
                 MessageBox.Show("Please select a movie first.");
@@ -318,6 +323,7 @@ namespace MovieRental_Team5
                 using (SqlConnection connectionNew = new SqlConnection(connection))
                 {
                     connectionNew.Open();
+                    // This query checks if there is an actor already assigned to the movie before attempting to assign.
                     string query = @"
                         IF NOT EXISTS (SELECT 1 FROM Appears_In WHERE Movie_ID = @movieId AND Actor_ID = @actorId)
                         INSERT INTO Appears_In (Movie_ID, Actor_ID) VALUES (@movieId, @actorId)";
@@ -326,7 +332,7 @@ namespace MovieRental_Team5
                     command.Parameters.AddWithValue("@actorId", actor.Id);
                     command.ExecuteNonQuery();
                 }
-
+                // Reloading the assigned actors.
                 load_assigned_actors();
                 MessageBox.Show("Actor assigned successfully.");
             }
@@ -338,6 +344,11 @@ namespace MovieRental_Team5
 
         private void remove_actor_button_Click(object sender, EventArgs e)
         {
+            /*@desc
+             * this functions serves 
+             * for removing the actors, it make sures if there is a movie and actor selected first
+             * before removing anything. then verifies if the actor is assigned to the movie or not
+             */
             if (selected_movie_id == -1)
             {
                 MessageBox.Show("Please select a movie first.");
@@ -349,20 +360,21 @@ namespace MovieRental_Team5
                 MessageBox.Show("Please select an assigned actor to remove.");
                 return;
             }
-
+            // Retrieves the actor ID
             int actorId = Convert.ToInt32(movie_actor_grid.CurrentRow.Cells["Actor_ID"].Value);
 
             try
             {
                 using (SqlConnection connectionNew = new SqlConnection(connection))
                 {
+                    // This query checks if the actor is assigned to the movie before attempting to remove them
                     connectionNew.Open();
                     SqlCommand command = new SqlCommand("DELETE FROM Appears_In WHERE Movie_ID = @movieId AND Actor_ID = @actorId", connectionNew);
                     command.Parameters.AddWithValue("@movieId", selected_movie_id);
                     command.Parameters.AddWithValue("@actorId", actorId);
                     command.ExecuteNonQuery();
                 }
-
+                // Reloading the assigned actors upon removing.
                 load_assigned_actors();
                 MessageBox.Show("Actor removed successfully.");
             }
@@ -374,6 +386,11 @@ namespace MovieRental_Team5
 
         private bool validate_movie_fields()
         {
+            /*@desc
+             * this method is used to validate movie fields 
+             * such as all the movie fields,
+             * distribution fee and number of copies
+             */
             if (string.IsNullOrWhiteSpace(title_field.Text) || string.IsNullOrWhiteSpace(fee_field.Text) || string.IsNullOrWhiteSpace(num_copies.Text))
             {
                 MessageBox.Show("All movie fields must be entered.");
