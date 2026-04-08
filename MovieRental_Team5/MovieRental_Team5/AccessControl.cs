@@ -1,3 +1,10 @@
+/* CLASS: CMPT 291
+ * LAB: X02L
+ * ASSIGNMENT: RENTAL DATABASE PROJECT
+ * AUTHOR(S): TEAM 5 - FIN, CHRISTIAN, BRICE, PIERRE
+ * DUE DATE: APRIL 10TH 2025
+ */
+
 using System.Windows.Forms;
 
 namespace MovieRental_Team5
@@ -7,11 +14,11 @@ namespace MovieRental_Team5
      * It ensures to check whether or not the employee is logged in or not else it'll 
      * warn the user and close the form. This is used in the dashboard form to ensure that only employees can access it.
      */
-    internal static class AccessControl
+    internal static class Access_Control
     {
-        public static bool EnsureEmployeeLoggedIn(Form form)
+        public static bool ensure_employee_logged_in(Form form)
         {
-            if (CurrentSession.EmployeeId != -1)
+            if (Current_Session.employee_id != -1)
             {
                 return true;
             }

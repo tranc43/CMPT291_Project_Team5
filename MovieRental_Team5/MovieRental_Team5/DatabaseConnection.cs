@@ -1,11 +1,17 @@
+/* CLASS: CMPT 291
+ * LAB: X02L
+ * ASSIGNMENT: RENTAL DATABASE PROJECT
+ * AUTHOR(S): TEAM 5 - FIN, CHRISTIAN, BRICE, PIERRE
+ * DUE DATE: APRIL 10TH 2025
+ */
 using System;
 using System.Configuration;
 
 namespace MovieRental_Team5
 {
-    internal static class DatabaseConnection
+    internal static class Database_Connection
     {
-        public static string ConnectionString
+        public static string connection_string
         {
             get
             {

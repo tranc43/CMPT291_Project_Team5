@@ -1,4 +1,10 @@
-﻿using System;
+﻿/* CLASS: CMPT 291
+ * LAB: X02L
+ * ASSIGNMENT: RENTAL DATABASE PROJECT
+ * AUTHOR(S): TEAM 5 - FIN, CHRISTIAN, BRICE, PIERRE
+ * DUE DATE: APRIL 10TH 2025
+ */
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -15,34 +21,34 @@ namespace MovieRental_Team5
         {
             InitializeComponent();
             employee_name = name;
-            Load += Dashboard_Form_Load;
+            Load += dashboard_form_load;
         }
 
         private void manage_customers_Click(object sender, EventArgs e)
         {
-            CustomerForm customerForm = new CustomerForm();
-            customerForm.Show();
+            Customer_Form customer_form = new Customer_Form();
+            customer_form.Show();
         }
 
-        private void Dashboard_Form_Load(object sender, EventArgs e)
+        private void dashboard_form_load(object sender, EventArgs e)
             /*@desc: this functions purpose is to display welcome and whos currently logged in
              * 
              */
         {
-            if (!AccessControl.EnsureEmployeeLoggedIn(this))
+            if (!Access_Control.ensure_employee_logged_in(this))
             {
                 return;
             }
 
-            string displayName = employee_name;
+            string display_name = employee_name;
 
-            if (!string.IsNullOrWhiteSpace(CurrentSession.EmployeeName))
+            if (!string.IsNullOrWhiteSpace(Current_Session.employee_name))
             {
-                displayName = CurrentSession.EmployeeName;
+                display_name = Current_Session.employee_name;
             }
 
             welcome_title.Text = "Employee Movie Rental Dashboard";
-            logged_in_as_label.Text = "Logged in as: " + displayName;
+            logged_in_as_label.Text = "Logged in as: " + display_name;
         }
 
         private void log_out_button_Click(object sender, EventArgs e)
@@ -50,10 +56,10 @@ namespace MovieRental_Team5
             /*@desc: this functions purpose is to log out the user and go to login 
              * 
              */
-            CurrentSession.Clear();
+            Current_Session.clear();
             this.Close();
-            LoginForm loginForm = new LoginForm();
-            loginForm.Show();
+            Login_Form login_form = new Login_Form();
+            login_form.Show();
         }
 
         private void orders_Click(object sender, EventArgs e)
@@ -62,8 +68,8 @@ namespace MovieRental_Team5
             /*@desc: this functions purpose is to go to the order form 
             * 
             */
-            OrderForm orderForm = new OrderForm();
-            orderForm.Show();
+            Order_Form order_form = new Order_Form();
+            order_form.Show();
         }
 
 
@@ -72,8 +78,8 @@ namespace MovieRental_Team5
             /*@desc: functions purpose is to go to manage movies
             * 
             */
-            MovieForm movieForm = new MovieForm();
-            movieForm.Show();
+            Movie_Form movie_form = new Movie_Form();
+            movie_form.Show();
         }
 
         private void reports_button_Click(object sender, EventArgs e)
@@ -81,51 +87,8 @@ namespace MovieRental_Team5
             /*@desc: functiosn purpose is to go to reports 
             * 
             */
-            ReportsForm reportsForm = new ReportsForm();
-            reportsForm.Show();
-        }
-
-        private void OpenHelpTopic(string topic)
-        {
-            using (HelpForm helpForm = new HelpForm(topic))
-            {
-                helpForm.ShowDialog(this);
-            }
-        }
-
-        private void helpOverviewToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            OpenHelpTopic(HelpTopics.GettingStarted);
-        }
-
-        private void helpDashboardToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            OpenHelpTopic(HelpTopics.Dashboard);
-        }
-
-        private void helpMoviesToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            OpenHelpTopic(HelpTopics.Movies);
-        }
-
-        private void helpOrdersToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            OpenHelpTopic(HelpTopics.Orders);
-        }
-
-        private void helpCustomersToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            OpenHelpTopic(HelpTopics.CustomerManagement);
-        }
-
-        private void helpReportsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            OpenHelpTopic(HelpTopics.Reports);
-        }
-
-        private void helpAboutToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            OpenHelpTopic(HelpTopics.About);
+            Reports_Form reports_form = new Reports_Form();
+            reports_form.Show();
         }
     }
 }

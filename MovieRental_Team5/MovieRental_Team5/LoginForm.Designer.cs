@@ -1,6 +1,6 @@
 ﻿namespace MovieRental_Team5
 {
-    partial class LoginForm
+    partial class Login_Form
     {
         /// <summary>
         ///  Required designer variable.
@@ -28,188 +28,127 @@
         /// </summary>
         private void InitializeComponent()
         {
-            components = new System.ComponentModel.Container();
-            menuStrip1 = new MenuStrip();
-            helpToolStripMenuItem = new ToolStripMenuItem();
-            helpGettingStartedToolStripMenuItem = new ToolStripMenuItem();
-            helpLoginToolStripMenuItem = new ToolStripMenuItem();
-            helpAboutToolStripMenuItem = new ToolStripMenuItem();
-            Title = new Label();
-            contextMenuStrip1 = new ContextMenuStrip(components);
-            Email_SIN_Label = new Label();
-            EmailField = new TextBox();
-            PasswordLabel = new Label();
-            PasswordField = new TextBox();
-            LoginButton = new Button();
-            label2 = new Label();
-            Exit_Application = new Button();
-            menuStrip1.SuspendLayout();
+            title = new Label();
+            email_sin_label = new Label();
+            email_field = new TextBox();
+            password_label = new Label();
+            password_field = new TextBox();
+            login_button = new Button();
+            label_2 = new Label();
+            exit_application = new Button();
             SuspendLayout();
             // 
-            // menuStrip1
+            // title
             // 
-            menuStrip1.Dock = DockStyle.Bottom;
-            menuStrip1.Items.AddRange(new ToolStripItem[] { helpToolStripMenuItem });
-            menuStrip1.Location = new Point(0, 562);
-            menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(967, 24);
-            menuStrip1.TabIndex = 9;
-            menuStrip1.Text = "menuStrip1";
+            title.AutoSize = true;
+            title.Font = new Font("Segoe UI", 30F, FontStyle.Bold);
+            title.Location = new Point(294, 36);
+            title.Name = "title";
+            title.Size = new Size(415, 54);
+            title.TabIndex = 0;
+            title.Text = "Movie Rental Project";
             // 
-            // helpToolStripMenuItem
+            // email_sin_label
             // 
-            helpToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { helpGettingStartedToolStripMenuItem, helpLoginToolStripMenuItem, helpAboutToolStripMenuItem });
-            helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            helpToolStripMenuItem.Size = new Size(44, 20);
-            helpToolStripMenuItem.Text = "Help";
+            email_sin_label.AutoSize = true;
+            email_sin_label.Font = new Font("Segoe UI", 20.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            email_sin_label.Location = new Point(232, 162);
+            email_sin_label.Name = "email_sin_label";
+            email_sin_label.Size = new Size(182, 37);
+            email_sin_label.TabIndex = 2;
+            email_sin_label.Text = "Employee SIN";
             // 
-            // helpGettingStartedToolStripMenuItem
+            // email_field
             // 
-            helpGettingStartedToolStripMenuItem.Name = "helpGettingStartedToolStripMenuItem";
-            helpGettingStartedToolStripMenuItem.Size = new Size(180, 22);
-            helpGettingStartedToolStripMenuItem.Text = "Getting Started";
-            helpGettingStartedToolStripMenuItem.Click += helpGettingStartedToolStripMenuItem_Click;
+            email_field.Font = new Font("Segoe UI", 10F);
+            email_field.Location = new Point(420, 175);
+            email_field.Name = "email_field";
+            email_field.PlaceholderText = "Enter Employee SIN";
+            email_field.Size = new Size(185, 25);
+            email_field.TabIndex = 4;
+            email_field.Click += email_address_input;
+            email_field.TextChanged += email_address_input;
             // 
-            // helpLoginToolStripMenuItem
+            // password_label
             // 
-            helpLoginToolStripMenuItem.Name = "helpLoginToolStripMenuItem";
-            helpLoginToolStripMenuItem.Size = new Size(180, 22);
-            helpLoginToolStripMenuItem.Text = "Login Screen";
-            helpLoginToolStripMenuItem.Click += helpLoginToolStripMenuItem_Click;
+            password_label.AutoSize = true;
+            password_label.Font = new Font("Segoe UI", 20.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            password_label.Location = new Point(264, 217);
+            password_label.Name = "password_label";
+            password_label.Size = new Size(128, 37);
+            password_label.TabIndex = 5;
+            password_label.Text = "Password";
             // 
-            // helpAboutToolStripMenuItem
+            // password_field
             // 
-            helpAboutToolStripMenuItem.Name = "helpAboutToolStripMenuItem";
-            helpAboutToolStripMenuItem.Size = new Size(180, 22);
-            helpAboutToolStripMenuItem.Text = "About";
-            helpAboutToolStripMenuItem.Click += helpAboutToolStripMenuItem_Click;
+            password_field.Font = new Font("Segoe UI", 10F);
+            password_field.Location = new Point(420, 229);
+            password_field.Name = "password_field";
+            password_field.PasswordChar = '*';
+            password_field.PlaceholderText = "Enter Password";
+            password_field.Size = new Size(185, 25);
+            password_field.TabIndex = 6;
             // 
-            // Title
+            // login_button
             // 
-            Title.AutoSize = true;
-            Title.Font = new Font("Segoe UI", 30F, FontStyle.Bold);
-            Title.Location = new Point(294, 36);
-            Title.Name = "Title";
-            Title.Size = new Size(415, 54);
-            Title.TabIndex = 0;
-            Title.Text = "Movie Rental Project";
+            login_button.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
+            login_button.Location = new Point(420, 277);
+            login_button.Name = "login_button";
+            login_button.Size = new Size(185, 66);
+            login_button.TabIndex = 7;
+            login_button.Text = "Login";
+            login_button.UseVisualStyleBackColor = true;
+            login_button.Click += login_button_click;
             // 
-            // contextMenuStrip1
+            // label_2
             // 
-            contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new Size(61, 4);
+            label_2.AutoSize = true;
+            label_2.Font = new Font("Segoe UI", 20.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label_2.Location = new Point(274, 146);
+            label_2.Name = "label_2";
+            label_2.Size = new Size(0, 37);
+            label_2.TabIndex = 3;
             // 
-            // Email_SIN_Label
+            // exit_application
             // 
-            Email_SIN_Label.AutoSize = true;
-            Email_SIN_Label.Font = new Font("Segoe UI", 20.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            Email_SIN_Label.Location = new Point(232, 162);
-            Email_SIN_Label.Name = "Email_SIN_Label";
-            Email_SIN_Label.Size = new Size(182, 37);
-            Email_SIN_Label.TabIndex = 2;
-            Email_SIN_Label.Text = "Employee SIN";
+            exit_application.Font = new Font("Segoe UI", 12F, FontStyle.Underline);
+            exit_application.Location = new Point(420, 359);
+            exit_application.Name = "exit_application";
+            exit_application.Size = new Size(182, 77);
+            exit_application.TabIndex = 8;
+            exit_application.Text = "Exit Application";
+            exit_application.UseVisualStyleBackColor = true;
+            exit_application.Click += exit_application_click;
             // 
-            // EmailField
-            // 
-            EmailField.Font = new Font("Segoe UI", 10F);
-            EmailField.Location = new Point(420, 175);
-            EmailField.Name = "EmailField";
-            EmailField.PlaceholderText = "Enter Employee SIN";
-            EmailField.Size = new Size(185, 25);
-            EmailField.TabIndex = 4;
-            EmailField.Click += EmailAddressInput;
-            EmailField.TextChanged += EmailAddressInput;
-            // 
-            // PasswordLabel
-            // 
-            PasswordLabel.AutoSize = true;
-            PasswordLabel.Font = new Font("Segoe UI", 20.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            PasswordLabel.Location = new Point(264, 217);
-            PasswordLabel.Name = "PasswordLabel";
-            PasswordLabel.Size = new Size(128, 37);
-            PasswordLabel.TabIndex = 5;
-            PasswordLabel.Text = "Password";
-            // 
-            // PasswordField
-            // 
-            PasswordField.Font = new Font("Segoe UI", 10F);
-            PasswordField.Location = new Point(420, 229);
-            PasswordField.Name = "PasswordField";
-            PasswordField.PasswordChar = '*';
-            PasswordField.PlaceholderText = "Enter Password";
-            PasswordField.Size = new Size(185, 25);
-            PasswordField.TabIndex = 6;
-            // 
-            // LoginButton
-            // 
-            LoginButton.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
-            LoginButton.Location = new Point(420, 277);
-            LoginButton.Name = "LoginButton";
-            LoginButton.Size = new Size(185, 66);
-            LoginButton.TabIndex = 7;
-            LoginButton.Text = "Login";
-            LoginButton.UseVisualStyleBackColor = true;
-            LoginButton.Click += LoginButton_Click;
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Font = new Font("Segoe UI", 20.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label2.Location = new Point(274, 146);
-            label2.Name = "label2";
-            label2.Size = new Size(0, 37);
-            label2.TabIndex = 3;
-            // 
-            // Exit_Application
-            // 
-            Exit_Application.Font = new Font("Segoe UI", 12F, FontStyle.Underline);
-            Exit_Application.Location = new Point(420, 359);
-            Exit_Application.Name = "Exit_Application";
-            Exit_Application.Size = new Size(182, 77);
-            Exit_Application.TabIndex = 8;
-            Exit_Application.Text = "Exit Application";
-            Exit_Application.UseVisualStyleBackColor = true;
-            Exit_Application.Click += Exit_Application_Click;
-            // 
-            // LoginForm
+            // Login_Form
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(967, 586);
-            Controls.Add(menuStrip1);
-            Controls.Add(Exit_Application);
-            Controls.Add(LoginButton);
-            Controls.Add(PasswordField);
-            Controls.Add(PasswordLabel);
-            Controls.Add(EmailField);
-            Controls.Add(label2);
-            Controls.Add(Email_SIN_Label);
-            Controls.Add(Title);
-            MainMenuStrip = menuStrip1;
-            Name = "LoginForm";
+            Controls.Add(exit_application);
+            Controls.Add(login_button);
+            Controls.Add(password_field);
+            Controls.Add(password_label);
+            Controls.Add(email_field);
+            Controls.Add(label_2);
+            Controls.Add(email_sin_label);
+            Controls.Add(title);
+            Name = "Login_Form";
             Text = "Form1";
-            Load += Form1_Load;
-            menuStrip1.ResumeLayout(false);
-            menuStrip1.PerformLayout();
+            Load += form_1_load;
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
 
-        private MenuStrip menuStrip1;
-        private ToolStripMenuItem helpToolStripMenuItem;
-        private ToolStripMenuItem helpGettingStartedToolStripMenuItem;
-        private ToolStripMenuItem helpLoginToolStripMenuItem;
-        private ToolStripMenuItem helpAboutToolStripMenuItem;
-        private Label Title;
-        private ContextMenuStrip contextMenuStrip1;
-        private Label Email_SIN_Label;
-        private TextBox EmailField;
-        private Label PasswordLabel;
-        private TextBox PasswordField;
-        private Button LoginButton;
-        private Label label2;
-        private Button Exit_Application;
+        private Label title;
+        private Label email_sin_label;
+        private TextBox email_field;
+        private Label password_label;
+        private TextBox password_field;
+        private Button login_button;
+        private Label label_2;
+        private Button exit_application;
     }
 }

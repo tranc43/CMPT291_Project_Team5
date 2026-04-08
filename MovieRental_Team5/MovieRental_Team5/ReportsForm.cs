@@ -1,3 +1,10 @@
+
+/* CLASS: CMPT 291
+ * LAB: X02L
+ * ASSIGNMENT: RENTAL DATABASE PROJECT
+ * AUTHOR(S): TEAM 5 - FIN, CHRISTIAN, BRICE, PIERRE
+ * DUE DATE: APRIL 10TH 2025
+ */
 using System;
 using System.Data;
 using System.Data.SqlClient;
@@ -5,71 +12,95 @@ using System.Windows.Forms;
 
 namespace MovieRental_Team5
 {
-    public partial class ReportsForm : Form
+    public partial class Reports_Form : Form
     {
-        private readonly string connectionString = DatabaseConnection.ConnectionString;
+        private readonly string connection_string = Database_Connection.connection_string;
 
-        public ReportsForm()
+        public Reports_Form()
         {
             InitializeComponent();
-            Load += ReportsForm_Load;
+            Load += reports_form_load;
         }
-
-        private void ReportsForm_Load(object? sender, EventArgs e)
+        // referencing the function in accescontrol.cs to ensure that an employee is logged in before accessing.
+        private void reports_form_load(object? sender, EventArgs e)
         {
-            if (!AccessControl.EnsureEmployeeLoggedIn(this))
+            if (!Access_Control.ensure_employee_logged_in(this))
             {
                 return;
             }
 
             report_selector.SelectedIndex = 0;
-            LoadSelectedReport();
+            load_selected_report();
         }
 
         private void run_report_button_Click(object sender, EventArgs e)
         {
-            LoadSelectedReport();
+            load_selected_report();
         }
 
-        private void LoadSelectedReport()
+        private void load_selected_report()
         {
+            /*@desc 
+             * This functions purpose is to serve for loading the 5 reports of the database
+             * the following reports are as follows:
+             * 1. Monthly Revenue
+             * 2. TOp 3 Most Rented Movies
+             * 3. Top 3 Employees by Revenue
+             * 4. Top 3 Actors
+             * 5. Top 3 most active customers.
+             */
             string query = report_selector.SelectedIndex switch
             {
-                0 => @"SELECT TOP (10) m.Movie_Name, m.Movie_Genre, COUNT(*) AS Total_Rentals
-                       FROM Order_Data o
-                       INNER JOIN Movie_Data m ON o.Movie_ID = m.Movie_ID
-                       GROUP BY m.Movie_Name, m.Movie_Genre
-                       ORDER BY COUNT(*) DESC, m.Movie_Name",
-                1 => @"SELECT TOP (10) c.Customer_ID, c.First_Name, c.Last_Name, COUNT(*) AS Total_Orders
-                       FROM Order_Data o
-                       INNER JOIN Customer_Data c ON o.Customer_ID = c.Customer_ID
-                       GROUP BY c.Customer_ID, c.First_Name, c.Last_Name
-                       ORDER BY COUNT(*) DESC, c.Last_Name, c.First_Name",
-                2 => @"SELECT m.Movie_Name, COUNT(*) AS Active_Rentals
-                       FROM Order_Data o
-                       INNER JOIN Movie_Data m ON o.Movie_ID = m.Movie_ID
-                       WHERE o.Return_Date > GETDATE()
-                       GROUP BY m.Movie_Name
-                       ORDER BY COUNT(*) DESC, m.Movie_Name",
-                3 => @"SELECT TOP (10)
-                            a.Actor_Name,
-                            COUNT(ai.Movie_ID) AS Movie_Count,
-                            AVG(CAST(ra.Rating AS DECIMAL(4,2))) AS Average_Rating
-                       FROM Actor_Data a
-                       LEFT JOIN Appears_In ai ON a.Actor_ID = ai.Actor_ID
-                       LEFT JOIN Rate_Actor ra ON a.Actor_ID = ra.Actor_ID
-                       GROUP BY a.Actor_Name
-                       ORDER BY COUNT(ai.Movie_ID) DESC, a.Actor_Name",
-                _ => @"SELECT c.Customer_ID, c.First_Name, c.Last_Name, COUNT(mq.Movie_ID) AS Queue_Size
-                       FROM Customer_Data c
-                       LEFT JOIN Movie_Queue mq ON c.Customer_ID = mq.Customer_ID
-                       GROUP BY c.Customer_ID, c.First_Name, c.Last_Name
-                       ORDER BY COUNT(mq.Movie_ID) DESC, c.Last_Name, c.First_Name"
+                0 => @"SELECT MONTH(Checkout) AS [month], YEAR(Checkout) AS [year], SUM(Distribution_Fee) AS [rev]
+                       FROM Order_Data AS o,
+                            Movie_Data AS m
+                       WHERE o.Movie_ID = m.Movie_ID
+                       GROUP BY MONTH(Checkout), YEAR(Checkout)
+                       ORDER BY YEAR(Checkout), MONTH(Checkout)",
+                1 => @"SELECT TOP 3 Movie_Name
+                       FROM (
+                           SELECT Movie_Name, COUNT(o.Movie_ID) AS num
+                           FROM Order_Data AS o,
+                                Movie_Data AS m
+                           WHERE o.Movie_ID = m.Movie_ID
+                           GROUP BY Movie_Name
+                       ) AS q
+                       ORDER BY num DESC",
+                2 => @"SELECT TOP 3 First_Name, rev
+                       FROM Employee_Data AS e,
+                            (
+                                SELECT Employee_ID, SUM(Distribution_Fee) AS [rev]
+                                FROM Order_Data AS o,
+                                     Movie_Data AS m
+                                WHERE o.Movie_ID = m.Movie_ID
+                                GROUP BY Employee_ID
+                            ) AS q
+                       WHERE e.Employee_ID = q.Employee_ID
+                       ORDER BY rev DESC",
+                3 => @"SELECT TOP 3 Actor_Name, rating
+                       FROM (
+                           SELECT Actor_Name, AVG(Rating) AS [rating]
+                           FROM Actor_Data AS a,
+                                Rate_Actor AS r
+                           WHERE a.Actor_ID = r.Actor_ID
+                           GROUP BY Actor_Name
+                       ) AS q
+                       ORDER BY rating DESC",
+                _ => @"SELECT TOP 3 First_Name
+                       FROM (
+                           SELECT First_Name, COUNT(o.Customer_ID) AS [num]
+                           FROM Customer_Data AS c,
+                                Order_Data AS o
+                           WHERE c.Customer_ID = o.Customer_ID
+                           GROUP BY First_Name
+                       ) AS q
+                       ORDER BY num DESC"
             };
 
             try
             {
-                using (SqlConnection connection = new SqlConnection(connectionString))
+                // Connecting to the database and executing the queries above to  fill the datagridview.
+                using (SqlConnection connection = new SqlConnection(connection_string))
                 {
                     connection.Open();
                     SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
@@ -88,29 +119,6 @@ namespace MovieRental_Team5
         private void back_button_Click(object sender, EventArgs e)
         {
             Close();
-        }
-
-        private void OpenHelpTopic(string topic)
-        {
-            using (HelpForm helpForm = new HelpForm(topic))
-            {
-                helpForm.ShowDialog(this);
-            }
-        }
-
-        private void helpOverviewToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            OpenHelpTopic(HelpTopics.GettingStarted);
-        }
-
-        private void helpReportsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            OpenHelpTopic(HelpTopics.Reports);
-        }
-
-        private void helpAboutToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            OpenHelpTopic(HelpTopics.About);
         }
     }
 }

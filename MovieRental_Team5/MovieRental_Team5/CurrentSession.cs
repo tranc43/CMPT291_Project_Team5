@@ -1,30 +1,40 @@
+/* CLASS: CMPT 291
+ * LAB: X02L
+ * ASSIGNMENT: RENTAL DATABASE PROJECT
+ * AUTHOR(S): TEAM 5 - FIN, CHRISTIAN, BRICE, PIERRE
+ * DUE DATE: APRIL 10TH 2025
+ */
+
 namespace MovieRental_Team5
 {
-    internal static class CurrentSession
+    internal static class Current_Session
     {
-        public static int EmployeeId = -1;
-        public static string EmployeeSin = "";
-        public static string EmployeeName = "";
+        /* initializing variables
+         * to hold employee data fo rth ecurrent session.
+         */
+        public static int employee_id = -1;
+        public static string employee_sin = "";
+        public static string employee_name = "";
 
-        public static void SetEmployee(int employeeId, string employeeSin, string employeeName)
+        public static void set_employee(int employee_id_value, string employee_sin_value, string employee_name_value)
 
         {
             /*@desc: this functions purpose is to set the current employeee session with data
             * 
             */
-            EmployeeId = employeeId;
-            EmployeeSin = employeeSin;
-            EmployeeName = employeeName;
+            employee_id = employee_id_value;
+            employee_sin = employee_sin_value;
+            employee_name = employee_name_value;
         }
 
-        public static void Clear()
+        public static void clear()
         {
             /*@desc: this functions purpose is to clear the employee session data. 
             * 
             */
-            EmployeeId = -1;
-            EmployeeSin = "";
-            EmployeeName = "";
+            employee_id = -1;
+            employee_sin = "";
+            employee_name = "";
         }
     }
 }

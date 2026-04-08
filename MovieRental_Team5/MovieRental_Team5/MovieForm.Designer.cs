@@ -1,6 +1,6 @@
 namespace MovieRental_Team5
 {
-    partial class MovieForm
+    partial class Movie_Form
     {
         private System.ComponentModel.IContainer components = null;
 
@@ -12,12 +12,6 @@ namespace MovieRental_Team5
 
         private void InitializeComponent()
         {
-            menuStrip1 = new MenuStrip();
-            helpToolStripMenuItem = new ToolStripMenuItem();
-            helpOverviewToolStripMenuItem = new ToolStripMenuItem();
-            helpMoviesToolStripMenuItem = new ToolStripMenuItem();
-            helpOrdersToolStripMenuItem = new ToolStripMenuItem();
-            helpAboutToolStripMenuItem = new ToolStripMenuItem();
             movie_dashboardd_title = new Label();
             input_movie_title = new Label();
             movie_grid = new DataGridView();
@@ -35,7 +29,7 @@ namespace MovieRental_Team5
             num_copies = new TextBox();
             title_field = new TextBox();
             genre_dropdown = new ComboBox();
-            load_movies = new Button();
+            load_movies_button = new Button();
             add_movie = new Button();
             update_movie = new Button();
             delete_movie = new Button();
@@ -48,55 +42,9 @@ namespace MovieRental_Team5
             movie_actor_grid = new DataGridView();
             label1 = new Label();
             label2 = new Label();
-            menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)movie_grid).BeginInit();
             ((System.ComponentModel.ISupportInitialize)movie_actor_grid).BeginInit();
             SuspendLayout();
-            // 
-            // menuStrip1
-            // 
-            menuStrip1.Dock = DockStyle.Bottom;
-            menuStrip1.Items.AddRange(new ToolStripItem[] { helpToolStripMenuItem });
-            menuStrip1.Location = new Point(0, 706);
-            menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(1050, 24);
-            menuStrip1.TabIndex = 28;
-            // 
-            // helpToolStripMenuItem
-            // 
-            helpToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { helpOverviewToolStripMenuItem, helpMoviesToolStripMenuItem, helpOrdersToolStripMenuItem, helpAboutToolStripMenuItem });
-            helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            helpToolStripMenuItem.Size = new Size(44, 20);
-            helpToolStripMenuItem.Text = "Help";
-            // 
-            // helpOverviewToolStripMenuItem
-            // 
-            helpOverviewToolStripMenuItem.Name = "helpOverviewToolStripMenuItem";
-            helpOverviewToolStripMenuItem.Size = new Size(181, 22);
-            helpOverviewToolStripMenuItem.Text = "Getting Started";
-            helpOverviewToolStripMenuItem.Click += helpOverviewToolStripMenuItem_Click;
-            // 
-            // helpMoviesToolStripMenuItem
-            // 
-            helpMoviesToolStripMenuItem.Name = "helpMoviesToolStripMenuItem";
-            helpMoviesToolStripMenuItem.Size = new Size(181, 22);
-            helpMoviesToolStripMenuItem.Text = "Movie Management";
-            helpMoviesToolStripMenuItem.Click += helpMoviesToolStripMenuItem_Click;
-            // 
-            // helpOrdersToolStripMenuItem
-            // 
-            helpOrdersToolStripMenuItem.Name = "helpOrdersToolStripMenuItem";
-            helpOrdersToolStripMenuItem.Size = new Size(181, 22);
-            helpOrdersToolStripMenuItem.Text = "Order Entry";
-            helpOrdersToolStripMenuItem.Click += helpOrdersToolStripMenuItem_Click;
-            // 
-            // helpAboutToolStripMenuItem
-            // 
-            helpAboutToolStripMenuItem.Name = "helpAboutToolStripMenuItem";
-            helpAboutToolStripMenuItem.Size = new Size(181, 22);
-            helpAboutToolStripMenuItem.Text = "About";
-            helpAboutToolStripMenuItem.Click += helpAboutToolStripMenuItem_Click;
-            // 
             // movie_dashboardd_title
             // 
             movie_dashboardd_title.AutoSize = true;
@@ -251,14 +199,14 @@ namespace MovieRental_Team5
             genre_dropdown.Size = new Size(190, 23);
             genre_dropdown.TabIndex = 13;
             // 
-            // load_movies
+            // load_movies_button
             // 
-            load_movies.Location = new Point(387, 444);
-            load_movies.Name = "load_movies";
-            load_movies.Size = new Size(106, 38);
-            load_movies.TabIndex = 10;
-            load_movies.Text = "Load Movies";
-            load_movies.Click += load_movies_Click;
+            load_movies_button.Location = new Point(387, 444);
+            load_movies_button.Name = "load_movies_button";
+            load_movies_button.Size = new Size(106, 38);
+            load_movies_button.TabIndex = 10;
+            load_movies_button.Text = "Load Movies";
+            load_movies_button.Click += load_movies_Click;
             // 
             // add_movie
             // 
@@ -369,7 +317,7 @@ namespace MovieRental_Team5
             label2.TabIndex = 30;
             label2.Text = "Actor Controls";
             // 
-            // MovieForm
+            // Movie_Form
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -386,7 +334,7 @@ namespace MovieRental_Team5
             Controls.Add(delete_movie);
             Controls.Add(update_movie);
             Controls.Add(add_movie);
-            Controls.Add(load_movies);
+            Controls.Add(load_movies_button);
             Controls.Add(num_copies);
             Controls.Add(fee_field);
             Controls.Add(genre_dropdown);
@@ -404,25 +352,15 @@ namespace MovieRental_Team5
             Controls.Add(movie_grid);
             Controls.Add(input_movie_title);
             Controls.Add(movie_dashboardd_title);
-            Controls.Add(menuStrip1);
-            MainMenuStrip = menuStrip1;
-            Name = "MovieForm";
+            Name = "Movie_Form";
             Text = "MovieForm";
-            Load += MovieForm_Load;
-            menuStrip1.ResumeLayout(false);
-            menuStrip1.PerformLayout();
+            Load += movie_form_load;
             ((System.ComponentModel.ISupportInitialize)movie_grid).EndInit();
             ((System.ComponentModel.ISupportInitialize)movie_actor_grid).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
 
-        private MenuStrip menuStrip1;
-        private ToolStripMenuItem helpToolStripMenuItem;
-        private ToolStripMenuItem helpOverviewToolStripMenuItem;
-        private ToolStripMenuItem helpMoviesToolStripMenuItem;
-        private ToolStripMenuItem helpOrdersToolStripMenuItem;
-        private ToolStripMenuItem helpAboutToolStripMenuItem;
         private Label movie_dashboardd_title;
         private Label input_movie_title;
         private DataGridView movie_grid;
@@ -440,7 +378,7 @@ namespace MovieRental_Team5
         private ComboBox genre_dropdown;
         private TextBox fee_field;
         private TextBox num_copies;
-        private Button load_movies;
+        private Button load_movies_button;
         private Button add_movie;
         private Button update_movie;
         private Button delete_movie;
