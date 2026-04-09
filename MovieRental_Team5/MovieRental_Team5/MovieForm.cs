@@ -280,6 +280,16 @@ namespace MovieRental_Team5
         }
 
         private void delete_movie_Click(object sender, EventArgs e)
+            /*@desc
+             * this functions purpose is to handle 
+             * deleting a movie. Before deleting a movie,
+             * error handling is implemented to make sure that there is a movie
+             * thats selected and then a second confirmation if the user wants to delete the movie 
+             * However, before deleting the movie, there is a check to see
+             * if the movie is currently in any existing orders. If there is a movie 
+             * with an existing order, it'll throw the error message saying the movie cannot be deleted.
+             * 
+             */
         {
             if (selected_movie_id == -1)
             {
@@ -299,6 +309,7 @@ namespace MovieRental_Team5
                 {
                     connectionNew.Open();
 
+                    // This section handles the logic of checking if movies are associated with an order and the process of deleting the movie.
                     SqlCommand checkCommand = new SqlCommand("SELECT COUNT(*) FROM Order_Data WHERE Movie_ID = @id", connectionNew);
                     checkCommand.Parameters.AddWithValue("@id", selected_movie_id);
                     int orderCount = Convert.ToInt32(checkCommand.ExecuteScalar());
@@ -308,7 +319,7 @@ namespace MovieRental_Team5
                         MessageBox.Show("This movie cannot be deleted because it is associated with existing rentals.");
                         return;
                     }
-
+                    // deletes everything associated with the movie like the actor assigned to it.
                     SqlCommand deleteAppearances = new SqlCommand("DELETE FROM Appears_In WHERE Movie_ID = @id", connectionNew);
                     deleteAppearances.Parameters.AddWithValue("@id", selected_movie_id);
                     deleteAppearances.ExecuteNonQuery();
