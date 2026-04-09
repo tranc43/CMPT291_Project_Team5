@@ -327,6 +327,8 @@ namespace MovieRental_Team5
          * this functions purpose is to delete the selected customer from the database
          * it also includes error handling and checks to make sure that the customer can be deleted
          * such as if they have existing orders or not.
+         * 
+         * The function also provides a secondary confirmation of deleting an actor. 
          */
         {
             if (selected_customer_id == -1)

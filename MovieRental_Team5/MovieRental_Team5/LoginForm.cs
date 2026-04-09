@@ -72,11 +72,11 @@ namespace MovieRental_Team5
                         emp_reader.Read();
                         string stored_password = emp_reader["Employee_Password"].ToString();
                         bool password_matches = Password_Security.verify_password(password, stored_password);
-                        // throw error for invalid password or SIN
+                        // if the employee exists but the password is wrong, show an invalid password error.
                         if (!password_matches)
                         {
                             emp_reader.Close();
-                            MessageBox.Show("Invalid Password or SIN!", "Login Error");
+                            MessageBox.Show("Invalid password.", "Login Error");
                             return;
                         }
       
@@ -101,7 +101,7 @@ namespace MovieRental_Team5
                         return;
                     }
 
-                    MessageBox.Show("Invalid employee SIN or password.", "Login Error");
+                    MessageBox.Show("Invalid employee SIN.", "Login Error");
                 }
 
             }
