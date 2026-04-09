@@ -39,6 +39,11 @@ namespace MovieRental_Team5
 
         private void load_movie_list()
         {
+            /*@desc 
+             * this functions purpose is to load the movie list
+             * from the database into the data grid
+             * it also implements the search functionality for movie name and genre. 
+             */
             try
             {
                 using (SqlConnection connectionNew = new SqlConnection(connection))
@@ -61,8 +66,9 @@ namespace MovieRental_Team5
                         WHERE (@name = '' OR m.Movie_Name LIKE '%' + @name + '%')
                           AND (@genre = '' OR m.Movie_Genre = @genre)
                         ORDER BY m.Movie_Name";
-
+                    
                     SqlDataAdapter adapter = new SqlDataAdapter(query, connectionNew);
+              
                     adapter.SelectCommand.Parameters.AddWithValue("@name", search_movie_field.Text.Trim());
                     adapter.SelectCommand.Parameters.AddWithValue("@genre", genre_search_dropdown.Text == "All" ? "" : genre_search_dropdown.Text);
                     DataTable table = new DataTable();
@@ -78,6 +84,10 @@ namespace MovieRental_Team5
         }
 
         private void load_actors()
+            /*@desc
+             * loads the actors from the database into 
+             * the actor dropdown. Has order by actor name and error handlings.
+             */
         {
             actor_dropdown.Items.Clear();
 
@@ -110,6 +120,11 @@ namespace MovieRental_Team5
         }
 
         private void load_assigned_actors()
+            /*@desc
+             * 
+             * this functons purpose is to load the actors that are 
+             * parrt of a specific movie. 
+             */
         {
             if (selected_movie_id == -1)
             {
@@ -151,6 +166,7 @@ namespace MovieRental_Team5
             }
         }
 
+        // ui elements
         private void load_movies_Click(object sender, EventArgs e)
         {
             load_movie_list();
@@ -163,6 +179,11 @@ namespace MovieRental_Team5
 
         private void movie_grid_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
+            /*@desc
+             * this functions purpose is to load the selected movie data 
+             * upon clicking a cell on the grid.
+             * 
+             */
             if (e.RowIndex < 0)
             {
                 return;
@@ -178,6 +199,11 @@ namespace MovieRental_Team5
         }
 
         private void add_movie_Click(object sender, EventArgs e)
+            /*@desc
+             * this functions purpose
+             * is to add a movie to the database 
+             * it uses a string query to insert the movie into the database.
+             */
         {
             if (!validate_movie_fields())
             {
@@ -198,6 +224,7 @@ namespace MovieRental_Team5
                     command.ExecuteNonQuery();
                 }
 
+            // refreshing movie list and error handling
                 MessageBox.Show("Movie added successfully!");
                 load_movie_list();
                 clear_fields();
@@ -209,6 +236,12 @@ namespace MovieRental_Team5
         }
 
         private void update_movie_Click(object sender, EventArgs e)
+            /*@desc
+             * this functions purpose
+             * is to update the move in the database
+             * using a string query to update the movies in the database
+             * it also has error handling
+             */
         {
             if (selected_movie_id == -1)
             {
