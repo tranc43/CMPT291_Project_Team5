@@ -52,28 +52,28 @@ namespace MovieRental_Team5
                     connection.Open();
                     string query = @"
                         SELECT
-                            customer.Customer_ID,
-                            customer.First_Name,
-                            customer.Last_Name,
-                            customer.Email_Address,
-                            customer.City,
-                            customer.Province,
-                            customer.Address,
-                            customer.Postal_Code,
-                            customer.Account_Number,
-                            customer.Account_Creation_Date,
-                            customer.Credit_Card_Number,
+                            c.Customer_ID,
+                            c.First_Name,
+                            c.Last_Name,
+                            c.Email_Address,
+                            c.City,
+                            c.Province,
+                            c.Address,
+                            c.Postal_Code,
+                            c.Account_Number,
+                            c.Account_Creation_Date,
+                            c.Credit_Card_Number,
                             (
-                                SELECT AVG(CAST(movie_rating.Rating AS DECIMAL(4,2)))
-                                FROM Rate_Movie movie_rating
-                                INNER JOIN Order_Data order_data ON movie_rating.Order_ID = movie_rating.Order_ID
-                                WHERE order_data.Customer_ID = customer.Customer_ID
+                                SELECT AVG(CAST(mr.Rating AS DECIMAL(4,2)))
+                                FROM Rate_Movie mr
+                                INNER JOIN Order_Data order_data ON mr.Order_ID = mr.Order_ID
+                                WHERE order_data.Customer_ID = c.Customer_ID
                             ) AS Average_Rating
                         FROM Customer_Data customer
-                        WHERE (@firstName = '' OR customer.First_Name LIKE '%' + @firstName + '%')
-                          AND (@lastName = '' OR customer.Last_Name LIKE '%' + @lastName + '%')
-                          AND (@email = '' OR customer.Email_Address LIKE '%' + @email + '%')
-                        ORDER BY customer.Last_Name, customer.First_Name";
+                        WHERE (@firstName = '' OR c.First_Name LIKE '%' + @firstName + '%')
+                          AND (@lastName = '' OR c.Last_Name LIKE '%' + @lastName + '%')
+                          AND (@email = '' OR c.Email_Address LIKE '%' + @email + '%')
+                        ORDER BY c.Last_Name, c.First_Name";
 
                     // Retrieve customer data with the filters applied.
                     SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
