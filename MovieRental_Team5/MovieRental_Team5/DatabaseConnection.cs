@@ -9,6 +9,12 @@ using System.Configuration;
 
 namespace MovieRental_Team5
 {
+    /*@desc
+     * this file is used to handle the database connection string 
+     * it reads the connection string from the App.config file and provides it to the rest of the system
+     * as one centralized location for the connection string. 
+     * 
+     */
     internal static class Database_Connection
     {
         public static string connection_string

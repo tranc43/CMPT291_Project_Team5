@@ -39,6 +39,11 @@ namespace MovieRental_Team5
 
         private void load_movie_list()
         {
+            /*@desc 
+             * this functions purpose is to load the movie list
+             * from the database into the data grid
+             * it also implements the search functionality for movie name and genre. 
+             */
             try
             {
                 using (SqlConnection connectionNew = new SqlConnection(connection))
@@ -61,8 +66,9 @@ namespace MovieRental_Team5
                         WHERE (@name = '' OR m.Movie_Name LIKE '%' + @name + '%')
                           AND (@genre = '' OR m.Movie_Genre = @genre)
                         ORDER BY m.Movie_Name";
-
+                    
                     SqlDataAdapter adapter = new SqlDataAdapter(query, connectionNew);
+              
                     adapter.SelectCommand.Parameters.AddWithValue("@name", search_movie_field.Text.Trim());
                     adapter.SelectCommand.Parameters.AddWithValue("@genre", genre_search_dropdown.Text == "All" ? "" : genre_search_dropdown.Text);
                     DataTable table = new DataTable();
@@ -78,6 +84,10 @@ namespace MovieRental_Team5
         }
 
         private void load_actors()
+            /*@desc
+             * loads the actors from the database into 
+             * the actor dropdown. Has order by actor name and error handlings.
+             */
         {
             actor_dropdown.Items.Clear();
 
@@ -110,6 +120,11 @@ namespace MovieRental_Team5
         }
 
         private void load_assigned_actors()
+            /*@desc
+             * 
+             * this functons purpose is to load the actors that are 
+             * parrt of a specific movie. 
+             */
         {
             if (selected_movie_id == -1)
             {
@@ -151,6 +166,7 @@ namespace MovieRental_Team5
             }
         }
 
+        // ui elements
         private void load_movies_Click(object sender, EventArgs e)
         {
             load_movie_list();
@@ -163,6 +179,11 @@ namespace MovieRental_Team5
 
         private void movie_grid_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
+            /*@desc
+             * this functions purpose is to load the selected movie data 
+             * upon clicking a cell on the grid.
+             * 
+             */
             if (e.RowIndex < 0)
             {
                 return;
@@ -178,6 +199,11 @@ namespace MovieRental_Team5
         }
 
         private void add_movie_Click(object sender, EventArgs e)
+            /*@desc
+             * this functions purpose
+             * is to add a movie to the database 
+             * it uses a string query to insert the movie into the database.
+             */
         {
             if (!validate_movie_fields())
             {
@@ -198,6 +224,7 @@ namespace MovieRental_Team5
                     command.ExecuteNonQuery();
                 }
 
+            // refreshing movie list and error handling
                 MessageBox.Show("Movie added successfully!");
                 load_movie_list();
                 clear_fields();
@@ -209,6 +236,12 @@ namespace MovieRental_Team5
         }
 
         private void update_movie_Click(object sender, EventArgs e)
+            /*@desc
+             * this functions purpose
+             * is to update the move in the database
+             * using a string query to update the movies in the database
+             * it also has error handling
+             */
         {
             if (selected_movie_id == -1)
             {
@@ -226,6 +259,7 @@ namespace MovieRental_Team5
                 using (SqlConnection connectionNew = new SqlConnection(connection))
                 {
                     connectionNew.Open();
+                    // Updating the movie data based on the selected movie ID and values.
                     string query = "UPDATE Movie_Data SET Movie_Name = @name, Movie_Genre = @genre, Distribution_Fee = @fee, Num_Copies = @copies WHERE Movie_ID = @id";
                     SqlCommand command = new SqlCommand(query, connectionNew);
                     command.Parameters.AddWithValue("@name", title_field.Text.Trim());
@@ -247,6 +281,16 @@ namespace MovieRental_Team5
         }
 
         private void delete_movie_Click(object sender, EventArgs e)
+            /*@desc
+             * this functions purpose is to handle 
+             * deleting a movie. Before deleting a movie,
+             * error handling is implemented to make sure that there is a movie
+             * thats selected and then a second confirmation if the user wants to delete the movie 
+             * However, before deleting the movie, there is a check to see
+             * if the movie is currently in any existing orders. If there is a movie 
+             * with an existing order, it'll throw the error message saying the movie cannot be deleted.
+             * 
+             */
         {
             if (selected_movie_id == -1)
             {
@@ -266,6 +310,7 @@ namespace MovieRental_Team5
                 {
                     connectionNew.Open();
 
+                    // This section handles the logic of checking if movies are associated with an order and the process of deleting the movie.
                     SqlCommand checkCommand = new SqlCommand("SELECT COUNT(*) FROM Order_Data WHERE Movie_ID = @id", connectionNew);
                     checkCommand.Parameters.AddWithValue("@id", selected_movie_id);
                     int orderCount = Convert.ToInt32(checkCommand.ExecuteScalar());
@@ -275,7 +320,7 @@ namespace MovieRental_Team5
                         MessageBox.Show("This movie cannot be deleted because it is associated with existing rentals.");
                         return;
                     }
-
+                    // deletes everything associated with the movie like the actor assigned to it.
                     SqlCommand deleteAppearances = new SqlCommand("DELETE FROM Appears_In WHERE Movie_ID = @id", connectionNew);
                     deleteAppearances.Parameters.AddWithValue("@id", selected_movie_id);
                     deleteAppearances.ExecuteNonQuery();
