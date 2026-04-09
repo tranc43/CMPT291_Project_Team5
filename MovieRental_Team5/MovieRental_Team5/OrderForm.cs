@@ -14,7 +14,7 @@ namespace MovieRental_Team5
     public partial class Order_Form : Form
     {
         private readonly string connection_string = Database_Connection.connection_string;
-
+        // loading the form and its components.
         public Order_Form()
         {
             InitializeComponent();
@@ -27,6 +27,11 @@ namespace MovieRental_Team5
 
         private void order_form_load(object sender, EventArgs e)
         {
+            /*@desc
+             * this functions purpose load the 
+             * components of the order form and but checks if the employee is logged in or not first.
+             * 
+             */
             if (!Access_Control.ensure_employee_logged_in(this))
             {
                 return;
@@ -40,6 +45,13 @@ namespace MovieRental_Team5
 
         private void load_customers()
         {
+            /*@desc
+             * this functions purpose
+             * is to load the customers into the selection box 
+             * Formats the customers by ID, first, ands last name
+             * It also has error handling incase there is an issue with loading the customers from the database.
+             * 
+             */
             comboBox2.Items.Clear();
 
             try
@@ -71,12 +83,19 @@ namespace MovieRental_Team5
         }
 
         private int? get_selected_customer_id()
+            // returns the selected customer ID from the combo box.
         {
             return comboBox2.SelectedItem is Order_Lookup_Item customer_item ? customer_item.Id : null;
         }
 
         private Order_Lookup_Item? get_next_available_queued_movie(SqlConnection conn, int customer_id)
         {
+            /*@desc
+             * this function checks the available movies in the customer queue
+             * then it'll return the next available movie that the customer should rent based on the position and movie ID.
+             * Using a string query, it checks the movie queue and movie data to find the next available movie.
+             * It checks the availability of the movie by comparing the number of copies to the count of orders. 
+             */
             string query = @"
                 SELECT TOP 1
                     m.Movie_ID,
@@ -112,6 +131,11 @@ namespace MovieRental_Team5
         }
 
         private void load_movies()
+            /*@desc
+             * this function loads the movies into the movie selection combo box
+             * based on the selected customer and their queue. 
+             * Prioritizing movies in the customer's queue then the rest of the movies in alphabetical order
+             */
         {
             comboBox3.Items.Clear();
 
@@ -121,7 +145,12 @@ namespace MovieRental_Team5
                 {
                     conn.Open();
                     int? selected_customer_id = get_selected_customer_id();
-
+                    
+                    /*@desc
+                     * this string query selects movie that have
+                     * available copies based on the count of orders that have a return date in the future
+                     * Prioritizes movies in the customer's queue by sorting them first then alphabetically
+                     */
                     string query = @"
                         SELECT m.Movie_ID, m.Movie_Name
                         FROM Movie_Data m
@@ -180,6 +209,11 @@ namespace MovieRental_Team5
 
         private void load_customer_queue()
         {
+            /*@desc
+             * this functions purpose is to load the customers queue into the data grid
+             * based on the customer thats selected
+             * It uses a string query to get the movies in the queue along with the position, ID, Name and Genre
+             */
             int? customer_id = get_selected_customer_id();
 
             if (customer_id == null)
@@ -193,6 +227,7 @@ namespace MovieRental_Team5
                 using (SqlConnection conn = new SqlConnection(connection_string))
                 {
                     conn.Open();
+                    // string query to get the movies from the customer queue. 
                     string query = @"
                         SELECT
                             mq.Queue_Position,
@@ -210,6 +245,7 @@ namespace MovieRental_Team5
                         WHERE mq.Customer_ID = @customerId
                         ORDER BY mq.Queue_Position";
 
+          
                     SqlDataAdapter adapter = new SqlDataAdapter(query, conn);
                     adapter.SelectCommand.Parameters.AddWithValue("@customerId", customer_id.Value);
                     DataTable table = new DataTable();
@@ -226,6 +262,13 @@ namespace MovieRental_Team5
 
         private void load_orders()
         {
+            /*@desc
+             * this functions purpose is to load the orders
+             * into the data grid onto the form
+             * has error handling as well.
+             * Using a string query to get the order data along with the other details 
+             * Orders are sorted by most recent based on the ID.
+             */
             try
             {
                 using (SqlConnection conn = new SqlConnection(connection_string))
@@ -258,6 +301,7 @@ namespace MovieRental_Team5
         }
 
         private void set_employee_label()
+            // this is to set whos currently logged in as the employee. 
         {
             employee_ID_label.Text = Current_Session.employee_id != -1
                 ? "Employee ID: " + Current_Session.employee_id
@@ -265,6 +309,10 @@ namespace MovieRental_Team5
         }
 
         private void clear_order_fields(bool preserveCustomerSelection = false)
+            /*@desc
+             * this functions purpose is to set 
+             * the order fields back to default values and to clear the movie selection
+             */
         {
             if (!preserveCustomerSelection && comboBox2.Items.Count > 0)
             {
@@ -281,6 +329,14 @@ namespace MovieRental_Team5
 
         private void combo_box_2_selected_index_changed(object? sender, EventArgs e)
         {
+            /*@desc
+             * this functions purpose is to 
+             * reload the movie dropdown for the selected customer and to reload the queue as well
+             * It automatically selects the first queued movie in the drop down if its available, else
+             * default to the first available movie. 
+             * 
+             * 
+             */
             load_movies();
             load_customer_queue();
 
@@ -305,6 +361,10 @@ namespace MovieRental_Team5
 
         private void queue_grid_CellClick(object sender, DataGridViewCellEventArgs e)
         {
+            /*@desc
+             * this functions purpose is to read the selected movie queues ID
+             * find the same movie in that dropdown and it'll display if the movie is currently unavailable.
+            */
             if (e.RowIndex < 0 || queue_grid.Rows[e.RowIndex].Cells["Movie_ID"].Value == null)
             {
                 return;
@@ -324,6 +384,7 @@ namespace MovieRental_Team5
             MessageBox.Show("That queued movie is not currently available.");
         }
 
+        // UI elements
         private void back_button_Click(object sender, EventArgs e)
         {
             Close();
@@ -336,6 +397,14 @@ namespace MovieRental_Team5
 
         private void record_order_button_Click(object sender, EventArgs e)
         {
+            /*@desc
+             * this functions purpose is to 
+             * record the order into the databased based on the selected customers 
+             * return date and check out date.
+             * Before recording the order it has error handles
+             * for scenarios if the employee is not logged in and if the customer or movie is not seleccted.
+             * 
+             */
             if (Current_Session.employee_id == -1)
             {
                 MessageBox.Show("There is an error. No employee is logged in.");
@@ -347,6 +416,9 @@ namespace MovieRental_Team5
                 MessageBox.Show("Please select a customer and a movie.");
                 return;
             }
+            
+
+            // this section of the code is to combine and compared the checkout date and time and the return date and time to make sure its returned after checkout time.
 
             Order_Lookup_Item customer_item = (Order_Lookup_Item)comboBox2.SelectedItem;
             Order_Lookup_Item movie_item = (Order_Lookup_Item)comboBox3.SelectedItem;
@@ -362,6 +434,12 @@ namespace MovieRental_Team5
 
             try
             {
+                /*@desc
+                 * this section of the code involves checking 
+                 * if the the movie is avaiable based on the number of copies and count of orders with return dates in the future.
+                 * 
+                 * However befoore that, whatever movie thats first in the queue must be rented before any other movie can be rented even if the selected movie is avaialble.
+                 */
                 using (SqlConnection conn = new SqlConnection(connection_string))
                 {
                     conn.Open();
@@ -375,6 +453,7 @@ namespace MovieRental_Team5
                         return;
                     }
 
+                    // string query to check availability
                     string availabilityQuery = @"
                         SELECT Num_Copies -
                         (
@@ -397,6 +476,8 @@ namespace MovieRental_Team5
                         return;
                     }
 
+                    // string query to inser the order into the database.
+
                     string insertQuery = @"
                         INSERT INTO Order_Data
                         (Checkout, Return_Date, Movie_ID, Customer_ID, Employee_ID)
@@ -411,6 +492,7 @@ namespace MovieRental_Team5
                     insertCmd.Parameters.AddWithValue("@employeeId", Current_Session.employee_id);
                     insertCmd.ExecuteNonQuery();
 
+                    // if the movie was just rented then it'll be removed from the customers queue and position will be resequenced.
                     string removeQueueQuery = "DELETE FROM Movie_Queue WHERE Customer_ID = @customerId AND Movie_ID = @movieId";
                     SqlCommand removeQueueCmd = new SqlCommand(removeQueueQuery, conn);
                     removeQueueCmd.Parameters.AddWithValue("@customerId", customer_item.Id);
@@ -419,7 +501,7 @@ namespace MovieRental_Team5
 
                     resequence_customer_queue(conn, customer_item.Id);
                 }
-
+                // refresh
                 MessageBox.Show("Order recorded successfully!");
                 load_orders();
                 load_movies();
@@ -451,6 +533,11 @@ namespace MovieRental_Team5
 
         private void resequence_customer_queue(SqlConnection conn, int customer_id)
         {
+            /*@desc
+             * this functions purpose 
+             * is to resequence the customer queue positions after a movie has been
+             * safely removed from the queue 
+             */
             string query = @"
                 WITH OrderedQueue AS
                 (
