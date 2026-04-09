@@ -385,6 +385,10 @@ namespace MovieRental_Team5
 
         private void load_customer_queue_and_history()
         {
+            /*@desc
+             * this function is used to load the customer queue
+             * and their history.
+             */
             if (selected_customer_id == -1)
             {
                 customer_queue_grid.DataSource = null;
