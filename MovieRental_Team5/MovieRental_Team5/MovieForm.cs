@@ -375,7 +375,13 @@ namespace MovieRental_Team5
                     SqlCommand command = new SqlCommand(query, connectionNew);
                     command.Parameters.AddWithValue("@movieId", selected_movie_id);
                     command.Parameters.AddWithValue("@actorId", actor.Id);
-                    command.ExecuteNonQuery();
+                    int rows_affected = command.ExecuteNonQuery();
+
+                    if (rows_affected == 0)
+                    {
+                        MessageBox.Show("This actor is already assigned to the selected movie.");
+                        return;
+                    }
                 }
                 // Reloading the assigned actors.
                 load_assigned_actors();
