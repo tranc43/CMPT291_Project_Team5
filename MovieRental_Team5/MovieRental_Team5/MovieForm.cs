@@ -259,6 +259,7 @@ namespace MovieRental_Team5
                 using (SqlConnection connectionNew = new SqlConnection(connection))
                 {
                     connectionNew.Open();
+                    // Updating the movie data based on the selected movie ID and values.
                     string query = "UPDATE Movie_Data SET Movie_Name = @name, Movie_Genre = @genre, Distribution_Fee = @fee, Num_Copies = @copies WHERE Movie_ID = @id";
                     SqlCommand command = new SqlCommand(query, connectionNew);
                     command.Parameters.AddWithValue("@name", title_field.Text.Trim());

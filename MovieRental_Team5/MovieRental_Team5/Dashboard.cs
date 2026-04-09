@@ -26,6 +26,7 @@ namespace MovieRental_Team5
 
         private void manage_customers_Click(object sender, EventArgs e)
         {
+            // this function is to go to the customer form when manage customers are clicked
             Customer_Form customer_form = new Customer_Form();
             customer_form.Show();
         }
