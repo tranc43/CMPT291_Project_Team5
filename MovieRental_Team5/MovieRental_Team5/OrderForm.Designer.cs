@@ -54,6 +54,7 @@
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)queue_grid).BeginInit();
             SuspendLayout();
+            // 
             // dataGridView1
             // 
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -133,12 +134,12 @@
             // 
             label2.AutoSize = true;
             label2.FlatStyle = FlatStyle.Flat;
-            label2.Font = new Font("Segoe UI", 15F, FontStyle.Bold);
-            label2.Location = new Point(34, 533);
+            label2.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            label2.Location = new Point(21, 533);
             label2.Name = "label2";
-            label2.Size = new Size(134, 28);
+            label2.Size = new Size(178, 19);
             label2.TabIndex = 9;
-            label2.Text = "Select Movie";
+            label2.Text = "Select Available Movie(s)";
             // 
             // current_orders_label
             // 

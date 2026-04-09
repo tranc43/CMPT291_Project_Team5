@@ -45,6 +45,7 @@ namespace MovieRental_Team5
             ((System.ComponentModel.ISupportInitialize)movie_grid).BeginInit();
             ((System.ComponentModel.ISupportInitialize)movie_actor_grid).BeginInit();
             SuspendLayout();
+            // 
             // movie_dashboardd_title
             // 
             movie_dashboardd_title.AutoSize = true;
@@ -237,11 +238,11 @@ namespace MovieRental_Team5
             // 
             // clear_button
             // 
-            clear_button.Location = new Point(387, 574);
+            clear_button.Location = new Point(387, 563);
             clear_button.Name = "clear_button";
-            clear_button.Size = new Size(106, 38);
+            clear_button.Size = new Size(236, 38);
             clear_button.TabIndex = 6;
-            clear_button.Text = "Clear Fields";
+            clear_button.Text = "Deselect/Clear Fields";
             clear_button.Click += clear_button_Click;
             // 
             // back_button

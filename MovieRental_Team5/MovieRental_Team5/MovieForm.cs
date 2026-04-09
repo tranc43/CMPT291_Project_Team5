@@ -367,15 +367,33 @@ namespace MovieRental_Team5
             {
                 using (SqlConnection connectionNew = new SqlConnection(connection))
                 {
+                    /*@desc
+                     * When selecting an actor
+                     * It checks whether or not the actor is already in the movie before assigning
+                     * if they exist then it'll throw the error that the acotr is already assigned
+                     * if they arent then they'll be inserted.
+                     */
                     connectionNew.Open();
-                    // This query checks if there is an actor already assigned to the movie before attempting to assign.
-                    string query = @"
-                        IF NOT EXISTS (SELECT 1 FROM Appears_In WHERE Movie_ID = @movieId AND Actor_ID = @actorId)
-                        INSERT INTO Appears_In (Movie_ID, Actor_ID) VALUES (@movieId, @actorId)";
-                    SqlCommand command = new SqlCommand(query, connectionNew);
-                    command.Parameters.AddWithValue("@movieId", selected_movie_id);
-                    command.Parameters.AddWithValue("@actorId", actor.Id);
-                    command.ExecuteNonQuery();
+                    string check_query = "SELECT COUNT(*) FROM Appears_In WHERE Movie_ID = @movieId AND Actor_ID = @actorId";
+                    SqlCommand check_command = new SqlCommand(check_query, connectionNew);
+                    check_command.Parameters.AddWithValue("@movieId", selected_movie_id);
+                    check_command.Parameters.AddWithValue("@actorId", actor.Id);
+
+                    // checks if an actor already exists in the selected movie.
+                    int existing_assignment_count = Convert.ToInt32(check_command.ExecuteScalar());
+
+                    if (existing_assignment_count > 0)
+                    {
+                        MessageBox.Show("This actor is already assigned to the selected movie.");
+                        return;
+                    }
+
+                    // inserting the actor once it has been successfully verified. 
+                    string insert_query = "INSERT INTO Appears_In (Movie_ID, Actor_ID) VALUES (@movieId, @actorId)";
+                    SqlCommand insert_command = new SqlCommand(insert_query, connectionNew);
+                    insert_command.Parameters.AddWithValue("@movieId", selected_movie_id);
+                    insert_command.Parameters.AddWithValue("@actorId", actor.Id);
+                    insert_command.ExecuteNonQuery();
                 }
                 // Reloading the assigned actors.
                 load_assigned_actors();
@@ -397,6 +415,14 @@ namespace MovieRental_Team5
             if (selected_movie_id == -1)
             {
                 MessageBox.Show("Please select a movie first.");
+                return;
+            }
+
+            DialogResult result = MessageBox.Show("" +
+                "Are you Sure you want to delete this actor?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (result != DialogResult.Yes)
+            {
                 return;
             }
 

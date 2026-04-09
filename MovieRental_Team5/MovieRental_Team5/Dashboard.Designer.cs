@@ -36,6 +36,7 @@
             logged_in_as_label = new Label();
             reports_button = new Button();
             SuspendLayout();
+            // 
             // log_out_button
             // 
             log_out_button.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
@@ -76,7 +77,7 @@
             orders.Name = "orders";
             orders.Size = new Size(188, 74);
             orders.TabIndex = 3;
-            orders.Text = "Record Order";
+            orders.Text = "Movie Rentals";
             orders.UseVisualStyleBackColor = true;
             orders.Click += orders_Click;
             // 
@@ -107,9 +108,10 @@
             reports_button.Name = "reports_button";
             reports_button.Size = new Size(188, 74);
             reports_button.TabIndex = 6;
-            reports_button.Text = "Reports";
+            reports_button.Text = "Movie Reports";
             reports_button.UseVisualStyleBackColor = true;
             reports_button.Click += reports_button_Click;
+            // 
             // Dashboard_Form
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);

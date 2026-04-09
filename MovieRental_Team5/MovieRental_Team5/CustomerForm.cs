@@ -156,6 +156,14 @@ namespace MovieRental_Team5
             }
 
             DataGridViewRow row = customer_grid.Rows[e.RowIndex];
+            // this is to make sure that deal with an issue where clicking on a blank row throws an exception/trap inside the debugger.
+            if (row.IsNewRow ||
+                row.Cells["Customer_ID"].Value == null ||
+                row.Cells["Customer_ID"].Value == DBNull.Value)
+            {
+                return;
+            }
+
             selected_customer_id = Convert.ToInt32(row.Cells["Customer_ID"].Value);
             first_name_field.Text = row.Cells["First_Name"].Value?.ToString() ?? "";
             last_name_field.Text = row.Cells["Last_Name"].Value?.ToString() ?? "";
@@ -319,6 +327,8 @@ namespace MovieRental_Team5
          * this functions purpose is to delete the selected customer from the database
          * it also includes error handling and checks to make sure that the customer can be deleted
          * such as if they have existing orders or not.
+         * 
+         * The function also provides a secondary confirmation of deleting an actor. 
          */
         {
             if (selected_customer_id == -1)
@@ -377,6 +387,10 @@ namespace MovieRental_Team5
 
         private void load_customer_queue_and_history()
         {
+            /*@desc
+             * this function is used to load the customer queue
+             * and their history.
+             */
             if (selected_customer_id == -1)
             {
                 customer_queue_grid.DataSource = null;
@@ -403,17 +417,17 @@ namespace MovieRental_Team5
                     string query = @"
                         SELECT
                             mq.Queue_Position,
-                            m.Movie_ID,
-                            m.Movie_Name,
-                            m.Movie_Genre,
+                            movie.Movie_ID,
+                            movie.Movie_Name,
+                            movie.Movie_Genre,
                             (
                                 SELECT AVG(CAST(rm.Rating AS DECIMAL(4,2)))
                                 FROM Rate_Movie rm
                                 INNER JOIN Order_Data od ON rm.Order_ID = od.Order_ID
-                                WHERE od.Movie_ID = m.Movie_ID
+                                WHERE od.Movie_ID = movie.Movie_ID
                             ) AS Average_Rating
-                        FROM Movie_Queue m
-                        INNER JOIN Movie_Data m ON mq.Movie_ID = m.Movie_ID
+                        FROM Movie_Queue mq
+                        INNER JOIN Movie_Data movie ON mq.Movie_ID = movie.Movie_ID
                         WHERE mq.Customer_ID = @customerId
                         ORDER BY mq.Queue_Position";
 
