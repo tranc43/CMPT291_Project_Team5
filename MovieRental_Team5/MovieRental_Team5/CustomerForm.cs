@@ -66,10 +66,10 @@ namespace MovieRental_Team5
                             (
                                 SELECT AVG(CAST(mr.Rating AS DECIMAL(4,2)))
                                 FROM Rate_Movie mr
-                                INNER JOIN Order_Data order_data ON mr.Order_ID = mr.Order_ID
-                                WHERE order_data.Customer_ID = c.Customer_ID
+                                INNER JOIN Order_Data od ON mr.Order_ID = mr.Order_ID
+                                WHERE od.Customer_ID = c.Customer_ID
                             ) AS Average_Rating
-                        FROM Customer_Data customer
+                        FROM Customer_Data c
                         WHERE (@firstName = '' OR c.First_Name LIKE '%' + @firstName + '%')
                           AND (@lastName = '' OR c.Last_Name LIKE '%' + @lastName + '%')
                           AND (@email = '' OR c.Email_Address LIKE '%' + @email + '%')
