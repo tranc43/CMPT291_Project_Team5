@@ -13,17 +13,17 @@ namespace MovieRental_Team5
          * to hold employee data fo rth ecurrent session.
          */
         public static int employee_id = -1;
-        public static string employee_sin = "";
+        public static string employee_login_id = "";
         public static string employee_name = "";
 
-        public static void set_employee(int employee_id_value, string employee_sin_value, string employee_name_value)
+        public static void set_employee(int employee_id_value, string employee_login_id_value, string employee_name_value)
 
         {
             /*@desc: this functions purpose is to set the current employeee session with data
             * 
             */
             employee_id = employee_id_value;
-            employee_sin = employee_sin_value;
+            employee_login_id = employee_login_id_value;
             employee_name = employee_name_value;
         }
 
@@ -33,7 +33,7 @@ namespace MovieRental_Team5
             * 
             */
             employee_id = -1;
-            employee_sin = "";
+            employee_login_id = "";
             employee_name = "";
         }
     }

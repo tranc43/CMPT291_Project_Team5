@@ -46,12 +46,18 @@ namespace MovieRental_Team5
              * there are error checks in place to assure various scenarios are handled
              * The functions also implements the hashing of employee passwords and updating them as the hash version in the DB.
              */
-            string sin = email_field.Text.Trim();
+            string employee_id_text = email_field.Text.Trim();
             string password = password_field.Text;
 
-            if (string.IsNullOrEmpty(sin) || string.IsNullOrEmpty(password))
+            if (string.IsNullOrEmpty(employee_id_text) || string.IsNullOrEmpty(password))
             {
-                MessageBox.Show("Please enter your employee SIN and password.", "Login Error");
+                MessageBox.Show("Please enter your employee ID and password.", "Login Error");
+                return;
+            }
+
+            if (!int.TryParse(employee_id_text, out int employee_id_input))
+            {
+                MessageBox.Show("Employee ID must be a whole number.", "Login Error");
                 return;
             }
             try
@@ -59,11 +65,11 @@ namespace MovieRental_Team5
                 using (SqlConnection conn = new SqlConnection(connection_string))
                 {
                     conn.Open();
-                    // this query is used to retrieve employee data based on the the provided sin 
-                    string employee_query = "SELECT Employee_ID, First_Name, Last_Name, Employee_Password FROM Employee_Data WHERE SIN = @input";
+                    // this query is used to retrieve employee data based on the provided employee id 
+                    string employee_query = "SELECT Employee_ID, First_Name, Last_Name, Employee_Password FROM Employee_Data WHERE Employee_ID = @input";
                     SqlCommand emp_cmd = new SqlCommand(employee_query, conn);
 
-                    emp_cmd.Parameters.AddWithValue("@input", sin);
+                    emp_cmd.Parameters.AddWithValue("@input", employee_id_input);
                     SqlDataReader emp_reader = emp_cmd.ExecuteReader();
                     
                   // password matching using the PasswordSecurity file which handles the hashing and vericiation of passwords.
@@ -92,7 +98,7 @@ namespace MovieRental_Team5
                             upgrade_employee_password(conn, employee_id, password);
                         }
 
-                        Current_Session.set_employee(employee_id, sin, employee_name);
+                        Current_Session.set_employee(employee_id, employee_id_input.ToString(), employee_name);
                         // success!
                         MessageBox.Show("Login Successful! " + " Welcome Back, " + employee_name + " ! ");
                         Dashboard_Form dashboard_form = new Dashboard_Form(employee_name);
@@ -101,7 +107,7 @@ namespace MovieRental_Team5
                         return;
                     }
 
-                    MessageBox.Show("Invalid employee SIN.", "Login Error");
+                    MessageBox.Show("Invalid employee ID.", "Login Error");
                 }
 
             }

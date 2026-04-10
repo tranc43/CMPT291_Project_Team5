@@ -56,14 +56,14 @@
             email_sin_label.Name = "email_sin_label";
             email_sin_label.Size = new Size(182, 37);
             email_sin_label.TabIndex = 2;
-            email_sin_label.Text = "Employee SIN";
+            email_sin_label.Text = "Employee ID";
             // 
             // email_field
             // 
             email_field.Font = new Font("Segoe UI", 10F);
             email_field.Location = new Point(420, 175);
             email_field.Name = "email_field";
-            email_field.PlaceholderText = "Enter Employee SIN";
+            email_field.PlaceholderText = "Enter Employee ID";
             email_field.Size = new Size(185, 25);
             email_field.TabIndex = 4;
             email_field.Click += email_address_input;
