@@ -417,17 +417,17 @@ namespace MovieRental_Team5
                     string query = @"
                         SELECT
                             mq.Queue_Position,
-                            movie.Movie_ID,
-                            movie.Movie_Name,
-                            movie.Movie_Genre,
+                            m.Movie_ID,
+                            m.Movie_Name,
+                            m.Movie_Genre,
                             (
                                 SELECT AVG(CAST(rm.Rating AS DECIMAL(4,2)))
                                 FROM Rate_Movie rm
                                 INNER JOIN Order_Data od ON rm.Order_ID = od.Order_ID
-                                WHERE od.Movie_ID = movie.Movie_ID
+                                WHERE od.Movie_ID = m.Movie_ID
                             ) AS Average_Rating
                         FROM Movie_Queue mq
-                        INNER JOIN Movie_Data movie ON mq.Movie_ID = movie.Movie_ID
+                        INNER JOIN Movie_Data m ON mq.Movie_ID = m.Movie_ID
                         WHERE mq.Customer_ID = @customerId
                         ORDER BY mq.Queue_Position";
 
