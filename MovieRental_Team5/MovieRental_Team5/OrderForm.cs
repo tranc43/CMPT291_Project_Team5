@@ -365,12 +365,21 @@ namespace MovieRental_Team5
              * this functions purpose is to read the selected movie queues ID
              * find the same movie in that dropdown and it'll display if the movie is currently unavailable.
             */
-            if (e.RowIndex < 0 || queue_grid.Rows[e.RowIndex].Cells["Movie_ID"].Value == null)
+            if (e.RowIndex < 0)
             {
                 return;
             }
 
-            int movieId = Convert.ToInt32(queue_grid.Rows[e.RowIndex].Cells["Movie_ID"].Value);
+            DataGridViewRow row = queue_grid.Rows[e.RowIndex];
+
+            if (row.IsNewRow ||
+                row.Cells["Movie_ID"].Value == null ||
+                row.Cells["Movie_ID"].Value == DBNull.Value)
+            {
+                return;
+            }
+
+            int movieId = Convert.ToInt32(row.Cells["Movie_ID"].Value);
 
             for (int i = 0; i < comboBox3.Items.Count; i++)
             {

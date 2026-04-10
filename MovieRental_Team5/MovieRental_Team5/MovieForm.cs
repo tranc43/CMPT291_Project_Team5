@@ -182,7 +182,7 @@ namespace MovieRental_Team5
             /*@desc
              * this functions purpose is to load the selected movie data 
              * upon clicking a cell on the grid.
-             * 
+             * It also has error handling when clicking on a empty row.
              */
             if (e.RowIndex < 0)
             {
