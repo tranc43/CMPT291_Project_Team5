@@ -182,7 +182,7 @@ namespace MovieRental_Team5
             /*@desc
              * this functions purpose is to load the selected movie data 
              * upon clicking a cell on the grid.
-             * 
+             * It also has error handling when clicking on a empty row.
              */
             if (e.RowIndex < 0)
             {
@@ -190,6 +190,14 @@ namespace MovieRental_Team5
             }
 
             DataGridViewRow row = movie_grid.Rows[e.RowIndex];
+
+            if (row.IsNewRow ||
+                row.Cells["Movie_ID"].Value == null ||
+                row.Cells["Movie_ID"].Value == DBNull.Value)
+            {
+                return;
+            }
+
             selected_movie_id = Convert.ToInt32(row.Cells["Movie_ID"].Value);
             title_field.Text = row.Cells["Movie_Name"].Value?.ToString() ?? "";
             genre_dropdown.SelectedItem = row.Cells["Movie_Genre"].Value?.ToString() ?? "Action";
